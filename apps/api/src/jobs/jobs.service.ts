@@ -41,17 +41,19 @@ export class JobsService {
       },
     });
 
-    // Enqueue to Redis Stream for Python worker consumption
-    await this.redis.pushJobStream('stream:pdf-jobs', {
+    // Enqueue to Priority or Standard Redis Stream
+    const targetStream = isPro ? 'stream:pdf-jobs:pro' : 'stream:pdf-jobs';
+    await this.redis.pushJobStream(targetStream, {
       jobId: job.id,
       toolType: job.toolType,
       sourceKey: job.sourceKey,
       sourceFilename: job.sourceFilename,
       optionsJson: JSON.stringify(dto.options || {}),
       userRole: dto.userRole || 'GUEST',
+      priority: isPro ? '1' : '0',
     });
 
-    this.logger.log(`Job ${job.id} enqueued to stream:pdf-jobs for ${job.toolType}`);
+    this.logger.log(`Job ${job.id} enqueued to ${targetStream} (Priority: ${isPro ? 'PRO' : 'FREE'})`);
 
     return {
       jobId: job.id,

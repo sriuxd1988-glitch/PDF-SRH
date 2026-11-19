@@ -1,23 +1,42 @@
 import subprocess
-import threading
 import os
+import time
 import logging
+import redis
 from pdf2docx import Converter
 
 logger = logging.getLogger("ToolOffice")
 
-# Strict Concurrency Guard: exactly 1 concurrent LibreOffice instance to protect VPS memory
-_office_semaphore = threading.Semaphore(1)
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+r = redis.Redis.from_url(REDIS_URL, decode_responses=True)
+
+LOCK_NAME = "lock:libreoffice:semaphore"
+LOCK_TIMEOUT = 70 # auto-expire after 70 seconds to prevent deadlocks
 
 def convert_office_to_pdf(input_path: str, output_path: str, timeout_sec: int = 60) -> str:
     """
     Converts Office docs (DOCX, XLSX, PPTX) to PDF using LibreOffice headless.
-    Guarded by a concurrency semaphore of 1.
+    Guarded by a distributed Redis lock semaphore = 1 across all worker containers.
     """
-    with _office_semaphore:
-        logger.info(f"Starting LibreOffice headless conversion for {input_path}")
-        out_dir = os.path.dirname(output_path) or "."
+    out_dir = os.path.dirname(output_path) or "."
+    acquired = False
 
+    try:
+        # Step 1: Acquire distributed Redis semaphore lock
+        logger.info(f"Waiting for LibreOffice concurrency lock '{LOCK_NAME}'...")
+        start_wait = time.time()
+        while not acquired:
+            # Atomically set lock with NX (not exists) and EX (expire)
+            acquired = r.set(LOCK_NAME, "locked", nx=True, ex=LOCK_TIMEOUT)
+            if acquired:
+                break
+            if time.time() - start_wait > 90:
+                raise TimeoutError("Timed out waiting for LibreOffice converter slot")
+            time.sleep(0.5)
+
+        logger.info(f"Acquired LibreOffice slot. Converting {input_path} -> PDF")
+
+        # Step 2: Execute sandboxed LibreOffice conversion
         cmd = [
             "soffice",
             "--headless",
@@ -28,28 +47,33 @@ def convert_office_to_pdf(input_path: str, output_path: str, timeout_sec: int = 
             input_path,
         ]
 
-        try:
-            res = subprocess.run(cmd, check=True, timeout=timeout_sec, capture_output=True)
-            logger.info(f"LibreOffice stdout: {res.stdout.decode('utf-8')}")
+        res = subprocess.run(cmd, check=True, timeout=timeout_sec, capture_output=True)
+        logger.info(f"LibreOffice stdout: {res.stdout.decode('utf-8')}")
 
-            # LibreOffice writes to <input_basename>.pdf
-            base = os.path.splitext(os.path.basename(input_path))[0]
-            generated_pdf = os.path.join(out_dir, f"{base}.pdf")
+        base = os.path.splitext(os.path.basename(input_path))[0]
+        generated_pdf = os.path.join(out_dir, f"{base}.pdf")
 
-            if os.path.exists(generated_pdf) and generated_pdf != output_path:
-                os.rename(generated_pdf, output_path)
+        if os.path.exists(generated_pdf) and generated_pdf != output_path:
+            os.rename(generated_pdf, output_path)
 
-            return output_path
-        except subprocess.TimeoutExpired:
-            logger.error(f"LibreOffice conversion timed out after {timeout_sec} seconds")
-            raise TimeoutError("Document conversion timed out")
-        except Exception as e:
-            logger.error(f"LibreOffice error: {e}")
-            raise e
+        return output_path
+
+    except subprocess.TimeoutExpired:
+        logger.error(f"LibreOffice conversion timed out after {timeout_sec} seconds")
+        raise TimeoutError("Document conversion timed out")
+    except Exception as e:
+        logger.error(f"LibreOffice conversion failed: {e}")
+        raise e
+    finally:
+        # Step 3: Release distributed Redis lock
+        if acquired:
+            r.delete(LOCK_NAME)
+            logger.info("Released LibreOffice concurrency lock")
 
 def convert_pdf_to_word(input_path: str, output_docx_path: str) -> str:
     """
     Converts PDF to Word (.docx) using pdf2docx (MIT permissive license).
+    Extracts text, tables, and images preserving layout.
     """
     logger.info(f"Converting PDF to Word: {input_path} -> {output_docx_path}")
     cv = Converter(input_path)

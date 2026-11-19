@@ -1,5 +1,5 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
-import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { randomUUID } from 'crypto';
 
@@ -22,19 +22,33 @@ export class StorageService {
     });
   }
 
-  // Generate Presigned PUT URL for direct browser-to-S3 upload
+  /**
+   * Generates a 15-minute presigned PUT URL for direct client browser-to-S3 uploads.
+   * Enforces file size limits per tier:
+   * - Guest: 25 MB
+   * - Free Member: 50 MB
+   * - Pro / Admin: 2048 MB (2 GB)
+   */
   async createPresignedUploadUrl(
     filename: string,
     fileSizeBytes: number,
-    contentType: string,
+    contentType: string = 'application/pdf',
     userRole: string = 'GUEST'
   ) {
-    const isPro = userRole === 'PRO' || userRole === 'ADMIN' || userRole === 'SUPER_ADMIN';
-    const maxAllowedBytes = isPro ? 2 * 1024 * 1024 * 1024 : 50 * 1024 * 1024; // 2GB vs 50MB
+    let maxAllowedBytes = 25 * 1024 * 1024; // Default Guest: 25MB
+    let tierName = 'Guest (25MB)';
+
+    if (userRole === 'PRO' || userRole === 'ADMIN' || userRole === 'SUPER_ADMIN') {
+      maxAllowedBytes = 2048 * 1024 * 1024; // 2GB
+      tierName = 'PRO (2GB)';
+    } else if (userRole === 'USER') {
+      maxAllowedBytes = 50 * 1024 * 1024; // 50MB
+      tierName = 'Free Member (50MB)';
+    }
 
     if (fileSizeBytes > maxAllowedBytes) {
       throw new BadRequestException(
-        `File exceeds maximum permitted size of ${isPro ? '2GB' : '50MB'}. Upgrade to Pro for 2GB file processing.`
+        `File size (${(fileSizeBytes / 1024 / 1024).toFixed(1)}MB) exceeds limit for ${tierName}. Upgrade to PRO for up to 2GB files.`
       );
     }
 
@@ -52,10 +66,9 @@ export class StorageService {
       },
     });
 
-    // 15-minute presigned upload window
     const uploadUrl = await getSignedUrl(this.s3, command, { expiresIn: 900 });
 
-    this.logger.log(`Created presigned upload URL for key: ${key} (${fileSizeBytes} bytes)`);
+    this.logger.log(`Generated presigned PUT for key: ${key} (${fileSizeBytes} bytes, role: ${userRole})`);
 
     return {
       uploadUrl,
@@ -65,7 +78,9 @@ export class StorageService {
     };
   }
 
-  // Generate Presigned GET download URL with attachment disposition
+  /**
+   * Generates a presigned GET download URL with attachment header.
+   */
   async createPresignedDownloadUrl(fileKey: string, downloadFilename: string, expiresIn: number = 3600) {
     const command = new GetObjectCommand({
       Bucket: this.bucket,
@@ -74,5 +89,22 @@ export class StorageService {
     });
 
     return getSignedUrl(this.s3, command, { expiresIn });
+  }
+
+  /**
+   * Permanently deletes an object from S3.
+   */
+  async deleteFile(fileKey: string) {
+    try {
+      await this.s3.send(
+        new DeleteObjectCommand({
+          Bucket: this.bucket,
+          Key: fileKey,
+        })
+      );
+      this.logger.log(`Deleted S3 object: ${fileKey}`);
+    } catch (e) {
+      this.logger.warn(`Failed to delete S3 object ${fileKey}: ${e}`);
+    }
   }
 }
