@@ -292,6 +292,16 @@ model Invoice {
   @@index([userId])
 }
 
+model WebhookEvent {
+  id          String         @id // Gateway event ID (e.g. evt_... or rzp_event_id)
+  gateway     PaymentGateway
+  eventType   String
+  payload     Json?
+  processedAt DateTime       @default(now())
+
+  @@index([gateway, eventType])
+}
+
 // =========================================================================
 // 5. WEBSITE BUILDERS & DESIGN SYSTEM STUDIO (LIVE PROPAGATION)
 // =========================================================================

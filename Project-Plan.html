@@ -1082,7 +1082,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
 <div class="phase-head"><div><span class="eyebrow" style="color:#14B8A6">Phase 08</span><h3>Payments (Stripe + Razorpay), Provisioning &amp; Dunning</h3></div><span class="mono muted">Prompts 8.1 – 8.2</span></div>
 <p class="lead">Builds multi-currency billing: Razorpay Subscriptions for domestic Indian INR (UPI, RuPay) and Stripe Billing for international USD cards.</p>
 <div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p8-1" onchange="updateProgress()"><span>Prompt 8.1: Pricing Page &amp; Dual Currency Checkout (USD / INR)</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p8-1" checked onchange="updateProgress()"><span>Prompt 8.1: Pricing Page &amp; Dual Currency Checkout (USD / INR)</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p8-1', this)">Copy prompt</button></div>
 <p class="muted small">Interactive pricing comparison table with live INR/USD currency toggle and checkout modal redirect.</p>
 <details><summary>Show full prompt</summary><pre id="p8-1">Act as a Monetization &amp; Payment Engineer. Build the pricing and checkout flow in `apps/web/src/app/(public)/pricing/`.
@@ -1099,7 +1099,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - `/checkout/cancel`: Friendly return page with FAQ and support link.
 4. Exit criteria: Test complete sandbox checkout via both Stripe test card and Razorpay UPI test flow; verify success redirects.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p8-2" onchange="updateProgress()"><span>Prompt 8.2: Webhooks, Role Provisioning, Dunning &amp; Lifecycle Emails</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p8-2" checked onchange="updateProgress()"><span>Prompt 8.2: Webhooks, Role Provisioning, Dunning &amp; Lifecycle Emails</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p8-2', this)">Copy prompt</button></div>
 <p class="muted small">Robust webhook handlers for Stripe and Razorpay, instant Pro tier provisioning, dunning retries, and transactional emails.</p>
 <details><summary>Show full prompt</summary><pre id="p8-2">Act as a Fintech Backend Architect. Build the webhook processing and lifecycle email engine in `apps/api/src/modules/billing/`.
