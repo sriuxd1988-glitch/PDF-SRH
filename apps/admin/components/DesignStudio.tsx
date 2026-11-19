@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Palette, Check, RefreshCw, Sparkles, Sliders, Eye, Save } from 'lucide-react';
+import { Palette, Check, RefreshCw, Sparkles, Sliders, Eye, Save, Type, ExternalLink } from 'lucide-react';
 import { ButtonV6, NextSaaSBtn, Badge, GlowCard } from '@simplifypdf/ui';
 
 export function DesignStudio() {
@@ -9,49 +9,84 @@ export function DesignStudio() {
   const [primaryHover, setPrimaryHover] = useState('#6D1FE2');
   const [secondaryColor, setSecondaryColor] = useState('#1A1A1C');
   const [accentLime, setAccentLime] = useState('#C6F56F');
+  const [accentCyan, setAccentCyan] = useState('#83E7EE');
+  const [accentYellow, setAccentYellow] = useState('#F9EB57');
   const [borderRadius, setBorderRadius] = useState('16px');
+  const [fontFamily, setFontFamily] = useState('Inter Tight, Inter, sans-serif');
   const [isSaving, setIsSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  // Apply changes to document root in real-time
-  const applyTokensLocally = (primary: string, hover: string, secondary: string, lime: string, radius: string) => {
-    document.documentElement.style.setProperty('--primary-500', primary);
-    document.documentElement.style.setProperty('--primary-700', hover);
-    document.documentElement.style.setProperty('--secondary', secondary);
-    document.documentElement.style.setProperty('--lime', lime);
-    document.documentElement.style.setProperty('--radius-lg', radius);
+  // Apply changes to document root and broadcast in real-time
+  const applyTokensLocally = (
+    primary: string,
+    hover: string,
+    secondary: string,
+    lime: string,
+    cyan: string,
+    yellow: string,
+    radius: string
+  ) => {
+    const root = document.documentElement;
+    root.style.setProperty('--primary-500', primary);
+    root.style.setProperty('--primary-700', hover);
+    root.style.setProperty('--secondary', secondary);
+    root.style.setProperty('--lime', lime);
+    root.style.setProperty('--cyan', cyan);
+    root.style.setProperty('--yellow', yellow);
+    root.style.setProperty('--radius-lg', radius);
+
+    const payload = {
+      primaryColor: primary,
+      primaryHover: hover,
+      secondaryColor: secondary,
+      accentLime: lime,
+      accentCyan: cyan,
+      accentYellow: yellow,
+      borderRadius: radius,
+    };
 
     // Broadcast change across tabs via BroadcastChannel
     if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
-      const channel = new BroadcastChannel('simplifypdf-design-tokens');
-      channel.postMessage({
-        primaryColor: primary,
-        primaryHover: hover,
-        secondaryColor: secondary,
-        accentLime: lime,
-        borderRadius: radius,
-      });
+      try {
+        const channel = new BroadcastChannel('simplifypdf-design-tokens');
+        channel.postMessage(payload);
+      } catch (e) {}
     }
+
+    // Persist in localStorage so all apps sync
+    try {
+      localStorage.setItem('simplifypdf_tokens', JSON.stringify(payload));
+    } catch (e) {}
   };
 
   const handlePrimaryChange = (val: string) => {
     setPrimaryColor(val);
-    applyTokensLocally(val, primaryHover, secondaryColor, accentLime, borderRadius);
+    applyTokensLocally(val, primaryHover, secondaryColor, accentLime, accentCyan, accentYellow, borderRadius);
   };
 
   const handleSecondaryChange = (val: string) => {
     setSecondaryColor(val);
-    applyTokensLocally(primaryColor, primaryHover, val, accentLime, borderRadius);
+    applyTokensLocally(primaryColor, primaryHover, val, accentLime, accentCyan, accentYellow, borderRadius);
   };
 
   const handleLimeChange = (val: string) => {
     setAccentLime(val);
-    applyTokensLocally(primaryColor, primaryHover, secondaryColor, val, borderRadius);
+    applyTokensLocally(primaryColor, primaryHover, secondaryColor, val, accentCyan, accentYellow, borderRadius);
+  };
+
+  const handleCyanChange = (val: string) => {
+    setAccentCyan(val);
+    applyTokensLocally(primaryColor, primaryHover, secondaryColor, accentLime, val, accentYellow, borderRadius);
+  };
+
+  const handleYellowChange = (val: string) => {
+    setAccentYellow(val);
+    applyTokensLocally(primaryColor, primaryHover, secondaryColor, accentLime, accentCyan, val, borderRadius);
   };
 
   const handleRadiusChange = (val: string) => {
     setBorderRadius(val);
-    applyTokensLocally(primaryColor, primaryHover, secondaryColor, accentLime, val);
+    applyTokensLocally(primaryColor, primaryHover, secondaryColor, accentLime, accentCyan, accentYellow, val);
   };
 
   const handleResetToNuvexa = () => {
@@ -59,13 +94,17 @@ export function DesignStudio() {
     const h = '#6D1FE2';
     const s = '#1A1A1C';
     const l = '#C6F56F';
+    const c = '#83E7EE';
+    const y = '#F9EB57';
     const r = '16px';
     setPrimaryColor(p);
     setPrimaryHover(h);
     setSecondaryColor(s);
     setAccentLime(l);
+    setAccentCyan(c);
+    setAccentYellow(y);
     setBorderRadius(r);
-    applyTokensLocally(p, h, s, l, r);
+    applyTokensLocally(p, h, s, l, c, y, r);
   };
 
   const handlePublishToProduction = async () => {
@@ -82,18 +121,14 @@ export function DesignStudio() {
           primaryHover,
           secondaryColor,
           accentLime,
+          accentCyan,
+          accentYellow,
           borderRadius,
         }),
       });
     } catch {
       // Local sync fallback
     }
-
-    // Persist in localStorage so all apps pick it up
-    localStorage.setItem(
-      'simplifypdf_tokens',
-      JSON.stringify({ primaryColor, primaryHover, secondaryColor, accentLime, borderRadius })
-    );
 
     setIsSaving(false);
     setSavedSuccess(true);
@@ -168,24 +203,50 @@ export function DesignStudio() {
               </div>
             </div>
 
-            {/* PRO Lime Accent */}
+            {/* Accents Palette */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)] mb-2">
-                PRO Badge Accent (Lime)
+                Nuvexa Accent Tones
               </label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="color"
-                  value={accentLime}
-                  onChange={(e) => handleLimeChange(e.target.value)}
-                  className="w-10 h-10 rounded-xl border border-[var(--line)] cursor-pointer bg-transparent"
-                />
-                <input
-                  type="text"
-                  value={accentLime}
-                  onChange={(e) => handleLimeChange(e.target.value)}
-                  className="flex-1 px-3 py-2 rounded-xl bg-[var(--soft)] border border-[var(--line)] font-mono text-xs font-bold text-[var(--ink)]"
-                />
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <span className="block text-[10px] font-bold text-[var(--muted)] mb-1">Lime (Pro)</span>
+                  <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[var(--soft)] border border-[var(--line)]">
+                    <input
+                      type="color"
+                      value={accentLime}
+                      onChange={(e) => handleLimeChange(e.target.value)}
+                      className="w-6 h-6 rounded-lg cursor-pointer bg-transparent border-0"
+                    />
+                    <span className="text-[10px] font-mono font-bold text-[var(--ink)] truncate">{accentLime}</span>
+                  </div>
+                </div>
+
+                <div>
+                  <span className="block text-[10px] font-bold text-[var(--muted)] mb-1">Cyan (Acc)</span>
+                  <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[var(--soft)] border border-[var(--line)]">
+                    <input
+                      type="color"
+                      value={accentCyan}
+                      onChange={(e) => handleCyanChange(e.target.value)}
+                      className="w-6 h-6 rounded-lg cursor-pointer bg-transparent border-0"
+                    />
+                    <span className="text-[10px] font-mono font-bold text-[var(--ink)] truncate">{accentCyan}</span>
+                  </div>
+                </div>
+
+                <div>
+                  <span className="block text-[10px] font-bold text-[var(--muted)] mb-1">Yellow (Acc)</span>
+                  <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[var(--soft)] border border-[var(--line)]">
+                    <input
+                      type="color"
+                      value={accentYellow}
+                      onChange={(e) => handleYellowChange(e.target.value)}
+                      className="w-6 h-6 rounded-lg cursor-pointer bg-transparent border-0"
+                    />
+                    <span className="text-[10px] font-mono font-bold text-[var(--ink)] truncate">{accentYellow}</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -194,8 +255,8 @@ export function DesignStudio() {
               <label className="block text-xs font-bold uppercase tracking-wider text-[var(--muted)] mb-2">
                 Global Border Radius
               </label>
-              <div className="grid grid-cols-3 gap-2">
-                {['12px', '16px', '24px'].map((r) => (
+              <div className="grid grid-cols-4 gap-2">
+                {['6px', '12px', '16px', '24px'].map((r) => (
                   <button
                     key={r}
                     onClick={() => handleRadiusChange(r)}
@@ -219,7 +280,7 @@ export function DesignStudio() {
               className="w-full py-3.5 px-6 rounded-2xl bg-[var(--primary-500)] text-white font-bold text-sm hover:bg-[var(--primary-700)] transition-all flex items-center justify-center gap-2 shadow-md"
             >
               {isSaving ? (
-                <span>Publishing to Redis & CDN...</span>
+                <span>Publishing to Redis &amp; CDN...</span>
               ) : savedSuccess ? (
                 <>
                   <Check className="w-4 h-4 text-white" />
@@ -236,7 +297,7 @@ export function DesignStudio() {
         </div>
       </div>
 
-      {/* Right Column: Live Interactive Preview */}
+      {/* Right Column: Live Interactive Component Workbench */}
       <div className="lg:col-span-7 flex flex-col gap-6">
         <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
           <div className="flex items-center justify-between mb-6">
@@ -273,7 +334,7 @@ export function DesignStudio() {
             {/* Badges Preview */}
             <div>
               <div className="text-xs font-bold uppercase tracking-wider text-[var(--muted)] mb-3">
-                Nuvexa Status Badges & Pills
+                Nuvexa Status Badges &amp; Pills
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <Badge variant="pro">PRO 2GB</Badge>
@@ -281,9 +342,17 @@ export function DesignStudio() {
                   <span className="w-2 h-2 rounded-full bg-emerald-500" />
                   Live Worker
                 </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
-                  <Sparkles className="w-3 h-3 text-amber-600" />
-                  Presigned S3
+                <span
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-neutral-900"
+                  style={{ backgroundColor: accentCyan }}
+                >
+                  Cyan Tag
+                </span>
+                <span
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-neutral-900"
+                  style={{ backgroundColor: accentYellow }}
+                >
+                  Yellow Badge
                 </span>
               </div>
             </div>

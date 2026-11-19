@@ -117,7 +117,7 @@ nav.side.open{display:flex}
 <button class="iconbtn menubtn" aria-label="Open sections" onclick="document.querySelector('nav.side').classList.toggle('open')">☰</button>
 <div class="logo">SP</div>
 <div class="brand"><b>SimplifyPDF · Master Execution Plan v2</b><span>All-in-one PDF toolkit + Admin-controlled website · 100% Permissive Open Source</span></div>
-<span class="pill hide-sm" id="progress-badge">30 / 43 prompts done</span>
+<span class="pill hide-sm" id="progress-badge">37 / 43 prompts done</span>
 <button class="iconbtn" aria-label="Toggle theme" onclick="toggleTheme()" id="themebtn">◐</button>
 <button class="btn btn-sm hide-sm" onclick="window.print()">Print / PDF</button>
 </div></div>
@@ -962,7 +962,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - Unsplash API integration: Search royalty-free photos, select photo, and automatically store photographer credit metadata.
 4. Exit criteria: Build a test draft; verify changes appear in live preview iframe in real time before publishing.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-2" onchange="updateProgress()"><span>Prompt 7.2: Header &amp; Navigation Builder</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-2" checked onchange="updateProgress()"><span>Prompt 7.2: Header &amp; Navigation Builder</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p7-2', this)">Copy prompt</button></div>
 <p class="muted small">Visual builder for site logo, menu items, categorized tools mega-menu, CTA buttons, and mobile drawer.</p>
 <details><summary>Show full prompt</summary><pre id="p7-2">Act as a UI/UX &amp; Frontend Engineer. Build the Header Builder in `apps/admin/src/app/(builders)/header/`.
@@ -977,7 +977,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - "Publish Header" flushes Redis cache `cache:config:header` and triggers revalidation on `apps/web`.
 3. Exit criteria: Reorder menu items in builder; verify updated order appears on public website immediately upon clicking publish.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-3" onchange="updateProgress()"><span>Prompt 7.3: Footer Builder</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-3" checked onchange="updateProgress()"><span>Prompt 7.3: Footer Builder</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p7-3', this)">Copy prompt</button></div>
 <p class="muted small">Visual builder for footer link columns, copyright notices, social icons, and trust certification badges.</p>
 <details><summary>Show full prompt</summary><pre id="p7-3">Act as a Frontend Engineer. Build the Footer Builder in `apps/admin/src/app/(builders)/footer/`.
@@ -992,7 +992,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - On publish, invalidates `cache:config:footer`.
 3. Exit criteria: Add new link column in Footer Builder; verify public footer updates instantly upon publish.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-4" onchange="updateProgress()"><span>Prompt 7.4: Notification Bar Builder</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-4" checked onchange="updateProgress()"><span>Prompt 7.4: Notification Bar Builder</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p7-4', this)">Copy prompt</button></div>
 <p class="muted small">Site-wide announcement bar builder with scheduling, CTA links, and dismissible cookie settings.</p>
 <details><summary>Show full prompt</summary><pre id="p7-4">Act as a Marketing Tech Engineer. Build the Notification Bar Builder in `apps/admin/src/app/(builders)/notification-bar/`.
@@ -1007,7 +1007,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - Instant master switch to show or hide the announcement bar immediately.
 3. Exit criteria: Schedule a notification bar; verify it renders on the public site and test dismiss button hiding the bar.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-5" onchange="updateProgress()"><span>Prompt 7.5: Homepage Sections Builder</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-5" checked onchange="updateProgress()"><span>Prompt 7.5: Homepage Sections Builder</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p7-5', this)">Copy prompt</button></div>
 <p class="muted small">Drag-and-drop section reordering for the homepage, hero headline editor, features grid, and FAQ accordion.</p>
 <details><summary>Show full prompt</summary><pre id="p7-5">Act as a Content Platform Engineer. Build the Homepage Builder in `apps/admin/src/app/(builders)/homepage/`.
@@ -1025,7 +1025,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - Publish invalidates `cache:config:page:home`.
 4. Exit criteria: Reorder FAQ above pricing in builder; verify public homepage reflects new section ordering instantly upon publish.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-6" onchange="updateProgress()"><span>Prompt 7.6: Other Pages &amp; Legal Pages Builder</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-6" checked onchange="updateProgress()"><span>Prompt 7.6: Other Pages &amp; Legal Pages Builder</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p7-6', this)">Copy prompt</button></div>
 <p class="muted small">Dynamic page creator for About, Security, Contact, and Legal pages with header/footer placement options.</p>
 <details><summary>Show full prompt</summary><pre id="p7-6">Act as a Web Content Engineer. Build the Custom Pages Builder in `apps/admin/src/app/(builders)/pages/`.
@@ -1040,7 +1040,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - Checkboxes: "Include link in Header Menu", "Include link in Footer Column (Select Column)".
 4. Exit criteria: Create a new `/security-policy` page; verify it renders with site header and footer at `https://simplifypdf.com/security-policy`.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-7" onchange="updateProgress()"><span>Prompt 7.7: Blog Builder (Block Editor, Categories, Tags, Authors, SEO, Scheduling)</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-7" checked onchange="updateProgress()"><span>Prompt 7.7: Blog Builder (Block Editor, Categories, Tags, Authors, SEO, Scheduling)</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p7-7', this)">Copy prompt</button></div>
 <p class="muted small">Article publishing studio with block editor, category taxonomies, Unsplash cover photo picker, and scheduled publishing.</p>
 <details><summary>Show full prompt</summary><pre id="p7-7">Act as a Digital Publishing Engineer. Build the Blog Builder in `apps/admin/src/app/(builders)/blog/`.
@@ -1057,7 +1057,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - Status: Draft, Scheduled (pick future date/time), Published.
 4. Exit criteria: Write and publish an article titled "How to Compress PDF Without Losing Quality"; verify it appears in `/blog` listing and renders cleanly.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-8" onchange="updateProgress()"><span>Prompt 7.8: Live Design System Studio (Theme Colors, Button Style, Radius, Live Propagation)</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-8" checked onchange="updateProgress()"><span>Prompt 7.8: Live Design System Studio (Theme Colors, Button Style, Radius, Live Propagation)</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p7-8', this)">Copy prompt</button></div>
 <p class="muted small">Real-time design token customizer with instant CSS variable propagation to public website and user portals.</p>
 <details><summary>Show full prompt</summary><pre id="p7-8">Act as a Design Systems Architect. Build the Live Design Studio in `apps/admin/src/app/(settings)/design-studio/`.
