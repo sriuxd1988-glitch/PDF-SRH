@@ -96,3 +96,28 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 Button.displayName = 'Button';
+
+export interface ButtonV6Props extends Omit<ButtonProps, 'children'> {
+  text: string;
+  hoverText?: string;
+}
+
+export function ButtonV6({ text, hoverText, ...props }: ButtonV6Props): React.JSX.Element {
+  return (
+    <Button variant="roll" {...props}>
+      {text}
+    </Button>
+  );
+}
+
+export interface NextSaaSBtnProps extends Omit<ButtonProps, 'children'> {
+  text: string;
+}
+
+export function NextSaaSBtn({ text, ...props }: NextSaaSBtnProps): React.JSX.Element {
+  return (
+    <Button variant="lateral" {...props}>
+      {text}
+    </Button>
+  );
+}

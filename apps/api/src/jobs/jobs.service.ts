@@ -33,7 +33,7 @@ export class JobsService {
         toolType: dto.toolType,
         sourceKey: dto.sourceKey,
         sourceFilename: dto.sourceFilename,
-        sourceSizeBytes: BigInt(dto.sizeBytes || dto.sourceSizeBytes || 0),
+        sourceSizeBytes: BigInt(dto.sourceSizeBytes || 0),
         status: JobStatus.QUEUED,
         expiresAt,
         userId: dto.userId || null,

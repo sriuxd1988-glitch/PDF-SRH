@@ -11,6 +11,8 @@
   "dependencies": {
     "@simplifypdf/types": "workspace:*",
     "@simplifypdf/ui": "workspace:*",
+    "@simplifypdf/auth": "workspace:*",
+    "next-auth": "5.0.0-beta.25",
     "lucide-react": "^0.468.0",
     "next": "15.0.3",
     "react": "^18.3.1",

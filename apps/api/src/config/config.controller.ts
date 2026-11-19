@@ -21,7 +21,7 @@ export class ConfigController {
   }
 
   @Post('header/publish')
-  async publishHeader(@Body() body: any) {
+  async publishHeader(@Body() body: any): Promise<any> {
     return this.configService.publishHeader(body);
   }
 
@@ -31,7 +31,7 @@ export class ConfigController {
   }
 
   @Post('footer/publish')
-  async publishFooter(@Body() body: any) {
+  async publishFooter(@Body() body: any): Promise<any> {
     return this.configService.publishFooter(body);
   }
 
@@ -46,7 +46,7 @@ export class ConfigController {
   }
 
   @Put('tools/:slug')
-  async updateTool(@Param('slug') slug: string, @Body() body: any) {
+  async updateTool(@Param('slug') slug: string, @Body() body: any): Promise<any> {
     return this.configService.updateToolConfig(slug, body);
   }
 }

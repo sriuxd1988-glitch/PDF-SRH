@@ -60,7 +60,7 @@ export class ConfigService {
     return header;
   }
 
-  async publishHeader(data: any) {
+  async publishHeader(data: any): Promise<any> {
     const updated = await prisma.headerConfig.upsert({
       where: { id: 'singleton' },
       update: {
@@ -96,7 +96,7 @@ export class ConfigService {
     return footer;
   }
 
-  async publishFooter(data: any) {
+  async publishFooter(data: any): Promise<any> {
     const updated = await prisma.footerConfig.upsert({
       where: { id: 'singleton' },
       update: {
@@ -150,7 +150,7 @@ export class ConfigService {
     return tools;
   }
 
-  async updateToolConfig(slug: string, data: any) {
+  async updateToolConfig(slug: string, data: any): Promise<any> {
     const updated = await prisma.toolConfig.update({
       where: { slug },
       data,

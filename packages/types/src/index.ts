@@ -109,3 +109,5 @@ export interface NotificationBarConfig {
   startAt?: string;
   endAt?: string;
 }
+
+export * from './env';

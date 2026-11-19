@@ -124,7 +124,7 @@ export default function HomePage() {
                         <Icon className="w-6 h-6" />
                       </div>
                       {tool.badge && (
-                        <Badge variant={tool.badge === 'PRO' ? 'pro' : 'default'}>
+                        <Badge variant={tool.badge === 'PRO' ? 'pro' : 'outline'}>
                           {tool.badge}
                         </Badge>
                       )}
