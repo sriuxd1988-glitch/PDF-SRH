@@ -13,6 +13,8 @@ from tools.split import split_pdf
 from tools.organize import organize_pdf
 from tools.security import protect_pdf, unlock_pdf
 from tools.compress import compress_pdf
+from tools.esign import apply_esign
+from tools.redact import redact_pdf
 
 class TestPermissivePDFTools(unittest.TestCase):
     def setUp(self):
@@ -114,6 +116,42 @@ class TestPermissivePDFTools(unittest.TestCase):
         result = compress_pdf(src_pdf, compressed_out, level="basic")
         self.assertTrue(os.path.exists(result))
         self.assertGreater(os.path.getsize(result), 0)
+
+    def test_esign_with_audit_certificate(self):
+        src_pdf = self._create_sample_pdf("contract.pdf", num_pages=2)
+        signed_out = os.path.join(self.temp_dir, "signed_contract.pdf")
+
+        # Create sample signature PNG
+        sig_png = os.path.join(self.temp_dir, "sig.png")
+        sig_img = Image.new("RGBA", (150, 60), color=(0, 0, 0, 0))
+        sig_img.save(sig_png)
+
+        # Apply e-signature
+        result = apply_esign(src_pdf, signed_out, sig_png, page_number=1, signer_info="John Doe (Verified)")
+        self.assertTrue(os.path.exists(result))
+
+        # Check that page count increased by 1 (the appended cryptographic audit certificate)
+        import pikepdf
+        with pikepdf.open(result) as pdf:
+            self.assertEqual(len(pdf.pages), 3)
+
+    def test_redact_pdf(self):
+        src_pdf = self._create_sample_pdf("confidential.pdf", num_pages=2)
+        redacted_out = os.path.join(self.temp_dir, "redacted.pdf")
+
+        result = redact_pdf(
+            src_pdf,
+            redacted_out,
+            redaction_areas=[{"page": 1, "x": 50, "y": 100, "width": 100, "height": 30}]
+        )
+        self.assertTrue(os.path.exists(result))
+
+        import pikepdf
+        with pikepdf.open(result) as pdf:
+            # Metadata must be stripped
+            self.assertFalse(hasattr(pdf.Root, "Metadata") and pdf.Root.Metadata is not None)
+            # Annotation rectangle must exist
+            self.assertIn("/Annots", pdf.pages[0])
 
 if __name__ == "__main__":
     unittest.main()

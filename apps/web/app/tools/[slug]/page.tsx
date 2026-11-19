@@ -1,19 +1,15 @@
-'use client';
-
 import React from 'react';
-import { useParams } from 'next/navigation';
-import { DropZone } from '../../../components/DropZone';
-import { ShieldCheck, Zap, Lock, Sparkles, ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
-import { Badge } from '@simplifypdf/ui';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { ToolView } from './ToolView';
 
-const TOOL_META: Record<string, { title: string; toolType: string; desc: string; maxMb: number; tips: string[] }> = {
+const ALL_TOOLS: Record<string, { title: string; toolType: string; desc: string; maxMb: number; tips: string[] }> = {
   compress: {
     title: 'Compress PDF',
     toolType: 'COMPRESS',
-    desc: 'Reduce PDF file sizes dramatically while keeping crisp vector fonts and sharp images.',
+    desc: 'Reduce PDF file size by up to 85% while keeping crisp vector fonts and sharp images.',
     maxMb: 50,
-    tips: ['Linearizes file for fast web streaming', 'Downsamples heavy raster images to 150 DPI', 'Removes unreferenced object streams'],
+    tips: ['Linearizes file for fast web streaming', 'Downsamples raster images to 150 DPI', 'Removes unreferenced object streams'],
   },
   merge: {
     title: 'Merge PDF',
@@ -71,57 +67,114 @@ const TOOL_META: Record<string, { title: string; toolType: string; desc: string;
     maxMb: 50,
     tips: ['Instantly removes owner restrictions', 'Requires valid user password if document is locked', 'Outputs clean unprotected PDF'],
   },
+  ocr: {
+    title: 'OCR PDF',
+    toolType: 'OCR',
+    desc: 'Extract selectable, searchable text from scanned paper PDF documents.',
+    maxMb: 50,
+    tips: ['Multilingual text recognition via Tesseract', 'Generates standard PDF/A format', 'Invisible searchable text overlay'],
+  },
+  esign: {
+    title: 'eSign PDF',
+    toolType: 'ESIGN',
+    desc: 'Apply legally binding electronic signatures with cryptographic audit certificate stamps.',
+    maxMb: 50,
+    tips: ['Draw, type or upload signatures', 'Cryptographic SHA-256 audit sheet appended', 'Complies with US ESIGN & eIDAS'],
+  },
+  redact: {
+    title: 'Redact PDF',
+    toolType: 'REDACT',
+    desc: 'Permanently remove sensitive text, numbers, and private regions from documents.',
+    maxMb: 50,
+    tips: ['True stream sanitization (not black box overlay)', 'Complete metadata purge', 'Irreversible privacy guarantee'],
+  },
+  organize: {
+    title: 'Organize PDF',
+    toolType: 'ORGANIZE',
+    desc: 'Rearrange, rotate, and delete pages inside your PDF documents.',
+    maxMb: 50,
+    tips: ['Rotate pages 90, 180, 270 degrees', 'Delete unwanted pages with one click', 'Fast visual thumbnail previews'],
+  },
+  rotate: {
+    title: 'Rotate PDF',
+    toolType: 'ROTATE',
+    desc: 'Rotate individual pages or the entire PDF permanently.',
+    maxMb: 50,
+    tips: ['Fix inverted scans permanently', 'Rotate all pages simultaneously', 'Preserves internal document links'],
+  },
 };
 
-export default function ToolPage() {
-  const params = useParams();
-  const slug = String(params?.slug || 'compress');
-  const tool = TOOL_META[slug] || {
-    title: `${slug.replace('-', ' ').toUpperCase()}`,
-    toolType: slug.toUpperCase().replace('-', '_'),
-    desc: `Process your documents with SimplifyPDF's permissive open-source engine.`,
-    maxMb: 50,
-    tips: ['Fast direct-to-S3 upload', 'Automated 2-hour file shredding', '100% permissive engine'],
+export async function generateStaticParams() {
+  return Object.keys(ALL_TOOLS).map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const resolved = await params;
+  const tool = ALL_TOOLS[resolved.slug];
+  if (!tool) return { title: 'Tool Not Found — SimplifyPDF' };
+
+  return {
+    title: `${tool.title} — Free Online Tool | SimplifyPDF`,
+    description: tool.desc,
+    openGraph: {
+      title: `${tool.title} — High-Speed Permissive PDF Processing`,
+      description: tool.desc,
+      url: `https://simplifypdf.com/tools/${resolved.slug}`,
+      siteName: 'SimplifyPDF',
+      type: 'website',
+    },
+  };
+}
+
+export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolved = await params;
+  const tool = ALL_TOOLS[resolved.slug];
+  if (!tool) notFound();
+
+  // JSON-LD Structured Data Schema for Search Engines
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'SoftwareApplication',
+        name: `SimplifyPDF ${tool.title}`,
+        operatingSystem: 'All',
+        applicationCategory: 'UtilitiesApplication',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
+        description: tool.desc,
+      },
+      {
+        '@type': 'HowTo',
+        name: `How to ${tool.title} Online`,
+        step: [
+          {
+            '@type': 'HowToStep',
+            text: 'Drop or select your document in the SimplifyPDF uploader.',
+          },
+          {
+            '@type': 'HowToStep',
+            text: 'Choose your options and execute high-speed permissive processing.',
+          },
+          {
+            '@type': 'HowToStep',
+            text: 'Download your processed document instantly with signed URL.',
+          },
+        ],
+      },
+    ],
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 flex flex-col gap-12">
-      <div className="flex items-center gap-2">
-        <Link
-          href="/#tools"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" /> Back to all tools
-        </Link>
-      </div>
-
-      <div className="text-center flex flex-col items-center gap-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--primary-50)] text-[var(--primary-500)] text-xs font-bold">
-          <Sparkles className="w-3.5 h-3.5" /> High-Speed Permissive Processing
-        </div>
-        <h1 className="font-heading font-black text-4xl sm:text-5xl text-[var(--ink)] tracking-tight">
-          {tool.title}
-        </h1>
-        <p className="text-base sm:text-lg text-[var(--muted)] max-w-xl">
-          {tool.desc}
-        </p>
-      </div>
-
-      <DropZone
-        toolType={tool.toolType}
-        toolTitle={`Drop file to ${tool.title}`}
-        maxFileSizeMb={tool.maxMb}
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-
-      {/* Feature & Security Highlights */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-[var(--line)]">
-        {tool.tips.map((tip, idx) => (
-          <div key={idx} className="p-5 rounded-2xl bg-[var(--card)] border border-[var(--line)] flex items-start gap-3 shadow-sm">
-            <ShieldCheck className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
-            <span className="text-sm font-semibold text-[var(--ink)]">{tip}</span>
-          </div>
-        ))}
-      </div>
-    </div>
+      <ToolView slug={resolved.slug} tool={tool} />
+    </>
   );
 }

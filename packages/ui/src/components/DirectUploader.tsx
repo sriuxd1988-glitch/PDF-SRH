@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useRef } from 'react';
 import { UploadCloud, CheckCircle2, AlertCircle, Loader2, Sparkles, ArrowDownToLine } from 'lucide-react';
 import { Button } from './button';

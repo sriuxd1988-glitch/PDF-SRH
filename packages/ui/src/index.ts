@@ -4,3 +4,5 @@ export * from './components/glow-card';
 export * from './components/auth/split-auth';
 
 export * from './components/DirectUploader';
+
+export * from './components/esign/SignaturePad';
