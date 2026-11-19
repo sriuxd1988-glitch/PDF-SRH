@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGradMask" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#864FFE"/>
+      <stop offset="100%" stop-color="#6D1FE2"/>
+    </linearGradient>
+    <linearGradient id="accentGradMask" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C6F56F"/>
+      <stop offset="100%" stop-color="#83E7EE"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Full-bleed background for maskable target (Android circular/squircle crop) -->
+  <rect x="0" y="0" width="512" height="512" fill="url(#bgGradMask)"/>
+
+  <!-- Centered emblem strictly inside 80% safe zone (center 400x400) -->
+  <g transform="translate(40, 30) scale(0.85)">
+    <path d="M 136 96 L 296 96 L 376 176 L 376 416 L 136 416 Z" fill="#FFFFFF"/>
+    <path d="M 296 96 L 296 176 L 376 176 Z" fill="#E6E6EC"/>
+    <path d="M 296 96 L 376 176" stroke="#864FFE" stroke-width="4"/>
+
+    <path d="M 266 136 L 232 204 L 260 204 L 246 244 L 294 176 L 266 176 Z" fill="url(#accentGradMask)"/>
+
+    <rect x="166" y="256" width="180" height="68" rx="18" fill="#1A1A1C"/>
+    <text x="256" y="302" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-weight="900" font-size="38" letter-spacing="3" text-anchor="middle">PDF</text>
+
+    <rect x="170" y="350" width="172" height="10" rx="5" fill="#E6E6EC"/>
+    <rect x="170" y="376" width="112" height="10" rx="5" fill="#E6E6EC"/>
+  </g>
+</svg>

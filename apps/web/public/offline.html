@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Offline — SimplifyPDF</title>
+  <style>
+    :root {
+      --bg: #FAF9F7;
+      --card: #ffffff;
+      --ink: #11141D;
+      --muted: #71717A;
+      --primary: #864FFE;
+      --line: #DDDDE4;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0B0B10;
+        --card: #19191F;
+        --ink: #FAF9F7;
+        --muted: #A1A1AA;
+        --line: #27272A;
+      }
+    }
+    body {
+      margin: 0;
+      padding: 24px;
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', Roboto, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .card {
+      max-width: 440px;
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 40px 32px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+    .icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: #864FFE15;
+      color: #864FFE;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      margin: 0 0 10px;
+      letter-spacing: -0.5px;
+    }
+    p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0 0 24px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--primary);
+      color: #ffffff !important;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 14px 28px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+      transition: opacity 0.2s;
+    }
+    .btn:hover {
+      opacity: 0.92;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 1l22 22"></path>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+        <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+      </svg>
+    </div>
+    <h1>You're currently offline</h1>
+    <p>
+      SimplifyPDF cached your app shell. Reconnect to Wi-Fi or cellular data to process documents with high-speed remote workers.
+    </p>
+    <button class="btn" onclick="window.location.reload()">
+      Retry Connection
+    </button>
+  </div>
+</body>
+</html>

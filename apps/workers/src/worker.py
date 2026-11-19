@@ -111,6 +111,19 @@ def process_single_job(message_id: str, data: dict, stream_source: str):
             publish_job_progress(job_id, "FAILED", 100, detail=err, error_reason=err)
             return
 
+        # Step 2.5: Polyglot Guard & JavaScript Sanitization
+        if source_filename.lower().endswith(".pdf"):
+            publish_job_progress(job_id, "SCANNING", 38, detail="Verifying magic bytes and stripping malicious actions...")
+            try:
+                from security_guard import inspect_and_sanitize
+                inspect_and_sanitize(local_input)
+            except Exception as sec_err:
+                err = f"SECURITY_VIOLATION: {sec_err}"
+                logger.error(f"Security Alert: Job {job_id} failed security guard: {err}")
+                update_db_job_status(job_id, "FAILED", error_reason=err)
+                publish_job_progress(job_id, "FAILED", 100, detail=err, error_reason=err)
+                return
+
         # Step 3: Permissive Open-Source Tool Execution
         publish_job_progress(job_id, "PROCESSING", 45, detail="Executing permissive open-source engine...")
         update_db_job_status(job_id, "PROCESSING")

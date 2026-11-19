@@ -1,0 +1,183 @@
+version: '3.8'
+
+services:
+  # =========================================================================
+  # 1. DATABASE, CACHE, STORAGE & SECURITY
+  # =========================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: simplifypdf-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-simplifypdf}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-simplifypdf_secret_password}
+      POSTGRES_DB: ${POSTGRES_DB:-simplifypdf_db}
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2048M
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U simplifypdf -d simplifypdf_db']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: simplifypdf-redis
+    restart: always
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-simplifypdf_redis_secret}
+    ports:
+      - '127.0.0.1:6379:6379'
+    volumes:
+      - redis_data:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+    healthcheck:
+      test: ['CMD', 'redis-cli', '-a', '${REDIS_PASSWORD:-simplifypdf_redis_secret}', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:RELEASE.2024-11-07T00-52-20Z
+    container_name: simplifypdf-minio
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin_secret}
+    ports:
+      - '127.0.0.1:9000:9000'
+      - '127.0.0.1:9001:9001'
+    volumes:
+      - minio_data:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1024M
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  clamav:
+    image: clamav/clamav:stable
+    container_name: simplifypdf-clamav
+    restart: always
+    ports:
+      - '127.0.0.1:3310:3310'
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 2048M
+
+  # =========================================================================
+  # 2. PYTHON WORKER ENGINES (ZERO-AGPL)
+  # =========================================================================
+  workers:
+    build:
+      context: .
+      dockerfile: apps/workers/Dockerfile
+    container_name: simplifypdf-workers
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-simplifypdf}:${POSTGRES_PASSWORD:-simplifypdf_secret_password}@postgres:5432/${POSTGRES_DB:-simplifypdf_db}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-simplifypdf_redis_secret}
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
+      S3_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin_secret}
+      S3_BUCKET: simplifypdf-vault
+      CLAMAV_HOST: clamav
+      CLAMAV_PORT: 3310
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '2.5'
+          memory: 3072M
+        reservations:
+          cpus: '1.0'
+          memory: 1024M
+
+  # =========================================================================
+  # 3. BACKEND API & NEXTJS APPS
+  # =========================================================================
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api
+    container_name: simplifypdf-api
+    restart: always
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-simplifypdf}:${POSTGRES_PASSWORD:-simplifypdf_secret_password}@postgres:5432/${POSTGRES_DB:-simplifypdf_db}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-simplifypdf_redis_secret}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET}
+      RAZORPAY_WEBHOOK_SECRET: ${RAZORPAY_WEBHOOK_SECRET}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+    ports:
+      - '127.0.0.1:4000:4000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1024M
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: web
+    container_name: simplifypdf-web
+    restart: always
+    environment:
+      PORT: 3000
+      NEXT_PUBLIC_API_URL: https://api.simplifypdf.com
+      NEXTAUTH_URL: https://simplifypdf.com
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+    ports:
+      - '127.0.0.1:3000:3000'
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1024M
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:

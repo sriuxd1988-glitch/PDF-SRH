@@ -1123,7 +1123,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
 <div class="phase-head"><div><span class="eyebrow" style="color:#64748B">Phase 09</span><h3>PWA, Security Hardening, QA &amp; Production Launch</h3></div><span class="mono muted">Prompts 9.1 – 9.4</span></div>
 <p class="lead">Builds mobile PWA with Web Share Target, OWASP security hardening, comprehensive load testing, and production deployment on Hostinger VPS with Coolify.</p>
 <div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p9-1" onchange="updateProgress()"><span>Prompt 9.1: Mobile PWA with Share Target</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p9-1" checked onchange="updateProgress()"><span>Prompt 9.1: Mobile PWA with Share Target</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p9-1', this)">Copy prompt</button></div>
 <p class="muted small">Progressive Web App manifest, offline shell caching, and native mobile Share Target receiving PDF files.</p>
 <details><summary>Show full prompt</summary><pre id="p9-1">Act as a Mobile Web &amp; PWA Specialist. Implement Progressive Web App capabilities in `apps/web`.
@@ -1141,7 +1141,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - Allows users on Android and iOS to click "Share to SimplifyPDF" directly from any file manager or messaging app.
 4. Exit criteria: Test PWA installation on Chrome Android and Safari iOS; verify app installs to home screen and accepts shared PDF file.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p9-2" onchange="updateProgress()"><span>Prompt 9.2: Security Hardening (OWASP Top 10, Rate Limiting, Polyglot PDF Guard)</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p9-2" checked onchange="updateProgress()"><span>Prompt 9.2: Security Hardening (OWASP Top 10, Rate Limiting, Polyglot PDF Guard)</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p9-2', this)">Copy prompt</button></div>
 <p class="muted small">Production security review: Content Security Policy, rate limits, ClamAV upload validation, and malicious polyglot PDF defense.</p>
 <details><summary>Show full prompt</summary><pre id="p9-2">Act as a Lead Penetration Tester &amp; Application Security Engineer. Harden SimplifyPDF against attacks.
@@ -1160,7 +1160,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - Redis token bucket rate limiter in NestJS API: 60 requests/minute per IP for standard endpoints.
 4. Exit criteria: Run automated security scan with OWASP ZAP; verify zero high/critical vulnerabilities.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p9-3" onchange="updateProgress()"><span>Prompt 9.3: Testing &amp; QA (Corpus Load Test at 3x Peak, Playwright E2E, Accessibility)</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p9-3" checked onchange="updateProgress()"><span>Prompt 9.3: Testing &amp; QA (Corpus Load Test at 3x Peak, Playwright E2E, Accessibility)</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p9-3', this)">Copy prompt</button></div>
 <p class="muted small">Automated testing suite with 300-file PDF test corpus, Playwright E2E flows, and Axe accessibility audits.</p>
 <details><summary>Show full prompt</summary><pre id="p9-3">Act as a QA Lead &amp; Test Automation Engineer. Build the testing suite across `apps/web`, `apps/app`, and `apps/workers`.
@@ -1176,7 +1176,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - Run `@axe-core/playwright` across all pages. Verify zero WCAG 2.2 AA violations (including focus rings and contrast).
 4. Exit criteria: All Playwright E2E tests pass in CI; load test with k6 simulates 200 concurrent users with 99% responses &lt; 1.5s.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p9-4" onchange="updateProgress()"><span>Prompt 9.4: Production VPS Setup, Scaling &amp; Cloudflare R2 Backup Drill</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p9-4" checked onchange="updateProgress()"><span>Prompt 9.4: Production VPS Setup, Scaling &amp; Cloudflare R2 Backup Drill</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p9-4', this)">Copy prompt</button></div>
 <p class="muted small">Production Hostinger VPS deployment, Coolify container orchestration, SSL certificates, and off-site backup restore drill.</p>
 <details><summary>Show full prompt</summary><pre id="p9-4">Act as a Principal DevOps &amp; Infrastructure Engineer. Finalize production deployment for SimplifyPDF.com.

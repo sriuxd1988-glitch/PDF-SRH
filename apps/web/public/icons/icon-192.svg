@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#864FFE"/>
+      <stop offset="100%" stop-color="#6D1FE2"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C6F56F"/>
+      <stop offset="100%" stop-color="#83E7EE"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background Rounded App Square -->
+  <rect x="8" y="8" width="176" height="176" rx="42" fill="url(#bgGrad)"/>
+
+  <!-- Document Outline -->
+  <g filter="url(#shadow)">
+    <!-- Document Body -->
+    <path d="M 52 38 L 110 38 L 140 68 L 140 154 L 52 154 Z" fill="#FFFFFF" rx="8"/>
+    <!-- Folded Corner -->
+    <path d="M 110 38 L 110 68 L 140 68 Z" fill="#DDDDE4"/>
+    <path d="M 110 38 L 140 68" stroke="#864FFE" stroke-width="2"/>
+    
+    <!-- PDF Badge Strip -->
+    <rect x="62" y="94" width="68" height="26" rx="6" fill="#1A1A1C"/>
+    <text x="96" y="112" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-weight="900" font-size="14" letter-spacing="1.5" text-anchor="middle">PDF</text>
+    
+    <!-- Lightning / Speed Bolt Accent -->
+    <path d="M 98 52 L 86 76 L 96 76 L 92 90 L 108 66 L 98 66 Z" fill="url(#accentGrad)"/>
+    
+    <!-- Document Content Lines -->
+    <rect x="64" y="130" width="64" height="4" rx="2" fill="#E6E6EC"/>
+    <rect x="64" y="140" width="40" height="4" rx="2" fill="#E6E6EC"/>
+  </g>
+</svg>

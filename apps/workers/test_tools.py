@@ -153,5 +153,38 @@ class TestPermissivePDFTools(unittest.TestCase):
             # Annotation rectangle must exist
             self.assertIn("/Annots", pdf.pages[0])
 
+    def test_security_guard_polyglot_and_sanitization(self):
+        from security_guard import (
+            validate_pdf_magic_bytes,
+            detect_polyglot_executables,
+            sanitize_pdf_actions,
+            inspect_and_sanitize,
+            SecurityValidationError,
+        )
+
+        # 1. Clean PDF passes validation
+        valid_pdf = self._create_sample_pdf("clean_test.pdf", num_pages=1)
+        version = validate_pdf_magic_bytes(valid_pdf)
+        self.assertTrue(version.startswith("%PDF-1."))
+
+        # 2. Corrupt / Non-PDF magic header is rejected
+        fake_pdf = os.path.join(self.temp_dir, "fake.pdf")
+        with open(fake_pdf, "wb") as f:
+            f.write(b"NOT A REAL PDF HEADER")
+        with self.assertRaises(SecurityValidationError):
+            validate_pdf_magic_bytes(fake_pdf)
+
+        # 3. Polyglot PE binary is rejected
+        polyglot_file = os.path.join(self.temp_dir, "polyglot.pdf")
+        with open(polyglot_file, "wb") as f:
+            f.write(b"MZ\x90\x00\x03\x00\x00\x00This program cannot be run in DOS mode.%PDF-1.4")
+        with self.assertRaises(SecurityValidationError):
+            detect_polyglot_executables(polyglot_file)
+
+        # 4. Master inspect_and_sanitize succeeds on valid document
+        report = inspect_and_sanitize(valid_pdf)
+        self.assertEqual(report["status"], "SECURE")
+        self.assertGreater(report["file_size"], 0)
+
 if __name__ == "__main__":
     unittest.main()
