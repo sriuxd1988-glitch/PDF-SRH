@@ -117,7 +117,7 @@ nav.side.open{display:flex}
 <button class="iconbtn menubtn" aria-label="Open sections" onclick="document.querySelector('nav.side').classList.toggle('open')">☰</button>
 <div class="logo">SP</div>
 <div class="brand"><b>SimplifyPDF · Master Execution Plan v2</b><span>All-in-one PDF toolkit + Admin-controlled website · 100% Permissive Open Source</span></div>
-<span class="pill hide-sm" id="progress-badge">26 / 43 prompts done</span>
+<span class="pill hide-sm" id="progress-badge">30 / 43 prompts done</span>
 <button class="iconbtn" aria-label="Toggle theme" onclick="toggleTheme()" id="themebtn">◐</button>
 <button class="btn btn-sm hide-sm" onclick="window.print()">Print / PDF</button>
 </div></div>
@@ -860,7 +860,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - When a tool is disabled in Admin, the public website instantly hides the tool or disables the drop zone with the maintenance notice without requiring container redeployment.
 4. Exit criteria: Disable "Compress PDF" in Admin; verify public homepage immediately reflects maintenance state within 5 seconds.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-3" onchange="updateProgress()"><span>Prompt 6.3: Tier &amp; Quota Limits Controller (Guest / Free / Pro Rules)</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-3" checked onchange="updateProgress()"><span>Prompt 6.3: Tier &amp; Quota Limits Controller (Guest / Free / Pro Rules)</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p6-3', this)">Copy prompt</button></div>
 <p class="muted small">Real-time limits editor for file sizes, daily task ceilings, retention hours, and OCR allowances.</p>
 <details><summary>Show full prompt</summary><pre id="p6-3">Act as a Growth &amp; Monetization Engineer. Build the Plan &amp; Quota management module in `apps/admin/src/app/(operations)/plans/`.
@@ -880,7 +880,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - API quota middleware immediately enforces new limits.
 4. Exit criteria: Change Free max file size from 50MB to 60MB in Admin; test dropping 55MB file and verify it is accepted without server restart.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-4" onchange="updateProgress()"><span>Prompt 6.4: User Management Module (Inspect, Plan Overrides, Suspend, GDPR Delete)</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-4" checked onchange="updateProgress()"><span>Prompt 6.4: User Management Module (Inspect, Plan Overrides, Suspend, GDPR Delete)</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p6-4', this)">Copy prompt</button></div>
 <p class="muted small">Comprehensive user administration table with search, manual Pro grants, account suspension, and GDPR deletion.</p>
 <details><summary>Show full prompt</summary><pre id="p6-4">Act as an Identity &amp; Support Systems Engineer. Build the User Administration module in `apps/admin/src/app/(operations)/users/`.
@@ -901,7 +901,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - Every administrative action writes an immutable entry to `AuditLog`.
 5. Exit criteria: Test searching users, granting Pro override, suspending account, and verify audit log record is created.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-5" onchange="updateProgress()"><span>Prompt 6.5: Billing Management Module (Razorpay + Stripe Invoices, Refunds, Dunning)</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-5" checked onchange="updateProgress()"><span>Prompt 6.5: Billing Management Module (Razorpay + Stripe Invoices, Refunds, Dunning)</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p6-5', this)">Copy prompt</button></div>
 <p class="muted small">Unified billing console across Stripe and Razorpay with manual refund triggers and subscription health metrics.</p>
 <details><summary>Show full prompt</summary><pre id="p6-5">Act as a Fintech &amp; Billing Engineer. Build the Billing Operations module in `apps/admin/src/app/(operations)/billing/`.
@@ -920,7 +920,7 @@ Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating d
    - Create discount coupon codes (Percentage or Fixed amount, expiration date, max redemptions limit).
 5. Exit criteria: Test issuing a sandbox refund from Admin; verify gateway refund API is called and user tier is downgraded gracefully.</pre></details>
 </div><div class="prompt">
-<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-6" onchange="updateProgress()"><span>Prompt 6.6: Redis Queue Monitor, Worker Health, Dead-Letter Inspector &amp; Audit Log</span></label>
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-6" checked onchange="updateProgress()"><span>Prompt 6.6: Redis Queue Monitor, Worker Health, Dead-Letter Inspector &amp; Audit Log</span></label>
 <button class="btn btn-sm" onclick="copyPrompt('p6-6', this)">Copy prompt</button></div>
 <p class="muted small">Live task queue health monitor, worker resource meters, dead-letter job retry, and administrative audit trail.</p>
 <details><summary>Show full prompt</summary><pre id="p6-6">Act as an SRE &amp; Observability Engineer. Build the Queue &amp; System Health console in `apps/admin/src/app/(operations)/queue/`.

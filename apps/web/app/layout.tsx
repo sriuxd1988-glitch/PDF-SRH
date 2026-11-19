@@ -6,6 +6,7 @@ import './globals.css';
 import { NotificationBar } from '../components/NotificationBar';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { DesignTokenSync } from '@simplifypdf/ui';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
 const interTight = Inter_Tight({ subsets: ['latin'], variable: '--font-heading' });
@@ -26,6 +27,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body className="bg-[var(--bg)] text-[var(--text)] min-h-screen flex flex-col font-body transition-colors">
+        <DesignTokenSync />
         <NotificationBar />
         <Header />
         <main className="flex-1 flex flex-col">{children}</main>

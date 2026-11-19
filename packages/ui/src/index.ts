@@ -6,3 +6,4 @@ export * from './components/auth/split-auth';
 export * from './components/DirectUploader';
 
 export * from './components/esign/SignaturePad';
+export * from './components/DesignTokenSync';
