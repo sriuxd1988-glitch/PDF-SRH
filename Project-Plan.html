@@ -1,0 +1,1317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SimplifyPDF — Master Execution Plan v2</title>
+<script>
+(function(){try{var t=localStorage.getItem('plan_theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#864FFE;--primary-700:#6D1FE2;--primary-50:#F4F0FF;--secondary:#1A1A1C;--ink:#11141D;
+--bg:#FAF9F7;--card:#FFFFFF;--soft:#F4F4F7;--text:#20202A;--muted:#686873;--line:#E4E4EA;--code:#F7F7F9;
+--lime:#C6F56F;--cyan:#83E7EE;--yellow:#F9EB57;--ok:#16A34A;--no:#E5484D;--part:#D97706;
+--shadow:0 1px 2px rgba(16,16,24,.05),0 8px 24px rgba(16,16,24,.06)}
+:root[data-theme="dark"]{--bg:#0B0B10;--card:#141419;--soft:#1B1B22;--text:#EEEEF3;--muted:#AAAAB7;--line:#2A2A33;--code:#0F0F14;--primary-50:#221A38;--shadow:none}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:"Inter Tight",Inter,sans-serif;letter-spacing:-.02em;line-height:1.2;margin:0}
+h2{font-size:clamp(24px,3vw,32px)}h3{font-size:clamp(19px,2.2vw,23px)}h4{font-size:16px}
+a{color:var(--primary)}code,.mono{font-family:"JetBrains Mono",monospace;font-size:.86em}
+code{background:var(--soft);padding:1px 5px;border-radius:5px;word-break:break-word}
+.muted{color:var(--muted)}.small{font-size:13px}
+/* top bar */
+.topbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.topbar .in{max-width:1320px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary-700),var(--primary));color:#fff;display:grid;place-items:center;font:700 14px "Inter Tight"}
+.brand{flex:1;min-width:0}.brand b{display:block;font:600 15px "Inter Tight";white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand span{font-size:12px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:12.5px;font-weight:500;white-space:nowrap}
+.iconbtn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;display:grid;place-items:center;flex:none}
+.menubtn{display:none}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;cursor:pointer;border-radius:999px;background:var(--secondary);color:#fff;font:600 13px Inter;padding:10px 16px;white-space:nowrap;text-decoration:none}
+.btn-primary{background:var(--primary)!important;color:#ffffff!important;box-shadow:0 4px 14px rgba(134,79,254,.28)}
+.btn-primary:hover{background:var(--primary-700)!important;color:#ffffff!important}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn-sm{padding:7px 13px;font-size:12px}.btn.ok{background:var(--ok)!important}
+/* layout */
+.wrap{max-width:1320px;margin:0 auto;padding:24px 16px 80px;display:grid;grid-template-columns:260px minmax(0,1fr);gap:28px}
+nav.side{position:sticky;top:84px;align-self:start;max-height:calc(100vh - 100px);overflow:auto;display:flex;flex-direction:column;gap:2px;padding-right:4px}
+nav.side a{color:var(--text);text-decoration:none;font-size:13.5px;padding:7px 10px;border-radius:8px;display:flex;align-items:center;gap:8px}
+nav.side a:hover{background:var(--soft)}.nav-label{font:600 11px Inter;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:14px 10px 4px}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+main{display:flex;flex-direction:column;gap:24px;min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(18px,3vw,32px);box-shadow:var(--shadow)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font:600 12px Inter;text-transform:uppercase;letter-spacing:.08em;color:var(--primary)}
+.newtag{background:var(--lime);color:#1A1A1C;border-radius:999px;padding:2px 8px;font-size:10.5px;letter-spacing:.04em;font-weight:700}
+.lead{color:var(--muted);margin:10px 0 0;max-width:80ch}
+.hero{position:relative;overflow:hidden;background:radial-gradient(70% 90% at 100% 0%,rgba(134,79,254,.16),transparent 60%),var(--card)}
+.hero h1{font-size:clamp(28px,4.4vw,46px);margin:10px 0 12px;max-width:24ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.tile{border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--bg)}
+.tile h4{margin-bottom:6px}.tile ul{margin:6px 0 0;padding-left:18px}.tile li{margin:3px 0;font-size:14px}
+.stat b{display:block;font:700 28px "Inter Tight";color:var(--primary)}.stat span{font-size:13px;color:var(--muted)}
+.sec-head{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+/* competitor cards */
+.ccards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.ccard{border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--bg)}
+.ccard header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}
+.ccard .dom{font:500 12px "JetBrains Mono";color:var(--muted)}
+.ccard dl{margin:0;display:grid;grid-template-columns:110px 1fr;gap:6px 10px;font-size:13.5px}
+.ccard dt{color:var(--muted);font-weight:500}.ccard dd{margin:0}.ccard dt.weak{color:var(--no)}
+/* tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:600;white-space:nowrap;position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+.matrix td.c{text-align:center;font-weight:600}.matrix td:first-child{white-space:nowrap;font-weight:500}
+.ok{color:var(--ok)}.no{color:var(--no)}.part{color:var(--part)}.na{color:var(--muted)}
+td.us{background:var(--primary-50);color:var(--primary);white-space:nowrap;font-weight:600}
+.note{font-size:12.5px;color:var(--muted);margin:8px 2px 0}
+/* design */
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.sw div{border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:12px;background:var(--bg)}
+.sw i{display:block;height:54px}.sw p{margin:0;padding:8px 10px}.sw b{display:block;font-size:12.5px}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.mock-auth{display:grid;grid-template-columns:1.05fr 1fr;border:1px solid var(--line);border-radius:18px;overflow:hidden;min-height:330px;background:var(--bg)}
+.mock-auth .f{padding:22px;display:flex;flex-direction:column;gap:9px;justify-content:center;max-width:340px;margin:0 auto;width:100%}
+.mock-auth .f .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.fake{height:38px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:12px;color:var(--muted);display:flex;align-items:center;padding:0 12px;gap:8px}
+.fake.dark{background:var(--secondary);color:#fff;justify-content:center;border:0}
+.mock-auth .b{margin:10px;border-radius:14px;background:linear-gradient(150deg,#1A1A1C,#6D1FE2);color:#fff;padding:22px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px}
+.mock-auth .b .chip{background:rgba(255,255,255,.16);border-radius:999px;padding:4px 10px;font-size:11.5px}
+.order{counter-reset:o;list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.order li{counter-increment:o;border:1px solid var(--line);border-radius:12px;padding:9px 12px;font-size:13.5px;background:var(--bg)}
+.order li::before{content:counter(o,decimal-leading-zero);font:600 11px "JetBrains Mono";color:var(--primary);margin-right:8px}
+pre.tree{background:var(--code);border:1px solid var(--line);border-radius:14px;padding:16px;overflow-x:auto;font:12.5px/1.55 "JetBrains Mono";margin:0}
+/* phases */
+.phase{border-top:3px solid var(--acc)}
+.phase-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.prompt{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:14px;background:var(--bg);transition:border-color .15s}
+.prompt:hover{border-color:color-mix(in srgb,var(--acc) 55%,var(--line))}
+.prompt-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.chk{display:inline-flex;align-items:flex-start;gap:10px;cursor:pointer;font-weight:600;font-size:14px}
+.chk input{margin-top:4px;accent-color:var(--primary);width:16px;height:16px}
+.prompt p{margin:6px 0 0 27px}
+details{margin-top:10px}
+details summary{font:600 12.5px Inter;color:var(--primary);cursor:pointer;user-select:none;margin-left:27px}
+pre{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:14px;font:12.5px/1.55 "JetBrains Mono";overflow-x:auto;margin:8px 0 0 27px;white-space:pre-wrap;word-break:break-word}
+@media(max-width:960px){
+.wrap{grid-template-columns:1fr}
+nav.side{display:none;position:fixed;inset:60px 0 0;background:var(--card);z-index:19;padding:16px;max-height:none}
+nav.side.open{display:flex}
+.menubtn{display:grid}
+.ccards,.g2,.g3,.g4,.order{grid-template-columns:1fr}
+.mock-auth{grid-template-columns:1fr}
+.mock-auth .b{display:none}
+.hide-sm{display:none}
+}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+<button class="iconbtn menubtn" aria-label="Open sections" onclick="document.querySelector('nav.side').classList.toggle('open')">☰</button>
+<div class="logo">SP</div>
+<div class="brand"><b>SimplifyPDF · Master Execution Plan v2</b><span>All-in-one PDF toolkit + Admin-controlled website · 100% Permissive Open Source</span></div>
+<span class="pill hide-sm" id="progress-badge">21 / 43 prompts done</span>
+<button class="iconbtn" aria-label="Toggle theme" onclick="toggleTheme()" id="themebtn">◐</button>
+<button class="btn btn-sm hide-sm" onclick="window.print()">Print / PDF</button>
+</div></div>
+
+<div class="wrap">
+<nav class="side" onclick="if(event.target.closest('a'))this.classList.remove('open')">
+<a href="#overview">Overview &amp; what’s new</a>
+<a href="#competitors">Competitive analysis</a>
+<a href="#matrix">Feature gap matrix</a>
+<a href="#design">Design system</a>
+<a href="#architecture">Architecture &amp; roles</a>
+<a href="#admin-map">Admin dashboard map</a>
+<div class="nav-label">Build phases</div>
+<a href="#phase-0"><span class="dot" style="background:#864FFE"></span>P00 · Design System &amp; Auth</a>
+<a href="#phase-1"><span class="dot" style="background:#6366F1"></span>P01 · Foundation &amp; Monorepo</a>
+<a href="#phase-2"><span class="dot" style="background:#10B981"></span>P02 · Core PDF Engine</a>
+<a href="#phase-3"><span class="dot" style="background:#EC4899"></span>P03 · Security, e-Sign &amp; OCR</a>
+<a href="#phase-4"><span class="dot" style="background:#0EA5E9"></span>P04 · Public Website &amp; Drop</a>
+<a href="#phase-5"><span class="dot" style="background:#F59E0B"></span>P05 · User Dashboards</a>
+<a href="#phase-6"><span class="dot" style="background:#F43F5E"></span>P06 · Admin Operations</a>
+<a href="#phase-7"><span class="dot" style="background:#C026D3"></span>P07 · Admin Website Builders</a>
+<a href="#phase-8"><span class="dot" style="background:#14B8A6"></span>P08 · Payments (Stripe/Razorpay)</a>
+<a href="#phase-9"><span class="dot" style="background:#64748B"></span>P09 · PWA, Security &amp; Launch</a>
+<a href="#roadmap">Roadmap, risks &amp; next step</a>
+</nav>
+<main>
+<!-- OVERVIEW -->
+<section id="overview" class="card hero">
+<span class="eyebrow">● Plan v2 · updated Nov 2026</span>
+<h1>One simple, fast and trustworthy home for every PDF job, run entirely from the admin dashboard</h1>
+<p class="lead">This master plan structures the complete development of <b>SimplifyPDF (SimplifyPDF.com)</b>. It incorporates competitive strengths from FreePDFConvert, iLovePDF, Smallpdf and PDFTry into an ad-free, 100% permissive open-source platform. Driven by 43 phase-wise prompts, each executable independently with built-in progress tracking.</p>
+<div class="grid g4" style="margin-top:20px">
+<div class="tile stat"><b>10</b><span>build phases</span></div>
+<div class="tile stat"><b>43</b><span>executable prompts</span></div>
+<div class="tile stat"><b>4</b><span>competitors analysed</span></div>
+<div class="tile stat"><b>7</b><span>admin website builders</span></div>
+</div>
+<h3 style="margin-top:26px">Key Architecture Additions in v2</h3>
+<div class="grid g2" style="margin-top:12px">
+<div class="tile"><h4>🎨 Nuvexa Premium Design System (Phase 00)</h4><ul><li>Look and feel based on Nuvexa: Violet <code>#864FFE</code>, Near-Black <code>#1A1A1C</code>, Lime <code>#C6F56F</code>, Inter Tight</li><li><b>Primary buttons strictly feature pure white text (<code>#FFFFFF</code>)</b> for WCAG AA compliance</li><li>NextSaaS rolling text buttons (<code>.btn-v6</code>) and lateral arrow slide pills</li><li>Split-screen login and signup modelled on AI Awaaz, plus admin 2FA</li></ul></div>
+<div class="tile"><h4>⚡ Direct-to-Storage Presigned Uploads</h4><ul><li>Client uploads directly to MinIO S3 via presigned PUT URLs, preserving VPS CPU/RAM</li><li>Zero Node.js buffer lag on heavy files (up to 2GB Pro)</li><li>Server-Sent Events (SSE) stream real-time progress to the browser</li><li>Strict automated S3 retention auto-deletion (1h guest / 2h free / 24h Pro)</li></ul></div>
+<div class="tile"><h4>🛡️ 100% Permissive Open-Source PDF Engines</h4><ul><li><b>Strictly zero AGPL tools</b> (PyMuPDF and Ghostscript eliminated to protect commercial IP)</li><li>Powered by <code>pypdfium2</code> (Google PDFium, Apache 2.0 / BSD), <code>pikepdf</code> (MPL 2.0), <code>qpdf</code> (Apache 2.0)</li><li>Headless LibreOffice Office conversions constrained by concurrency semaphore (limit = 1)</li><li><code>OCRmyPDF</code> + Tesseract for searchable PDF/A generation</li></ul></div>
+<div class="tile"><h4>🧩 Website Builders &amp; Live Design Studio in Admin</h4><ul><li>Header, Footer, Notification Bar, Homepage, Pages, Blog, and Ads builders</li><li>Live Design Studio: adjust primary/secondary colors, radius, and fonts with instant real-time propagation to the frontend</li><li>Full user and billing management: Razorpay Subscriptions (INR) and Stripe (USD)</li><li>Free users get their own dashboard with daily quota meter and auto-delete countdown</li></ul></div>
+</div>
+</section>
+<!-- COMPETITORS -->
+<section id="competitors" class="card">
+<div class="sec-head"><span class="eyebrow">Market benchmark</span><h2>Competitive analysis: 4 major PDF toolkits</h2>
+<p class="lead">Benchmarked against public sites on 19 Nov 2026. Coverage focuses on conversion limits, monetization friction, privacy models, and admin control.</p></div>
+<div class="ccards">
+<div class="ccard"><header><b>iLovePDF</b><span class="dom">ilovepdf.com</span></header>
+<dl><dt>Positioning</dt><dd>Largest all-in-one freemium PDF suite with daily per-tool task quotas.</dd>
+<dt>Pricing</dt><dd>$48/yr ($4/mo) or ₹2,400/yr. Heavy limits on free batch size.</dd>
+<dt>Strengths</dt><dd>Workflows, drag-to-reorder merge, speed/ETA progress rail, cloud Drive import.</dd>
+<dt class="weak">Weaknesses</dt><dd>Aggressive banner ad clutter, opaque quota limits, upsell modal roadblocks.</dd></dl></div>
+
+<div class="ccard"><header><b>Smallpdf</b><span class="dom">smallpdf.com</span></header>
+<dl><dt>Positioning</dt><dd>Design-led productivity PDF suite with strong e-Sign and AI PDF assistant.</dd>
+<dt>Pricing</dt><dd>$108/yr ($9/mo). Free tier extremely restricted to 2 tasks per day.</dd>
+<dt>Strengths</dt><dd>Polished UI, smooth e-Sign signature placement, AI PDF chat, team plans.</dd>
+<dt class="weak">Weaknesses</dt><dd>Pricing completely hidden behind paywall gates; free tier nearly unusable for batch.</dd></dl></div>
+
+<div class="ccard"><header><b>FreePDFConvert</b><span class="dom">freepdfconvert.com</span></header>
+<dl><dt>Positioning</dt><dd>Utility converter with membership plans and massive format coverage.</dd>
+<dt>Pricing</dt><dd>$59/yr ($4.92/mo) or ₹3,500/yr. 35+ localized SEO domains.</dd>
+<dt>Strengths</dt><dd>Broad format support (CAD, DICOM, eBooks), localized URL slugs, developer API.</dd>
+<dt class="weak">Weaknesses</dt><dd>Visually dated interface, artificial wait-time countdown modals to force upgrades.</dd></dl></div>
+
+<div class="ccard"><header><b>PDFTry</b><span class="dom">pdftry.com</span></header>
+<dl><dt>Positioning</dt><dd>Free, "no-upload" client-side browser-only PDF utility.</dd>
+<dt>Pricing</dt><dd>100% Free. No accounts, no paid subscriptions.</dd>
+<dt>Strengths</dt><dd>Privacy-first ("files never leave your browser"), ZIP batch output, receipt cards.</dd>
+<dt class="weak">Weaknesses</dt><dd>No server-quality OCR; WASM compression breaks selectable fonts; zero accounts or sync.</dd></dl></div>
+</div>
+</section>
+<!-- FEATURE MATRIX -->
+<section id="matrix" class="card">
+<div class="sec-head"><span class="eyebrow">Gap analysis</span><h2>Feature gap matrix</h2>
+<p class="lead">Comparison of core capabilities across competitors versus SimplifyPDF's unified platform.</p></div>
+<div class="tbl-wrap">
+<table class="matrix">
+<thead><tr><th>Capability</th><th>iLovePDF</th><th>Smallpdf</th><th>FreePDFConvert</th><th>PDFTry</th><th style="background:var(--primary);color:#fff">SimplifyPDF</th></tr></thead>
+<tbody>
+<tr><td>Transparent limit disclosure on every page</td><td class="c no">✗</td><td class="c no">✗</td><td class="c no">✗</td><td class="c ok">✓</td><td class="us">✓ Upfront on every tool</td></tr>
+<tr><td>Ad-free experience across all plans</td><td class="c no">✗</td><td class="c part">Free ads</td><td class="c no">✗</td><td class="c ok">✓</td><td class="us">✓ 100% Ad-Free</td></tr>
+<tr><td>Direct-to-storage presigned uploads</td><td class="c part">Unknown</td><td class="c no">✗</td><td class="c no">✗</td><td class="c na">Client-only</td><td class="us">✓ Presigned MinIO S3</td></tr>
+<tr><td>Permissive open-source engines (Zero AGPL)</td><td class="c na">Proprietary</td><td class="c na">Proprietary</td><td class="c na">Proprietary</td><td class="c part">pdf-lib only</td><td class="us">✓ pypdfium2, pikepdf, qpdf</td></tr>
+<tr><td>Guaranteed auto-delete lifecycle</td><td class="c part">2 hours</td><td class="c part">1 hour</td><td class="c part">3 hours</td><td class="c ok">Never leaves</td><td class="us">✓ 1h Guest / 2h Free / 24h Pro</td></tr>
+<tr><td>Batch processing with ZIP output</td><td class="c ok">✓</td><td class="c part">Pro only</td><td class="c no">✗</td><td class="c ok">✓</td><td class="us">✓ Up to 100 files (Pro)</td></tr>
+<tr><td>e-Sign with cryptographic audit certificate</td><td class="c ok">✓</td><td class="c ok">✓</td><td class="c no">✗</td><td class="c no">✗</td><td class="us">✓ Canvas + Audit sheet</td></tr>
+<tr><td>Permanent redaction with text rasterization</td><td class="c ok">✓</td><td class="c ok">✓</td><td class="c no">✗</td><td class="c no">✗</td><td class="us">✓ Zero data residue</td></tr>
+<tr><td>OCR scanned PDF to searchable PDF/A</td><td class="c ok">✓</td><td class="c ok">✓</td><td class="c ok">✓</td><td class="c no">✗</td><td class="us">✓ OCRmyPDF (Multilingual)</td></tr>
+<tr><td>Real-time SSE progress streaming</td><td class="c ok">✓</td><td class="c ok">✓</td><td class="c no">✗</td><td class="c part">Client bar</td><td class="us">✓ SSE + Redis Pub/Sub</td></tr>
+<tr><td>Dual currency pricing (INR UPI / USD Stripe)</td><td class="c part">Cards only</td><td class="c part">Cards only</td><td class="c no">✗</td><td class="c na">Free</td><td class="us">✓ ₹249 UPI / $4.99 Stripe</td></tr>
+<tr><td>Unified Admin Dashboard with Website Builders</td><td class="c no">✗</td><td class="c no">✗</td><td class="c no">✗</td><td class="c no">✗</td><td class="us">✓ Full CMS &amp; Design Studio</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- DESIGN SYSTEM -->
+<section id="design" class="card">
+<div class="sec-head"><span class="eyebrow">Phase 00 preview</span><h2>Design system: premium, inspired by Nuvexa</h2>
+<p class="lead">Colours come from the Nuvexa template's CSS (<code>primary-500 #864FFE</code>, <code>primary-700 #6D1FE2</code>, <code>secondary #1A1A1C</code>, accents <code>#C6F56F / #83E7EE / #F9EB57</code>, font Inter Tight). Auth colours come from the AI Awaaz login CSS (paper <code>#FAF9F7</code>, input <code>#F7F7F9</code>, line <code>#DDDDE4</code>, dark card <code>#19191F</code>). Use the toggle at the top right to see dark mode.</p></div>
+<div class="sw">
+<div><i style="background:#864FFE"></i><p><b>Primary 500</b>#864FFE</p></div>
+<div><i style="background:#6D1FE2"></i><p><b>Primary 700</b>#6D1FE2</p></div>
+<div><i style="background:#1A1A1C"></i><p><b>Secondary</b>#1A1A1C</p></div>
+<div><i style="background:#11141D"></i><p><b>Ink / footer</b>#11141D</p></div>
+<div><i style="background:#C6F56F"></i><p><b>Accent lime</b>#C6F56F</p></div>
+<div><i style="background:#83E7EE"></i><p><b>Accent cyan</b>#83E7EE</p></div>
+<div><i style="background:#F9EB57"></i><p><b>Accent yellow</b>#F9EB57</p></div>
+<div><i style="background:#FAF9F7;border-bottom:1px solid var(--line)"></i><p><b>Paper (light)</b>#FAF9F7</p></div>
+<div><i style="background:#0B0B10"></i><p><b>Background (dark)</b>#0B0B10</p></div>
+<div><i style="background:#19191F"></i><p><b>Card (dark)</b>#19191F</p></div>
+</div>
+<div class="grid g2" style="margin-top:18px">
+<div class="tile"><h4>Buttons &amp; pills</h4><div class="btnrow" style="margin-top:10px"><button class="btn btn-primary">Get started →</button><button class="btn">Process PDF</button><button class="btn btn-outline">See how it works</button><span class="pill">● Live</span><span class="pill" style="background:var(--lime);color:#1A1A1C;border:0;font-weight:700">PRO</span></div>
+<p class="small muted">Pill-shaped radius, trailing arrow that nudges on hover, 44px touch targets on mobile. Primary = violet with <b>white text</b>; Dark = near-black (flips to violet in dark mode).</p></div>
+<div class="tile"><h4>Type &amp; layout rules</h4><ul><li>Headings: Inter Tight 600/700, −0.02em; body: Inter 15–16px</li><li>Radius: 12 (inputs), 16 (cards), 24 (framed screenshots)</li><li>Mobile-first: 360 → 640 → 768 → 1024 → 1280; 16px gutters</li><li>Light mode uses soft shadows; dark mode swaps them for 1px borders</li><li>WCAG AA contrast, visible focus rings, respects reduced motion</li></ul></div>
+</div>
+<h3 style="margin-top:22px">Login / signup layout (modelled on AI Awaaz)</h3>
+<div class="mock-auth" style="margin-top:12px">
+<div class="f"><div class="top"><div class="logo" style="width:30px;height:30px;font-size:11px">SP</div><span class="small muted">No account? <a href="#design">Sign up</a> ◐</span></div>
+<h3>Welcome back</h3><span class="small muted">Sign in to your SimplifyPDF workspace.</span>
+<div class="fake">G&nbsp; Continue with Google</div><div class="small muted" style="text-align:center">or sign in with email</div>
+<div class="fake">✉ Email address</div><div class="fake">🔒 Password <span style="margin-left:auto">👁</span></div>
+<div class="small muted" style="display:flex;justify-content:space-between"><span>☐ Remember me</span><a href="#design">Forgot password?</a></div>
+<div class="fake dark">Sign in</div><div class="small muted" style="text-align:center">🔒 Secure sign in · Privacy protected</div></div>
+<div class="b"><span style="font-size:11px;letter-spacing:.1em;opacity:.8">SIMPLIFYPDF · PDF WORKSPACE</span><h3 style="color:#fff;font-size:24px">Every document. Every PDF job. One click.</h3><span style="opacity:.85;font-size:13px">40+ PDF tools in one private, fast workspace.</span><div class="btnrow"><span class="chip">2GB Pro</span><span class="chip">Batch ZIP</span><span class="chip">Ad-free Pro</span></div></div>
+</div>
+<p class="note">On screens narrower than 1040px the brand panel collapses and the form fills the width. All brand-panel text can be edited in Admin → Settings → Auth Screens.</p>
+<h3 style="margin-top:22px">Default homepage sections (rearrange them in the Homepage Builder)</h3>
+<ol class="order" style="margin-top:12px">
+<li>Notification bar (Notification Bar builder)</li><li>Header: sticky, mega-menu, “Go Pro” CTA, theme toggle</li><li>Hero: eyebrow, H1, Universal file drop zone (Compress | Convert | Merge)</li><li>Platform pills (Live / Soon) + trust micro-copy</li><li>Trust strip / stats band</li><li>Features grid (4 cards)</li><li>Compression highlight: qpdf engine, Extreme &amp; Print-ready presets</li><li>How it works: 3 steps</li><li>Comparison table: us vs typical converters</li><li>Pricing: monthly/yearly, Free vs Pro</li><li>Testimonials</li><li>FAQ accordion (FAQPage schema)</li><li>Latest blog posts</li><li>Gradient CTA band</li><li>Footer (Footer builder)</li><li>Ad-free experience guaranteed (zero banner ads across all plans)</li>
+</ol>
+</section>
+<!-- ARCHITECTURE -->
+<section id="architecture" class="card">
+<div class="sec-head"><span class="eyebrow">Engineering baseline</span><h2>Architecture &amp; role matrix</h2>
+<p class="lead">Monorepo with Next.js App Router frontends, NestJS API, Python permissive workers, MinIO S3 object storage, and Redis Streams.</p></div>
+<h3 style="margin-bottom:10px">Monorepo directory structure</h3>
+<pre class="tree">
+simplify-pdf/
+├── apps/
+│   ├── web/                  # Next.js 15: Public website, tool pages, MDX blog, drop zone
+│   ├── app/                  # Next.js 15: Authenticated User Dashboard (Free &amp; Pro workspaces)
+│   ├── admin/                # Next.js 15: Unified Admin Dashboard &amp; 7 Website Builders
+│   ├── api/                  # NestJS API: Auth, Billing, Quotas, S3 Presigner, SSE progress
+│   └── workers/              # Python 3.11 Daemons: pypdfium2, pikepdf, qpdf, OCRmyPDF
+├── packages/
+│   ├── ui/                   # Shared React component library (Tailwind + shadcn + Lucide)
+│   ├── types/                # Shared TypeScript DTOs, Zod schemas, job interfaces
+│   └── database/             # Prisma ORM schema, migrations, client singleton
+├── docker-compose.yml        # Local development: Postgres 16, Redis 7, MinIO S3, ClamAV
+└── turbo.json                # Turborepo task pipeline cache configuration
+</pre>
+
+<h3 style="margin-top:24px; margin-bottom:12px">User role &amp; access matrix</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Feature / Limit</th><th>Guest</th><th>Free Registered</th><th>Paid (Pro)</th><th>Super Admin</th></tr></thead>
+<tbody>
+<tr><td>Max file size</td><td>25 MB</td><td>50 MB</td><td><b>2 GB</b></td><td>Unlimited</td></tr>
+<tr><td>Daily tasks</td><td>3 tasks / day</td><td>10 tasks / day</td><td><b>Unlimited</b> (fair-use 250)</td><td>Unlimited</td></tr>
+<tr><td>Batch processing</td><td>Single file only</td><td>Up to 5 files</td><td><b>Up to 100 files (ZIP)</b></td><td>Unlimited</td></tr>
+<tr><td>Auto-delete retention</td><td>1 Hour</td><td>2 Hours</td><td><b>24 Hours</b> (or delete now)</td><td>Configurable</td></tr>
+<tr><td>OCR Scanned PDFs</td><td>—</td><td>5 pages / month trial</td><td><b>Unlimited</b> (fair-use 500)</td><td>Unlimited</td></tr>
+<tr><td>Extreme compression</td><td>Basic only</td><td>Basic + Recommended</td><td><b>Extreme &amp; Print-ready</b></td><td>Full access</td></tr>
+<tr><td>Admin Command Center</td><td>No access</td><td>No access</td><td>No access</td><td><b>Full access + 2FA</b></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ADMIN MAP -->
+<section id="admin-map" class="card">
+<div class="sec-head"><span class="eyebrow">Operations &amp; Builders</span><h2>Admin dashboard map</h2>
+<p class="lead">One unified command center on <code>admin.simplifypdf.com</code> controlling all operations and frontend website builders without code deployments.</p></div>
+<div class="grid g3">
+<div class="tile"><h4>📊 Operations</h4><ul>
+<li><b>Overview:</b> Real-time visitors, conversion rate, MRR, daily task volume, worker error rates</li>
+<li><b>PDF Tools:</b> Master kill-switches, maintenance mode toggles, processing notices</li>
+<li><b>Plans &amp; Quotas:</b> File limits, daily tasks, retention hours, price bindings</li>
+<li><b>Users:</b> Search, inspect, plan overrides, suspend, GDPR delete</li>
+<li><b>Billing:</b> Subscriptions, invoices, refunds, failed payments, coupons</li>
+<li><b>Queue Monitor:</b> Redis depth, worker CPU/RAM, dead-letter retry, logs</li>
+</ul></div>
+
+<div class="tile"><h4>🧩 Website Builders</h4><ul>
+<li><b>Header Builder:</b> Logo, links, mega-menu, buttons, mobile drawer</li>
+<li><b>Footer Builder:</b> Columns, links, copyright, social icons, badges</li>
+<li><b>Notification Bar:</b> Site-wide announcements, scheduling, dismissible</li>
+<li><b>Homepage Builder:</b> Reorder sections, hero copy, features, FAQ</li>
+<li><b>Other Pages Builder:</b> Create custom pages, legal pages, header/footer placement</li>
+<li><b>Blog Builder:</b> Block editor, categories, tags, authors, SEO meta</li>
+</ul></div>
+
+<div class="tile"><h4>🎨 Global Settings &amp; Theme</h4><ul>
+<li><b>Design Studio:</b> Primary violet `#864FFE`, secondary `#1A1A1C`, button style, radius</li>
+<li><b>SEO Settings:</b> Meta title, descriptions, OG images, Google Search Console, sitemap</li>
+<li><b>Auth Screens:</b> Customize split-screen brand panel text and chips</li>
+<li><b>Email Templates:</b> Transactional emails (Welcome, invoice, limit warning)</li>
+<li><b>Storage &amp; Retention:</b> S3 lifecycle rules, ClamAV malware scan settings</li>
+<li><b>Audit Log:</b> Immutable record of every administrative action</li>
+</ul></div>
+</div>
+</section>
+
+
+<section id="phase-0" class="card phase" style="--acc:#864FFE">
+<div class="phase-head"><div><span class="eyebrow" style="color:#864FFE">Phase 00 <span class="newtag">NEW</span></span><h3>Design System, UI Kit &amp; Premium Auth Screens</h3></div><span class="mono muted">Prompts 0.1 – 0.3</span></div>
+<p class="lead">Sets the visual language before any feature is built so every screen (website, user dashboard, admin) looks premium and consistent in light and dark mode. Mobile-first from the first component.</p>
+<div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p0-1" checked onchange="updateProgress()"><span>Prompt 0.1: Design Tokens, Light/Dark Theme &amp; Tailwind/shadcn Theme (Nuvexa-inspired)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p0-1', this)">Copy prompt</button></div>
+<p class="muted small">Creates the CSS-variable token system that the whole product, and the admin's Theme settings, read from.</p>
+<details><summary>Show full prompt</summary><pre id="p0-1">Act as a Senior Product Designer + Frontend Architect. Build the design system for our SimplifyPDF (SimplifyPDF.com) SaaS. The visual direction is inspired by the "Nuvexa CRM" NextSaaS template: clean, premium, violet primary (#864FFE), near-black secondary (#1A1A1C), soft lime/cyan/yellow accent highlights, large confident headings, generous whitespace, framed product screenshots.
+
+1. Tokens (CSS variables in `src/styles/tokens.css`, consumed by Tailwind + shadcn/ui):
+   Light (:root)
+   --primary-500 #864FFE  --primary-700 #6D1FE2  --primary-50 #F4F0FF
+   --secondary #1A1A1C (headings, dark buttons)  --ink #11141D
+   --bg #FFFFFF  --bg-soft #F7F7F9  --bg-paper #FAF9F7
+   --text #20202A  --muted #686873  --line #E4E4EA
+   --accent-lime #C6F56F  --accent-cyan #83E7EE  --accent-yellow #F9EB57
+   --success #16A34A  --warning #F59E0B  --danger #E5484D
+   CRITICAL BUTTON RULE: On primary buttons, the text color MUST always be pure white (#FFFFFF), giving WCAG AA 4.6:1+ contrast on #864FFE and #6D1FE2.
+   Dark ([data-theme="dark"])
+   --bg #0B0B10  --bg-soft #141419  --card #19191F  --input #202028
+   --text #EEEEF3  --muted #AAAAB7  --line #2A2A33  primary stays #864FFE (hover #9D6BFF) with white text.
+2. Theme switching: `next-themes` with `attribute="data-theme"`, default "system", no flash (script in &lt;head&gt;), toggle component (sun/moon, 36px round) reused on website, auth, user dashboard and admin.
+3. Typography: "Inter Tight" for headings (600/700, tight tracking -0.02em), "Inter" for body (400/500), "JetBrains Mono" for codes. Fluid type scale with clamp(): display 40→64px, h1 32→48, h2 26→36, h3 20→24, body 15→16.
+4. Radius &amp; elevation: radius-sm 8, md 12, lg 16, xl 24, pill 999. Shadows: soft `0 1px 2px rgba(16,16,24,.06), 0 8px 24px rgba(16,16,24,.06)`; in dark mode use 1px borders instead of shadows.
+5. Gradients: hero glow `radial-gradient(60% 60% at 50% 0%, rgba(134,79,254,.18), transparent)`, CTA band `linear-gradient(135deg,#6D1FE2,#864FFE)`.
+6. Breakpoints mobile-first: base (≥360), sm 640, md 768, lg 1024, xl 1280, 2xl 1440. Container max 1240px with 16px side gutters on mobile, 24px on md+.
+7. All tokens must be overridable at runtime from Admin → Settings → Branding (primary color, fonts, radius) by writing a `&lt;style id="theme-overrides"&gt;` block generated from `SiteSettings.themeJson`.
+8. Create `/design-system` (admin-only) route that renders every token, type style and component in both modes for QA.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p0-2" checked onchange="updateProgress()"><span>Prompt 0.2: Component Library &amp; Marketing Section Kit (Mobile-First)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p0-2', this)">Copy prompt</button></div>
+<p class="muted small">Builds the reusable buttons, cards, pills and full landing-page sections that the Homepage/Page builders will compose.</p>
+<details><summary>Show full prompt</summary><pre id="p0-2">Using the tokens from Prompt 0.1, build a component library in `packages/ui` (shadcn/ui + Tailwind + Lucide + Framer Motion):
+
+Primitives:
+- Button: variants primary (violet #864FFE fill, white #FFFFFF text), dark (#1A1A1C fill, white text), outline, ghost, link; sizes sm/md/lg; pill radius; optional trailing arrow icon that slides 2px on hover; loading spinner state; full-width on mobile option.
+- NextSaaS button variations: `.btn-v6` rolling vertical text hover with pure white text on primary; `.nextsaas-btn` lateral icon swap pill.
+- Badge/Pill: eyebrow pill (small uppercase with dot), status badges (Live, Soon, Pro lime #C6F56F chip, Maintenance).
+- Card: default, bordered, glass, framed-screenshot (rounded 24px frame with soft gradient border), nextsaas-glow-card (mouse-following radial lighting), pricing card (highlighted variant with violet ring + "Most popular" tag).
+- Input/Textarea/Select/Switch/Checkbox/Radio/Slider/Tabs/Segmented control, Accordion, Dialog/Drawer (Drawer on mobile, Dialog on desktop), Toast (sonner), Tooltip, Dropdown, Skeleton shimmer, Progress bar, Stepper, Avatar, Table with responsive card-stack on mobile, Pagination, Empty state.
+
+Marketing sections (each a typed component with a Zod `propsSchema` so builders can edit them):
+UniversalDropZone, PlatformPills, LogoMarquee/TrustStrip, StatsBand, ToolGrid (4 cols), AlternatingFeature (image + 3 bullets), HowItWorksSteps, CompressionHighlight, ComparisonTable (Us vs Typical Converters), PricingTable (monthly/yearly toggle, INR/USD toggle), Testimonials (cards with rating + avatar), FAQAccordion (emits FAQPage JSON-LD), LatestBlogPosts, CTABand (gradient).
+
+Rules: mobile-first (stack to single column &lt; md), touch targets ≥ 44px, focus-visible rings, prefers-reduced-motion respected, WCAG AA contrast in both themes (white text on primary violet), no layout shift. Add Storybook (or Ladle) with light/dark toggle for every component.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p0-3" checked onchange="updateProgress()"><span>Prompt 0.3: Premium Auth Screens (AI-Awaaz style split layout)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p0-3', this)">Copy prompt</button></div>
+<p class="muted small">Login, signup, forgot/reset password, verify email and admin 2FA screens modeled on app.aiawaaz.io/login.</p>
+<details><summary>Show full prompt</summary><pre id="p0-3">Build the authentication UI under `src/app/(auth)/` modeled on the AI Awaaz login page layout:
+
+Layout (desktop ≥ 1040px): CSS grid `1.05fr 1fr`, min-height 100svh.
+- Left column (form): top bar 96px with logo (light/dark variants) left, and on the right a theme toggle (36px round, 1px line border) + "Don't have an account? Sign up" link. Form shell max-width 424px, vertically centered.
+  Heading "Welcome back" (Inter Tight 32/600), subtitle "Sign in to your {siteName} workspace." muted.
+  "Continue with Google" full-width outline button (Google logo), divider "or sign in with email".
+  Fields with leading icons (mail, lock) padding-left 44px, background var(--input) #F7F7F9 light / #202028 dark, 1px line #DDDDE4, radius 12, 48px tall; password show/hide eye button.
+  Row: "Remember me" checkbox + "Forgot password?" link. Primary "Sign in" button full width with white text (dark #1A1A1C in light mode, violet #864FFE in dark mode).
+  Trust line under button: lock icon "Secure sign in · Privacy protected".
+- Right column (brand panel): rounded 24px panel inset 16px, deep violet gradient (#1A1A1C → #6D1FE2 → #864FFE) with subtle grain/noise, eyebrow "{SITENAME} · PDF WORKSPACE", headline "Every document. Every PDF job. One click.", body copy, a floating product card mock (Compress tool result: 68% saved, AES-256 encrypted), and 3 chips: "2GB Pro", "Batch ZIP", "Ad-free Pro". Footer note "Your documents stay private and auto-delete per policy." All panel text editable from Admin → Settings → Auth Screens.
+Mobile (&lt; 1040px): brand panel hidden (or condensed to a 120px gradient header), form full width, 16px gutters, keyboard-safe padding using env(safe-area-inset-bottom).
+
+Screens: /login, /signup (name, email, password with strength meter, accept Terms checkbox, Google), /forgot-password, /reset-password/[token], /verify-email, /admin/2fa (TOTP 6-digit input). Use react-hook-form + Zod, inline errors, toast feedback, rate-limit messaging, Cloudflare Turnstile slot (toggle from admin). Light + dark mode pixel-perfect.</pre></details>
+</div></section>
+
+<section id="phase-1" class="card phase" style="--acc:#6366F1">
+<div class="phase-head"><div><span class="eyebrow" style="color:#6366F1">Phase 01</span><h3>Project Foundation, Database Schema &amp; RBAC Auth</h3></div><span class="mono muted">Prompts 1.1 – 1.4</span></div>
+<p class="lead">Sets up the Turborepo monorepo, complete PostgreSQL schema with Prisma, Auth.js with RBAC, and the builder configuration cache service.</p>
+<div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p1-1" checked onchange="updateProgress()"><span>Prompt 1.1: Initialize Next.js Monorepo &amp; Core Dependencies</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p1-1', this)">Copy prompt</button></div>
+<p class="muted small">Workspace, Docker (Postgres/Redis/MinIO), env validation, route groups for public, auth, account and admin.</p>
+<details><summary>Show full prompt</summary><pre id="p1-1">Act as a Principal Full-Stack Architect. Set up the production pnpm + Turborepo monorepo for SimplifyPDF.
+
+1. Repository layout:
+   apps/web (Next.js 15, App Router, SSR for public tools &amp; blog)
+   apps/app (Next.js 15, authenticated user dashboard: free &amp; pro workspaces)
+   apps/admin (Next.js 15, admin dashboard &amp; 7 website builders)
+   apps/api (NestJS API: presigned S3 URLs, auth, quotas, job queue producer)
+   apps/workers (Python 3.11 daemons: pypdfium2, pikepdf, qpdf, LibreOffice)
+   packages/ui (shared Tailwind + Radix + Lucide component library)
+   packages/types (shared TypeScript DTOs, Zod schemas, job interfaces)
+   packages/database (Prisma ORM schema, migrations, client singleton)
+2. Tooling: TypeScript 5.x strict mode, ESLint 9, Prettier with Tailwind plugin, Vitest for unit tests, Playwright for E2E.
+3. Docker Compose (`docker-compose.yml`):
+   - PostgreSQL 16 on port 5432
+   - Redis 7 (Alpine) on port 6379 with persistence enabled
+   - MinIO Object Storage on port 9000 (API) and 9001 (Console) with default bucket `simplifypdf-temp`
+   - ClamAV daemon on port 3310 for upload malware scanning
+4. Environment configuration: Centralized validation using `@t3-oss/env-nextjs` and `zod` for all required secrets (DATABASE_URL, REDIS_URL, MINIO_ENDPOINT, S3_ACCESS_KEY, S3_SECRET_KEY, NEXTAUTH_SECRET, STRIPE_SECRET_KEY, RAZORPAY_KEY_SECRET). Fail build fast if any key is missing.
+5. Exit criteria: `pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test` completes with 0 errors across all workspaces.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p1-2" checked onchange="updateProgress()"><span>Prompt 1.2: Complete Prisma Schema (Admin-Driven Website + PDF Tools + Billing)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p1-2', this)">Copy prompt</button></div>
+<p class="muted small">Complete database schema with 24 relational models supporting builder configs, PDF jobs, quotas, subscriptions, and audit logs.</p>
+<details><summary>Show full prompt</summary><pre id="p1-2">Act as a Lead Database Architect. Design and write the complete production `packages/database/prisma/schema.prisma` file for SimplifyPDF using PostgreSQL 16.
+
+Models required:
+1. Auth &amp; Users:
+   - User: id, email (unique), name, passwordHash, emailVerified, role (GUEST, USER, PRO, ADMIN, SUPER_ADMIN), avatarUrl, createdAt, updatedAt
+   - Session, Account (OAuth provider links for Google), VerificationToken
+   - AdminMfa: userId, secret, backupCodes, isEnabled
+2. Tiers &amp; Limits:
+   - Plan: id, name (FREE, PRO), slug, priceInr, priceUsd, stripePriceId, razorpayPlanId, maxFileSizeMb (50 / 2048), dailyTasks (10 / 250), batchLimit (1 / 100), retentionHours (2 / 24), ocrPageAllowance (5 / 500), isDefault
+   - UserQuota: userId (unique), tasksUsedToday, ocrPagesUsedMonth, resetAt, updatedAt
+   - GuestQuota: ipAddressHash (unique, from CF-Connecting-IP), tasksUsedToday, resetAt
+3. PDF Jobs &amp; Processing:
+   - Job: id, userId (nullable for guests), guestIpHash, toolType (COMPRESS, MERGE, SPLIT, WORD_TO_PDF, PDF_TO_WORD, PROTECT, UNLOCK, OCR, REDACT, ESIGN), status (QUEUED, SCANNING, PROCESSING, COMPLETED, FAILED), sourceKey, outputKey, sourceSizeBytes, outputSizeBytes, durationMs, errorReason, expiresAt, createdAt
+4. Subscriptions &amp; Billing:
+   - Subscription: id, userId, gateway (STRIPE, RAZORPAY), externalSubscriptionId, status (ACTIVE, PAST_DUE, CANCELED), currentPeriodStart, currentPeriodEnd, cancelAtPeriodEnd
+   - Invoice: id, userId, subscriptionId, invoiceNumber, amount, currency (INR, USD), pdfUrl, status (PAID, FAILED), createdAt
+5. Website Builders &amp; Content Management:
+   - SiteSettings: id, primaryColor, secondaryColor, borderRadius, fontHeading, fontBody, logoUrl, faviconUrl, announcementText, isBannerActive, updatedAt
+   - HeaderConfig: id, logoText, navItemsJson, ctaText, ctaLink, version, isPublished
+   - FooterConfig: id, columnsJson, copyrightText, socialLinksJson, version, isPublished
+   - NotificationBar: id, message, ctaText, ctaLink, startAt, endAt, isActive
+   - PageBlock: id, pageSlug ('home', 'about', 'privacy', etc.), sectionType (HERO, DROPZONE, TRUST, TOOLS, HOW_IT_WORKS, PRICING, FAQ, CTA), contentJson, sortOrder, isVisible
+   - BlogPost: id, slug (unique), title, excerpt, contentMdx, authorName, authorAvatar, coverImage, tags, metaTitle, metaDesc, isPublished, publishedAt
+   - ToolConfig: id, slug (unique), toolName, category, isEnabled, isMaintenance, maintenanceMessage, optionsJson, sortOrder
+   - AuditLog: id, actorId, action, targetResource, ipAddress, diffJson, createdAt
+
+Generate the complete Prisma schema, seed script (`prisma/seed.ts`) populating default plans, initial site settings, and tool configurations, and test migrations.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p1-3" checked onchange="updateProgress()"><span>Prompt 1.3: Auth.js, RBAC Middleware, Guest/Free Quotas &amp; Admin 2FA</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p1-3', this)">Copy prompt</button></div>
+<p class="muted small">Complete authentication pipeline with Google OAuth, Magic Links, role verification, guest rate-limiting and TOTP 2FA.</p>
+<details><summary>Show full prompt</summary><pre id="p1-3">Act as a Security &amp; Identity Architect. Implement Auth.js (NextAuth v5) across `apps/web`, `apps/app`, and `apps/admin`.
+
+1. Configuration (`packages/auth`):
+   - Providers: Google OAuth 2.0, CredentialsProvider with argon2 password hashing, and EmailProvider via Resend for magic links.
+   - Callbacks: Populate JWT and session tokens with `id`, `role`, and `planSlug`.
+2. Middleware (`apps/app/middleware.ts` &amp; `apps/admin/middleware.ts`):
+   - Protect `/app/*`: Redirect unauthenticated users to `/login`.
+   - Protect `/admin/*`: Strictly enforce `role === ADMIN || role === SUPER_ADMIN`. Redirect unauthorized users to 403 Forbidden.
+   - Mandatory TOTP MFA check for admins: If `AdminMfa.isEnabled`, verify session has valid 2FA validation token before granting admin panel routes.
+3. Quota Middleware (`apps/api/src/common/guards/quota.guard.ts`):
+   - For Authenticated Users: Check `UserQuota` record in Redis cache. Reject with 429 Limit Exceeded if daily task limit reached. Show upgrade prompt payload.
+   - For Guests: Extract verified client IP from `request.headers['cf-connecting-ip']`. Query Redis key `guest:quota:{ipHash}`. Increment atomically. Block if &gt; 3 tasks/day.
+4. Add complete unit and integration tests verifying session issuance, role transitions, and quota denials.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p1-4" checked onchange="updateProgress()"><span>Prompt 1.4: Settings &amp; Builder Config Service (Cache + Instant Publish)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p1-4', this)">Copy prompt</button></div>
+<p class="muted small">High-performance Redis caching layer for builder configurations with instant cache invalidation on admin publish.</p>
+<details><summary>Show full prompt</summary><pre id="p1-4">Act as a Backend Performance Engineer. Build the Configuration &amp; Content Service in `apps/api` and `packages/database`.
+
+1. Builder Config Service (`ConfigService`):
+   - Methods: `getPublishedHeader()`, `getPublishedFooter()`, `getPublishedPage(slug)`, `getSiteSettings()`, `getToolConfigs()`.
+2. Redis Caching Strategy:
+   - Cache keys: `cache:config:header`, `cache:config:footer`, `cache:config:page:{slug}`, `cache:config:settings`, `cache:tools:active`.
+   - Read path: Check Redis cache first. If miss, fetch from PostgreSQL, store in Redis with TTL 86400s (24h), and return.
+3. Instant Publishing &amp; Cache Purge:
+   - When an admin clicks "Publish" in the Admin Dashboard, update the DB record `isPublished: true` and execute `redis.del()` on the respective cache key.
+   - Publish a Redis Pub/Sub event `config:invalidated` so all running Next.js instances revalidate their on-demand Incremental Static Regeneration (ISR) tags via `revalidateTag(cacheTag)`.
+4. Provide comprehensive unit tests verifying that cache hits occur and that publishing an update immediately invalidates the cache.</pre></details>
+</div></section>
+
+<section id="phase-2" class="card phase" style="--acc:#10B981">
+<div class="phase-head"><div><span class="eyebrow" style="color:#10B981">Phase 02</span><h3>Core PDF Processing Engine &amp; Permissive Workers</h3></div><span class="mono muted">Prompts 2.1 – 2.4</span></div>
+<p class="lead">Builds the direct-to-storage upload pipeline, Redis Streams task broker, Python workers with permissive engines (pypdfium2, pikepdf, qpdf), and core PDF conversion utilities.</p>
+<div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p2-1" checked onchange="updateProgress()"><span>Prompt 2.1: Direct-to-Storage Presigned Upload Pipeline (MinIO S3 + Lifecycle + ClamAV)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p2-1', this)">Copy prompt</button></div>
+<p class="muted small">Generates short-lived presigned PUT URLs, handles direct client S3 upload, triggers ClamAV malware scan, and enforces S3 auto-deletion.</p>
+<details><summary>Show full prompt</summary><pre id="p2-1">Act as a Cloud Storage &amp; Security Engineer. Build the direct-to-storage presigned upload workflow in `apps/api` using MinIO S3 and ClamAV.
+
+1. Presigned URL Endpoint (`POST /api/storage/presigned-upload`):
+   - Accepts: `fileName`, `fileSizeBytes`, `mimeType`, and optional `toolType`.
+   - Validates file size against user tier (25MB guest, 50MB free, 2GB Pro).
+   - Generates an S3 presigned PUT URL with 15-minute expiration into the temporary MinIO bucket `simplifypdf-temp`.
+   - Returns: `uploadUrl`, `s3Key`, `expiresAt`.
+2. Client-Side Uploader (`packages/ui/src/components/DirectUploader.tsx`):
+   - Requests presigned URL from API.
+   - Executes direct `fetch(uploadUrl, { method: 'PUT', body: file })` with `XMLHttpRequest` chunked progress tracking.
+   - Emits upload progress percentage to the UI.
+   - Calls `POST /api/jobs/enqueue` upon upload completion with the verified `s3Key`.
+3. ClamAV Pre-Processing Guard (`ClamScanService`):
+   - Worker streams first 10MB chunk from MinIO to ClamAV daemon (`INSTREAM` command).
+   - If infected, delete file from S3 immediately, mark job `FAILED: MALWARE_DETECTED`, and log security incident.
+4. Retention Lifecycle Configuration:
+   - Configure MinIO bucket lifecycle rule: automatically delete all objects older than 24 hours.
+   - Dedicated cron service runs hourly to delete guest files older than 1 hour and free user files older than 2 hours.
+5. Exit criteria: Unit and integration tests verify direct PUT upload to MinIO, ClamAV clean/malware detection, and lifecycle expiry.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p2-2" checked onchange="updateProgress()"><span>Prompt 2.2: Redis Queue Producer &amp; Python Worker Consumer (pypdfium2, pikepdf, qpdf)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p2-2', this)">Copy prompt</button></div>
+<p class="muted small">Language-agnostic Redis Streams queue connecting NestJS API with isolated Python worker daemons.</p>
+<details><summary>Show full prompt</summary><pre id="p2-2">Act as a Distributed Systems Engineer. Build the Redis Streams task broker and Python worker execution daemon.
+
+1. NestJS Queue Producer (`apps/api/src/modules/queue/queue.service.ts`):
+   - Enqueues job payload to Redis Stream `stream:pdf-jobs`:
+     `{ jobId, toolType, sourceKey, outputKey, optionsJson, priority (0=free, 1=pro), expiresAt, timestamp }`
+   - Uses consumer groups (`group:pdf-workers`) for reliable delivery and acknowledgment.
+   - High-priority Pro jobs are pushed to `stream:pdf-jobs:pro` and handled first.
+2. Python Worker Daemon (`apps/workers/daemon.py`):
+   - Multi-process Python 3.11 consumer running in Docker container.
+   - Strictly imports **permissive open-source libraries only**: `pypdfium2`, `pikepdf`, `qpdf`, `pypdf`, `Pillow`.
+   - Read loop: `XREADGROUP GROUP group:pdf-workers worker-1 BLOCK 2000 COUNT 1 STREAMS stream:pdf-jobs:pro stream:pdf-jobs &gt;`
+   - Downloads source PDF from MinIO using S3 SDK, calls corresponding tool module, uploads output result to MinIO, and calls `XACK`.
+   - Publishes real-time step progress to Redis channel `channel:job-progress:{jobId}`:
+     `{ step: "PROCESSING", percent: 45, detail: "Linearizing streams with qpdf..." }`
+3. NestJS SSE Progress Stream (`GET /api/jobs/:id/progress`):
+   - Subscribes to Redis channel and streams Server-Sent Events (SSE) directly to the browser with heartbeats.
+4. Error handling &amp; Dead-Letter Queue (DLQ):
+   - If job fails or times out (120s limit), increment retry count. After 3 retries, move to `stream:pdf-jobs:dlq` and record error reason in database.
+5. Exit criteria: Benchmark worker processing 50 concurrent tasks through Redis Streams with zero dropped messages and verified SSE streaming.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p2-3" checked onchange="updateProgress()"><span>Prompt 2.3: Core Free PDF Tools (Merge, Split, Compress via qpdf, Rotate, Delete)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p2-3', this)">Copy prompt</button></div>
+<p class="muted small">High-performance Python modules for Merge, Split, Compress, Rotate, and Delete using pypdfium2, pikepdf, and qpdf.</p>
+<details><summary>Show full prompt</summary><pre id="p2-3">Act as a PDF Processing Specialist. Implement the core PDF tool modules in `apps/workers/tools/`.
+
+1. Merge PDF (`merge.py` via `pikepdf`):
+   - Accepts array of S3 keys with custom page order.
+   - Streams input files, merges into unified document, normalizes outline/bookmarks, and outputs optimized PDF.
+2. Split PDF (`split.py` via `pikepdf`):
+   - Modes: Extract all pages (as individual PDFs in ZIP), or extract specific ranges (e.g., "1-3, 5, 8-10").
+3. Compress PDF (`compress.py` via `qpdf` &amp; `pypdfium2`):
+   - Basic level: Linearize PDF, compress object streams, remove redundant fonts.
+   - Recommended level: Downsample color/grayscale images to 150 DPI via Pillow, recompress with JPEG quality 75.
+   - Extreme level (Pro): Downsample images to 72 DPI, strip private metadata, compress font streams.
+   - Check file size before/after; if compressed size is larger, return original file with notification.
+4. Rotate, Delete &amp; Organize (`organize.py` via `pypdfium2` &amp; `pikepdf`):
+   - Rotate specific pages by 90/180/270 degrees.
+   - Delete specified page indices.
+   - Generate fast PNG thumbnails of each page (150px wide) for client preview.
+5. Exit criteria: Automated test suite running on 100 sample PDFs (including corrupted, encrypted, and scanned files) with 100% pass rate.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p2-4" checked onchange="updateProgress()"><span>Prompt 2.4: Office &amp; Media Conversions (pdf2docx, PDF to JPG/PNG, Sandboxed LibreOffice)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p2-4', this)">Copy prompt</button></div>
+<p class="muted small">Conversions between PDF and Word, Excel, PowerPoint, JPG, and PNG with strict concurrency semaphores.</p>
+<details><summary>Show full prompt</summary><pre id="p2-4">Act as a Backend System Engineer. Implement Office and image conversions in `apps/workers/tools/`.
+
+1. PDF to Images (`pdf_to_images.py` via `pypdfium2`):
+   - Render PDF pages to high-resolution PNG or JPG (standard 150 DPI free, 300/600 DPI Pro).
+   - If multi-page, package rendered images into a clean ZIP archive with sequential filenames.
+2. Images to PDF (`images_to_pdf.py` via `Pillow` &amp; `pikepdf`):
+   - Combine JPG, PNG, HEIC, and WebP images into a single formatted PDF document with auto-rotation.
+3. PDF to Word DOCX (`pdf_to_docx.py` via `pdf2docx`):
+   - Extract text, tables, and images from text-based PDFs into editable `.docx` files preserving layout and font weights.
+4. Office to PDF (`office_to_pdf.py` via Sandboxed LibreOffice):
+   - Support `.docx`, `.xlsx`, `.pptx`, `.odt`, `.ods`, `.odp`.
+   - Execute LibreOffice in headless mode:
+     `soffice --headless --convert-to pdf --outdir /tmp/output /tmp/input.docx`
+   - **Crucial Resource Safeguards for 2 vCPU VPS**:
+     - Strict execution timeout: 60 seconds hard kill.
+     - Concurrency Semaphore: Limit to **maximum 1 simultaneous conversion** at a time in Redis (`lock:libreoffice:semaphore`).
+     - Run LibreOffice in temporary ephemeral Docker directory with memory limit 1GB to prevent memory leak crashes.
+5. Exit criteria: Verify conversion of DOCX, XLSX, and PPTX to PDF and PDF to DOCX with zero process leaks and verified memory recovery.</pre></details>
+</div></section>
+
+<section id="phase-3" class="card phase" style="--acc:#EC4899">
+<div class="phase-head"><div><span class="eyebrow" style="color:#EC4899">Phase 03</span><h3>Advanced Document Suite, Security &amp; OCR</h3></div><span class="mono muted">Prompts 3.1 – 3.4</span></div>
+<p class="lead">Builds server-side OCR via OCRmyPDF, AES-256 PDF encryption/decryption, e-Sign with cryptographic audit sheet, and permanent text redaction.</p>
+<div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p3-1" onchange="updateProgress()"><span>Prompt 3.1: OCR Conversion Pipeline (OCRmyPDF + Tesseract, Multilingual, PDF/A)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p3-1', this)">Copy prompt</button></div>
+<p class="muted small">Converts scanned PDFs into fully searchable documents with selectable text and PDF/A archiving.</p>
+<details><summary>Show full prompt</summary><pre id="p3-1">Act as an OCR &amp; Document Archiving Engineer. Build the server-side OCR pipeline in `apps/workers/tools/ocr.py`.
+
+1. OCR Engine (`OCRmyPDF` + `Tesseract 5`):
+   - Input: Scanned or image-only PDF.
+   - Command flags: `--deskew --clean --rotate-pages --output-type pdfa --skip-text`
+   - Language packs installed: English (`eng`), Spanish (`spa`), French (`fra`), German (`deu`), Hindi (`hin`), Chinese (`chi_sim`).
+   - Allow user to specify OCR language from the web interface.
+2. Output:
+   - Searchable PDF/A compliant document containing invisible text overlay aligned with image characters.
+   - Generate text extraction file (`.txt`) available as secondary download.
+3. Quota &amp; Performance Controls:
+   - Check user OCR allowance before processing (Free: 5 pages/mo trial; Pro: fair-use 500 pages/mo).
+   - If PDF page count exceeds plan allowance, reject job early with informative upgrade modal payload.
+   - Enforce process timeout (15s per page, max 300s total).
+4. Exit criteria: Test on 20 low-quality scanned receipts and contracts; verify 95%+ text accuracy and searchable text overlay in Acrobat Reader.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p3-2" onchange="updateProgress()"><span>Prompt 3.2: PDF Security: AES-256 Protect &amp; Unlock (pikepdf, Zero-Log Password)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p3-2', this)">Copy prompt</button></div>
+<p class="muted small">Encrypts and decrypts PDF files with standard AES-256 permissions and zero-log security guarantee.</p>
+<details><summary>Show full prompt</summary><pre id="p3-2">Act as an Application Security Engineer. Build the PDF encryption and decryption tools in `apps/workers/tools/security.py`.
+
+1. Protect PDF:
+   - Accepts: input PDF, user password (to open), optional owner password (to restrict permissions).
+   - Encryption: Strict 256-bit AES (`pikepdf.Permissions(accessibility=True, extract=False, print_lowres=True)`).
+   - Granular permission flags: Prevent printing, prevent text/image copying, prevent page modifications.
+2. Unlock PDF:
+   - Accepts: password-protected PDF and supplied password.
+   - Validates password against document encryption dictionary.
+   - If valid, decrypts document and saves clean unencrypted PDF.
+   - If invalid, returns 401 Unauthorized with error message: "Incorrect password provided."
+3. Zero-Log Security Guarantee:
+   - Passwords must **never** be logged, printed, or saved to the database. Passwords exist only in worker memory during the single encryption/decryption step and are overwritten immediately.
+4. Exit criteria: Verify protected files require password in Chrome, Acrobat, and Safari; verify unlocked files open cleanly without credentials.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p3-3" onchange="updateProgress()"><span>Prompt 3.3: e-Sign Studio (Canvas Draw/Type/Upload, Audit Certificate Stamp)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p3-3', this)">Copy prompt</button></div>
+<p class="muted small">Interactive browser signature pad with typed/drawn signatures and cryptographic PDF audit trail certificate.</p>
+<details><summary>Show full prompt</summary><pre id="p3-3">Act as a Full-Stack Legal Tech Engineer. Build the e-Sign document signing system in `apps/web` and `apps/workers/tools/esign.py`.
+
+1. Frontend Signing Studio (`packages/ui/src/components/esign/`):
+   - Multi-page PDF viewer with interactive signature/initial placement using HTML5 Canvas.
+   - Signature creation modalities:
+     - Draw: Smooth bezier curve canvas with stroke smoothing.
+     - Type: 6 elegant handwritten signature fonts (Caveat, Dancing Script, Pacifico, etc.).
+     - Upload: Transparent PNG signature image.
+   - Place signature, date, name, and custom text fields onto specific page coordinates.
+2. Backend Signature Burner (`esign.py` via `pikepdf` &amp; `Pillow`):
+   - Renders signature images at exact normalized PDF coordinates.
+   - Embeds visual signature into document content stream.
+3. Cryptographic Audit Certificate:
+   - Generates an immutable completion certificate page appended to the signed PDF.
+   - Certificate contains: Document Title, Unique Document ID (UUIDv4), Signer IP Address (`CF-Connecting-IP`), Timestamp (UTC ISO-8601), Browser User-Agent, and SHA-256 checksum of original document vs signed document.
+4. Exit criteria: Test end-to-end document signing workflow and verify signature placement accuracy and audit certificate checksum verification.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p3-4" onchange="updateProgress()"><span>Prompt 3.4: PDF Redaction (Permanent Text Rasterization), Flatten, Crop &amp; Watermark</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p3-4', this)">Copy prompt</button></div>
+<p class="muted small">Permanent irreversible redaction, form field flattening, custom crop, and text/image watermarks.</p>
+<details><summary>Show full prompt</summary><pre id="p3-4">Act as a Privacy &amp; Document Processing Engineer. Implement redaction and formatting tools in `apps/workers/tools/`.
+
+1. Redact PDF (`redact.py` via `pypdfium2` &amp; `pikepdf`):
+   - Accepts array of bounding boxes (page index, x, y, width, height).
+   - **Irreversible Security Rule**: Never simply draw a black rectangle over text!
+   - Must locate and expunge all underlying text, vector paths, and metadata inside the bounding box.
+   - Rasterize the redacted bounding box region so raw byte inspection cannot recover underlying text strings.
+2. Flatten PDF Forms (`flatten.py`):
+   - Merge interactive form fields (AcroForms) and annotations into the static page content stream, making fields non-editable while preserving values.
+3. Crop PDF Pages (`crop.py`):
+   - Modify PDF `CropBox` and `MediaBox` dimensions based on visual box coordinates selected in the UI.
+4. Watermark &amp; Page Numbers (`watermark.py`):
+   - Add customizable text watermark (diagonal, opacity 0.1–0.9, custom font/size) or image logo watermark.
+   - Add page numbers with custom position (top/bottom, left/center/right) and format ("Page {n} of {total}").
+5. Exit criteria: Perform string extraction on redacted files using `strings` and verify zero redacted text strings leak into output.</pre></details>
+</div></section>
+
+<section id="phase-4" class="card phase" style="--acc:#0EA5E9">
+<div class="phase-head"><div><span class="eyebrow" style="color:#0EA5E9">Phase 04</span><h3>Public Website (Builder-Driven, Mobile-First, Light/Dark)</h3></div><span class="mono muted">Prompts 4.1 – 4.5</span></div>
+<p class="lead">Builds the customer-facing website rendering from builder configurations, universal file drop zone, tool pages, dynamic pricing, and MDX blog.</p>
+<div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p4-1" checked onchange="updateProgress()"><span>Prompt 4.1: Global Layout Renderer: Notification Bars, Header &amp; Footer</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p4-1', this)">Copy prompt</button></div>
+<p class="muted small">Dynamic Next.js Server Components rendering header, mega-menu, footer, and announcement bars from Redis-cached database configs.</p>
+<details><summary>Show full prompt</summary><pre id="p4-1">Act as a Senior Frontend Architect. Build the global layout renderers in `apps/web/src/components/layout/`.
+
+1. Dynamic Notification Bar (`NotificationBarRenderer.tsx`):
+   - Server Component reading published notification bar from `ConfigService`.
+   - If active and current date within `startAt` - `endAt`, render sticky top banner.
+   - Support dismissible state via client cookie `dismissed_bar_{id}`.
+2. Dynamic Header (`HeaderRenderer.tsx`):
+   - Renders logo, navigation links, and categorized tools mega-menu.
+   - Right side: Theme toggle (sun/moon), "Log in" button, and Pro CTA (`btn-v6` rolling button with pure white text).
+   - Mobile: Responsive hamburger menu opening animated full-screen drawer on mobile devices.
+3. Dynamic Footer (`FooterRenderer.tsx`):
+   - Renders 4 columns of links (Product, Tools, Legal, Company), copyright notice, social media icons, and trust badges.
+   - Links dynamically populated from `FooterConfig`.
+4. Theme Hydration:
+   - Wrap application with `next-themes` (`attribute="data-theme"`, default "system").
+   - Ensure zero layout shift and zero flash of unstyled content (FOUC).
+5. Exit criteria: Verify header and footer render from DB; test updating header link in database and verify change appears on frontend instantly.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p4-2" checked onchange="updateProgress()"><span>Prompt 4.2: Homepage Renderer + Universal Drop Zone + SSE Live Progress Rail + Download Receipt</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p4-2', this)">Copy prompt</button></div>
+<p class="muted small">Homepage with universal file drop zone, smart tool recommendation, SSE progress stream, and downloadable task summary receipt.</p>
+<details><summary>Show full prompt</summary><pre id="p4-2">Act as a Principal Frontend Engineer. Build the homepage and universal drop zone in `apps/web/src/app/(public)/page.tsx`.
+
+1. Hero Section:
+   - Dynamic headline and subtitle rendered from `PageBlock` (HERO).
+   - NextSaaS status badge with pulsating dot: "Fast, Privacy-First PDF Utility Platform".
+2. Universal Interactive Drop Zone:
+   - Drag-and-drop zone with full mobile touch support and file input fallback.
+   - Detects dropped file MIME type and recommends top 4 tools (e.g., dropped `.pdf` recommends Compress, Split, Protect; dropped `.docx` recommends Word to PDF).
+   - Quick-try sample file buttons: "Sample PDF (3.4 MB)" and "Sample DOCX (1.8 MB)".
+3. Live SSE Progress Rail:
+   - On file drop: Request presigned S3 URL → Upload direct to MinIO with upload percentage.
+   - Enqueue job → Open SSE stream `GET /api/jobs/:id/progress`.
+   - Render 4-step animated progress rail:
+     `[ Uploading (100%) ] → [ ClamAV Scan (Clean) ] → [ Python Permissive Worker (Processing) ] → [ Ready ]`
+4. Result Panel &amp; Download Receipt:
+   - Shows compression ratio (e.g., "-68% · 3.4 MB → 1.1 MB").
+   - Primary "Download PDF" button (Nuvexa violet `#864FFE` with white text) streaming signed S3 download URL.
+   - Time-limited expiry notice: "Auto-deletes from server in 1 hour."
+   - "Download Task Receipt" button generating clean printable summary receipt of the processed task.
+5. Exit criteria: Test complete upload, processing, and download lifecycle in browser; verify SSE events update UI in real time without polling.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p4-3" checked onchange="updateProgress()"><span>Prompt 4.3: Dedicated Tool Pages Directory (40+ Tool Slugs, SEO Schema, FAQ)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p4-3', this)">Copy prompt</button></div>
+<p class="muted small">Dynamic route `/tools/[slug]` generating 40+ dedicated SEO landing pages with schema markup and FAQs.</p>
+<details><summary>Show full prompt</summary><pre id="p4-3">Act as an SEO &amp; Next.js Engineer. Build the dynamic tool directory under `apps/web/src/app/(public)/tools/`.
+
+1. Dynamic Tool Route (`/tools/[slug]/page.tsx`):
+   - Pre-render top 40 tool slugs at build time using `generateStaticParams()`:
+     `/tools/compress-pdf`, `/tools/merge-pdf`, `/tools/split-pdf`, `/tools/pdf-to-word`, `/tools/word-to-pdf`, `/tools/protect-pdf`, `/tools/unlock-pdf`, `/tools/ocr-pdf`, `/tools/esign-pdf`, etc.
+   - Tool-specific Hero with pre-configured drop zone locked to that specific tool.
+   - Tool-specific options panel:
+     - Compress: Basic, Recommended, Extreme selector.
+     - Protect: Password input with strength meter.
+     - Split: Visual page range selector.
+2. Structured SEO Metadata &amp; Schema:
+   - Dynamic `generateMetadata()`: Title, Meta description, Canonical URL, OpenGraph cards.
+   - Inject `SoftwareApplication` and `HowTo` JSON-LD schema into `&lt;head&gt;`:
+     `{ "@context": "https://schema.org", "@type": "SoftwareApplication", "name": "SimplifyPDF Compress Tool", "applicationCategory": "UtilitiesApplication", "operatingSystem": "All" }`
+3. Tool Features &amp; FAQ Section:
+   - 3-step "How to use" guide with visual icon tiles.
+   - FAQ accordion with `FAQPage` JSON-LD schema markup.
+   - Related tools carousel for cross-navigation.
+4. Exit criteria: Verify all 40+ tool URLs render with unique metadata and pass Google Rich Results Test for SoftwareApplication and FAQ schema.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p4-4" checked onchange="updateProgress()"><span>Prompt 4.4: Dynamic Pages, Blog &amp; Guides Engine (MDX Blog with Categories, Tags, Authors)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p4-4', this)">Copy prompt</button></div>
+<p class="muted small">High-performance MDX blog engine for long-tail SEO guides and dynamic pages builder.</p>
+<details><summary>Show full prompt</summary><pre id="p4-4">Act as a Content &amp; Jamstack Engineer. Build the MDX blog and dynamic pages engine in `apps/web/src/app/(public)/blog/`.
+
+1. MDX Blog Architecture:
+   - Dynamic routes: `/blog` (listing), `/blog/[slug]` (post), `/blog/category/[cat]`, `/blog/tag/[tag]`.
+   - Content parsed via `next-mdx-remote` with custom components (Callout, CodeBlock with syntax highlighting, ToolCard, ImageWithCaption).
+   - Display author name, avatar, publish date, reading time calculation, and automated Table of Contents (TOC).
+2. Category &amp; Tag Filtering:
+   - Categories: PDF Guides, Productivity, Security &amp; Privacy, Document Workflows.
+   - Search bar with instant client-side keyword filtering.
+3. Dynamic Custom Pages (`apps/web/src/app/(public)/[slug]/page.tsx`):
+   - Renders custom pages authored in Admin Other Pages Builder (e.g., `/about`, `/security`, `/contact`, `/pricing`, `/legal/terms`, `/legal/privacy`).
+   - Automatically injects header and footer according to configuration.
+4. Exit criteria: Author 5 sample PDF how-to guides; verify MDX renders cleanly in light and dark mode with 100 Lighthouse SEO score.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p4-5" onchange="updateProgress()"><span>Prompt 4.5: SEO Metadata, OpenGraph Cards, Dynamic Sitemap &amp; Trust Badges</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p4-5', this)">Copy prompt</button></div>
+<p class="muted small">Automated XML sitemap, robots.txt, dynamic OpenGraph image generation, and trust indicators.</p>
+<details><summary>Show full prompt</summary><pre id="p4-5">Act as an SEO Technical Lead. Implement site-wide SEO infrastructure in `apps/web`.
+
+1. Dynamic Sitemap (`apps/web/src/app/sitemap.ts`):
+   - Generates dynamic `sitemap.xml` covering:
+     - Static pages (Home, Pricing, About, Contact, Security)
+     - All 40+ tool routes (`/tools/[slug]`)
+     - All published blog articles and category archives (`/blog/[slug]`)
+   - Includes `&lt;lastmod&gt;`, `&lt;changefreq&gt;`, and `&lt;priority&gt;`.
+2. Dynamic Robots.txt (`apps/web/src/app/robots.ts`):
+   - Allow public indexing of `/`, `/tools/*`, `/blog/*`.
+   - Disallow private routes: `/app/*`, `/admin/*`, `/api/*`.
+3. Automated OpenGraph Image Generator (`apps/web/src/app/api/og/route.tsx`):
+   - Generates dynamic 1200x630 OG image cards via `@vercel/og` featuring tool title, SimplifyPDF logo, and Nuvexa violet gradient.
+4. Trust &amp; Security Badges:
+   - Security page (`/security`) detailing AES-256 encryption, 100% automated deletion, zero-log password policy, and India DPDP Act / GDPR compliance.
+5. Exit criteria: Validate sitemap.xml and robots.txt syntax; verify dynamic OpenGraph image previews render in Twitter Card Validator.</pre></details>
+</div></section>
+
+<section id="phase-5" class="card phase" style="--acc:#F59E0B">
+<div class="phase-head"><div><span class="eyebrow" style="color:#F59E0B">Phase 05</span><h3>User Dashboards (Free &amp; Paid)</h3></div><span class="mono muted">Prompts 5.1 – 5.3</span></div>
+<p class="lead">Builds the authenticated user application (`apps/app`) with differentiated workspaces for Free members and Paid Pro subscribers.</p>
+<div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p5-1" checked onchange="updateProgress()"><span>Prompt 5.1: User Dashboard Shell + Free User Workspace</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p5-1', this)">Copy prompt</button></div>
+<p class="muted small">Personal dashboard for free registered users with 50MB limits, daily task meters, and 2-hour retention countdown.</p>
+<details><summary>Show full prompt</summary><pre id="p5-1">Act as a Frontend Product Engineer. Build the Free User workspace in `apps/app/src/app/(dashboard)/`.
+
+1. Dashboard Shell (`layout.tsx`):
+   - Sidebar navigation: Workspace, Recent Files, Saved Workflows, Account Settings, Billing &amp; Upgrade.
+   - Header: User avatar, email, Free Tier badge, and prominent "Upgrade to Pro" rolling button (`.btn-v6` with white text).
+2. Free Workspace Overview:
+   - Daily Quota Card: Visual progress bar showing tasks used today (e.g., "3 of 10 tasks used"). Resets at 00:00 UTC.
+   - Max File Limit Card: "50 MB Limit" with tooltip explaining Pro 2GB capability.
+   - Retention Timer Card: "2-Hour Auto-Delete Policy" highlighting privacy-first security.
+3. Quick Conversion Launcher:
+   - Embedded drop zone tailored to frequent user tools (Compress, Merge, Convert).
+4. Upgrade Modal Trigger:
+   - When a free user approaches limit (e.g., at 9/10 tasks or drops a 65MB file), display an upgrade modal highlighting Pro perks (2GB limit, batch ZIP, priority queue, full OCR).
+5. Exit criteria: Test logging in as free user; verify daily quota counter updates upon task completion and upgrade triggers appear at limit.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p5-2" checked onchange="updateProgress()"><span>Prompt 5.2: Pro Workspace: 2GB Limit, Batch ZIP Multi-File Processor, Dedicated Priority Queue</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p5-2', this)">Copy prompt</button></div>
+<p class="muted small">Power workspace for Pro subscribers with 2GB files, batch multi-file processor, and priority queue tag.</p>
+<details><summary>Show full prompt</summary><pre id="p5-2">Act as a Senior SaaS Engineer. Build the Pro User workspace in `apps/app/src/app/(dashboard)/`.
+
+1. Pro Account Indicia:
+   - Gold Pro Crown badge, "SimplifyPDF Pro Active", subscription renewal date, and dedicated worker indicator: "⚡ Priority Queue Routing Active".
+2. Batch ZIP Multi-File Processor (`BatchUploader.tsx`):
+   - Multi-file drop zone accepting up to 100 files simultaneously.
+   - File queue manager: Drag to reorder, individual file remove button, total batch size meter (up to 2 GB).
+   - Batch actions: Batch Compress (apply Recommended or Extreme to all), Batch Convert to PDF, Batch Protect.
+   - Consolidated ZIP generation: Worker processes files in parallel and packages all output files into a single structured ZIP archive for one-click download.
+3. Extended Retention Window:
+   - Files retained in user vault for 24 hours (with manual "Delete Now" button for instant GDPR erasure).
+4. Exit criteria: Test uploading 25 sample PDFs simultaneously in Pro mode; verify parallel worker processing and single consolidated ZIP download.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p5-3" checked onchange="updateProgress()"><span>Prompt 5.3: History Vault, Billing Page, Invoices &amp; GDPR Erasure</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p5-3', this)">Copy prompt</button></div>
+<p class="muted small">Recent files history table, download links, Stripe/Razorpay invoices, and one-click GDPR account erasure.</p>
+<details><summary>Show full prompt</summary><pre id="p5-3">Act as a Security &amp; Billing UX Engineer. Build the History Vault and Billing management views in `apps/app`.
+
+1. History Vault (`/account/files`):
+   - Table of recent conversions: File name, tool type, original size, output size, compression savings %, time remaining until deletion (live countdown timer), and signed S3 download button.
+   - Instant "Delete Now" action: Immediately purges object from MinIO S3 and marks DB record as expunged.
+2. Billing &amp; Subscription Management (`/account/billing`):
+   - Displays active plan (Free vs Pro), current billing cycle (Monthly / Yearly), and price (₹249 INR / $4.99 USD).
+   - "Manage Subscription" button redirecting to Stripe Customer Portal or Razorpay Customer Portal for payment method updates and cancellation.
+   - Invoices table with direct PDF receipt downloads.
+3. Account Settings &amp; GDPR Erasure (`/account/settings`):
+   - Profile name, password change, two-factor authentication toggle.
+   - "Delete My Account &amp; All Data" (GDPR Article 17 Right to Erasure): Requires password confirmation; completely purges user record, quotas, active sessions, and all associated MinIO S3 files.
+4. Exit criteria: Verify complete subscription cancellation flow and test GDPR erasure to ensure zero data residue remains in DB or S3.</pre></details>
+</div></section>
+
+<section id="phase-6" class="card phase" style="--acc:#F43F5E">
+<div class="phase-head"><div><span class="eyebrow" style="color:#F43F5E">Phase 06</span><h3>Admin Command Center — Core Operations</h3></div><span class="mono muted">Prompts 6.1 – 6.6</span></div>
+<p class="lead">Builds the unified administrative headquarters on `admin.simplifypdf.com` controlling live operations, tools, quotas, users, and billing.</p>
+<div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-1" checked onchange="updateProgress()"><span>Prompt 6.1: Admin Shell, Executive Overview &amp; Live KPIs</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p6-1', this)">Copy prompt</button></div>
+<p class="muted small">Admin command layout, real-time metrics (Active Visitors, Tasks, MRR, Conversion rate, Error rate) with Recharts.</p>
+<details><summary>Show full prompt</summary><pre id="p6-1">Act as a Full-Stack Enterprise Architect. Build the Admin Command Center shell in `apps/admin/src/app/`.
+
+1. Admin Shell Layout (`layout.tsx`):
+   - Sidebar navigation grouped into Operations (Dashboard, Tools, Quotas, Users, Billing, Queue) and Website Builders (Header, Footer, Bars, Homepage, Pages, Blog, Design Studio).
+   - Top bar: Admin profile, Super Admin badge, Environment pill (Production / Staging), and "View Live Website →" button.
+2. Executive KPI Cards:
+   - Active Visitors (live estimation from Redis sessions)
+   - Monthly Recurring Revenue (MRR) with month-over-month growth percentage
+   - Daily Tasks Volume (tasks processed today across Free and Pro)
+   - Free-to-Paid Conversion Rate (%)
+   - Worker Health &amp; Error Rate (%)
+3. Analytical Charts (`Recharts`):
+   - Daily conversion volume by tool type (Stacked bar chart: Compress, Merge, Convert, OCR).
+   - Revenue trajectory chart (Line chart: Monthly vs Annual subscriptions across Razorpay and Stripe).
+4. Exit criteria: Admin dashboard renders with verified live data from PostgreSQL and Redis; test role protection ensuring non-admins receive 403 Forbidden.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-2" checked onchange="updateProgress()"><span>Prompt 6.2: PDF Tool Kill-Switches &amp; Maintenance Console</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p6-2', this)">Copy prompt</button></div>
+<p class="muted small">Real-time master kill-switches and maintenance banners for every individual PDF tool via Redis.</p>
+<details><summary>Show full prompt</summary><pre id="p6-2">Act as an Operations Systems Engineer. Build the Tool Management module in `apps/admin/src/app/(operations)/tools/`.
+
+1. Tools Directory Table:
+   - Lists all 40+ PDF tools with Category, Slug, Active Status, Failure Rate (last 24h), and Average Processing Time.
+2. Tool Controls:
+   - Master Toggle: Instant ON/OFF switch stored in Redis key `tool:status:{slug}`.
+   - Maintenance Mode: Toggle maintenance mode with custom user-facing message (e.g., "Word to PDF is currently undergoing scheduled engine upgrades. Back online in 30 minutes.").
+   - Plan Visibility: Toggle whether a tool is available to Guests, Free, or Pro-only.
+3. Live Propagation:
+   - When a tool is disabled in Admin, the public website instantly hides the tool or disables the drop zone with the maintenance notice without requiring container redeployment.
+4. Exit criteria: Disable "Compress PDF" in Admin; verify public homepage immediately reflects maintenance state within 5 seconds.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-3" onchange="updateProgress()"><span>Prompt 6.3: Tier &amp; Quota Limits Controller (Guest / Free / Pro Rules)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p6-3', this)">Copy prompt</button></div>
+<p class="muted small">Real-time limits editor for file sizes, daily task ceilings, retention hours, and OCR allowances.</p>
+<details><summary>Show full prompt</summary><pre id="p6-3">Act as a Growth &amp; Monetization Engineer. Build the Plan &amp; Quota management module in `apps/admin/src/app/(operations)/plans/`.
+
+1. Plan Editor:
+   - Edit limits for Guest, Free, and Pro plans:
+     - Max file size (MB)
+     - Daily tasks ceiling
+     - Batch processing limit (number of files)
+     - Retention period (hours)
+     - OCR monthly page allowance
+   - Link plans to Stripe Price ID and Razorpay Plan ID.
+2. Grandfathering Engine:
+   - When updating plan limits or prices, provide option to apply strictly to new subscribers or grandfather existing active subscriptions.
+3. Instant Runtime Application:
+   - Updates write directly to `Plan` database table and flush Redis plan cache `cache:plans:all`.
+   - API quota middleware immediately enforces new limits.
+4. Exit criteria: Change Free max file size from 50MB to 60MB in Admin; test dropping 55MB file and verify it is accepted without server restart.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-4" onchange="updateProgress()"><span>Prompt 6.4: User Management Module (Inspect, Plan Overrides, Suspend, GDPR Delete)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p6-4', this)">Copy prompt</button></div>
+<p class="muted small">Comprehensive user administration table with search, manual Pro grants, account suspension, and GDPR deletion.</p>
+<details><summary>Show full prompt</summary><pre id="p6-4">Act as an Identity &amp; Support Systems Engineer. Build the User Administration module in `apps/admin/src/app/(operations)/users/`.
+
+1. User Directory Data Table (`TanStack Table`):
+   - Virtualized data grid supporting 100,000+ users.
+   - Search by email, name, or user ID. Filter by plan (Free, Pro), role (User, Admin), or status (Active, Suspended).
+2. User Inspection Drawer:
+   - Account details: Registration date, last active IP, verified email status, total tasks processed.
+   - Active Quotas: View tasks used today with manual "Reset Daily Quota" button.
+   - Subscription Status: Active Stripe/Razorpay subscription ID with direct gateway link.
+3. Administrative Actions:
+   - Manual Plan Override: Grant Pro status for custom duration (e.g., 1 month, 1 year, Lifetime) for VIP users or support compensation.
+   - Account Suspension: Suspend abusive users with reason prompt; revokes active JWT sessions immediately in Redis.
+   - Impersonate User: Generate short-lived audited impersonation session for troubleshooting.
+   - GDPR Right to Erasure: Permanent account expunge with confirmation modal.
+4. Audit Log Integration:
+   - Every administrative action writes an immutable entry to `AuditLog`.
+5. Exit criteria: Test searching users, granting Pro override, suspending account, and verify audit log record is created.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-5" onchange="updateProgress()"><span>Prompt 6.5: Billing Management Module (Razorpay + Stripe Invoices, Refunds, Dunning)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p6-5', this)">Copy prompt</button></div>
+<p class="muted small">Unified billing console across Stripe and Razorpay with manual refund triggers and subscription health metrics.</p>
+<details><summary>Show full prompt</summary><pre id="p6-5">Act as a Fintech &amp; Billing Engineer. Build the Billing Operations module in `apps/admin/src/app/(operations)/billing/`.
+
+1. Subscriptions Overview:
+   - Lists all active, past-due, and canceled subscriptions across both Stripe (USD) and Razorpay (INR).
+   - Monthly Recurring Revenue (MRR) breakdown by currency and country.
+2. Invoices &amp; Transaction History:
+   - Table of all payment attempts: Date, Customer, Amount, Currency, Gateway, Status (Success, Failed).
+   - Download official GST/VAT invoice PDF.
+3. Refund Management:
+   - Trigger full or partial refund directly through Stripe/Razorpay API from the admin interface.
+   - Prompt for refund reason (Accidental purchase, service dissatisfaction, duplicate charge).
+   - Automatically revoke Pro status if full refund is issued.
+4. Coupon &amp; Promotion Engine:
+   - Create discount coupon codes (Percentage or Fixed amount, expiration date, max redemptions limit).
+5. Exit criteria: Test issuing a sandbox refund from Admin; verify gateway refund API is called and user tier is downgraded gracefully.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p6-6" onchange="updateProgress()"><span>Prompt 6.6: Redis Queue Monitor, Worker Health, Dead-Letter Inspector &amp; Audit Log</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p6-6', this)">Copy prompt</button></div>
+<p class="muted small">Live task queue health monitor, worker resource meters, dead-letter job retry, and administrative audit trail.</p>
+<details><summary>Show full prompt</summary><pre id="p6-6">Act as an SRE &amp; Observability Engineer. Build the Queue &amp; System Health console in `apps/admin/src/app/(operations)/queue/`.
+
+1. Real-Time Redis Queue Visualizer:
+   - Shows active queue depth for `stream:pdf-jobs` (standard queue) and `stream:pdf-jobs:pro` (priority queue).
+   - Task status distribution: Queued, Processing, Completed (last hour), Failed.
+2. Worker Daemon Health:
+   - Reports live CPU and RAM consumption for each worker container.
+   - Concurrency semaphore meter: Displays active LibreOffice and OCR conversions in real time.
+3. Dead-Letter Queue (DLQ) Inspector:
+   - Lists failed jobs in `stream:pdf-jobs:dlq` with full stack traces, input file metadata, and error codes.
+   - "Retry Job" button: Re-enqueues failed job to priority queue.
+   - "Delete Job" button: Clears corrupted file from S3 and deletes queue entry.
+4. Immutable Administrative Audit Log (`/admin/audit`):
+   - Table of all admin actions: Timestamp, Admin Actor, Resource, Action, IP Address, and JSON Diff of changes.
+   - Export audit log to CSV for compliance audits.
+5. Exit criteria: Simulate worker failure; verify failed task appears in DLQ Inspector and retry button successfully processes task.</pre></details>
+</div></section>
+
+<section id="phase-7" class="card phase" style="--acc:#C026D3">
+<div class="phase-head"><div><span class="eyebrow" style="color:#C026D3">Phase 07 <span class="newtag">NEW</span></span><h3>Admin Website Builders &amp; Live Design Studio</h3></div><span class="mono muted">Prompts 7.1 – 7.8</span></div>
+<p class="lead">Builds the 7 administrative website builders and the Live Design Studio, enabling full control of marketing copy, navigation, homepage sections, and design tokens without code deployments.</p>
+<div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-1" checked onchange="updateProgress()"><span>Prompt 7.1: Shared Builder Engine (Draft/Publish, Live Preview, Revisions, Media Library)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p7-1', this)">Copy prompt</button></div>
+<p class="muted small">Core builder framework powering all 7 website builders with live iframe preview, draft staging, and version rollback.</p>
+<details><summary>Show full prompt</summary><pre id="p7-1">Act as a Principal CMS Architect. Build the shared website builder engine in `apps/admin/src/components/builder/`.
+
+1. Builder State Machine:
+   - Modes: DRAFT, PREVIEW, PUBLISHED.
+   - Version history: Every publish creates a new version record. One-click "Rollback to this version".
+2. Responsive Live Preview Iframe:
+   - Side-by-side or split layout: Left = form controls / section reordering; Right = live interactive preview of `apps/web`.
+   - Viewport switcher: Mobile (375px), Tablet (768px), Desktop (1280px).
+   - Theme toggle: Preview draft in light mode and dark mode instantly.
+3. Media Library Modal:
+   - Upload image assets (logos, icons, illustrations) directly to MinIO S3 media bucket.
+   - Unsplash API integration: Search royalty-free photos, select photo, and automatically store photographer credit metadata.
+4. Exit criteria: Build a test draft; verify changes appear in live preview iframe in real time before publishing.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-2" onchange="updateProgress()"><span>Prompt 7.2: Header &amp; Navigation Builder</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p7-2', this)">Copy prompt</button></div>
+<p class="muted small">Visual builder for site logo, menu items, categorized tools mega-menu, CTA buttons, and mobile drawer.</p>
+<details><summary>Show full prompt</summary><pre id="p7-2">Act as a UI/UX &amp; Frontend Engineer. Build the Header Builder in `apps/admin/src/app/(builders)/header/`.
+
+1. Header Configuration Form:
+   - Logo settings: Brand text, logo image upload, dark mode logo variant.
+   - Navigation Items: Drag-and-drop link list (Label, URL, target `_self`/`_blank`).
+   - Categorized Mega-Menu: Configure tool category dropdowns (Convert, Organize, Compress, Secure). Choose which tools to highlight with "HOT" or "NEW" badges.
+   - Call-to-Action (CTA): Button text ("Try Pro Free"), destination URL, button variant (`.btn-v6` roll text with white text).
+2. Live Publishing:
+   - "Save Draft" saves to `HeaderConfig` with `isPublished: false`.
+   - "Publish Header" flushes Redis cache `cache:config:header` and triggers revalidation on `apps/web`.
+3. Exit criteria: Reorder menu items in builder; verify updated order appears on public website immediately upon clicking publish.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-3" onchange="updateProgress()"><span>Prompt 7.3: Footer Builder</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p7-3', this)">Copy prompt</button></div>
+<p class="muted small">Visual builder for footer link columns, copyright notices, social icons, and trust certification badges.</p>
+<details><summary>Show full prompt</summary><pre id="p7-3">Act as a Frontend Engineer. Build the Footer Builder in `apps/admin/src/app/(builders)/footer/`.
+
+1. Footer Configuration Controls:
+   - Columns Manager: Create up to 4 link columns (e.g., "PDF Tools", "Company", "Security &amp; Legal", "Resources").
+   - Column items: Add links with custom label, URL, and optional badge tag.
+   - Social Media Icons: Toggle and input links for Twitter/X, GitHub, LinkedIn, YouTube.
+   - Copyright &amp; Legal Line: Rich text input for copyright string with auto-updating year token `{YEAR}`.
+   - Trust Badges: Toggle SSL 256-bit encryption badge, India DPDP Act compliance badge, and GDPR readiness badge.
+2. Instant Cache Flush:
+   - On publish, invalidates `cache:config:footer`.
+3. Exit criteria: Add new link column in Footer Builder; verify public footer updates instantly upon publish.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-4" onchange="updateProgress()"><span>Prompt 7.4: Notification Bar Builder</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p7-4', this)">Copy prompt</button></div>
+<p class="muted small">Site-wide announcement bar builder with scheduling, CTA links, and dismissible cookie settings.</p>
+<details><summary>Show full prompt</summary><pre id="p7-4">Act as a Marketing Tech Engineer. Build the Notification Bar Builder in `apps/admin/src/app/(builders)/notification-bar/`.
+
+1. Announcement Bar Form:
+   - Message text input with emoji support and markdown links.
+   - Call-to-Action (CTA): Optional link text ("Learn more →") and destination URL.
+   - Background styling: Choose solid Nuvexa violet (`#864FFE`), near-black (`#1A1A1C`), gradient, or custom hex.
+   - Date Scheduling: Set optional Start Date/Time and End Date/Time.
+   - Dismissible Toggle: If enabled, users can click (X) to dismiss; stores client cookie to hide for 7 days.
+2. Active Toggle:
+   - Instant master switch to show or hide the announcement bar immediately.
+3. Exit criteria: Schedule a notification bar; verify it renders on the public site and test dismiss button hiding the bar.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-5" onchange="updateProgress()"><span>Prompt 7.5: Homepage Sections Builder</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p7-5', this)">Copy prompt</button></div>
+<p class="muted small">Drag-and-drop section reordering for the homepage, hero headline editor, features grid, and FAQ accordion.</p>
+<details><summary>Show full prompt</summary><pre id="p7-5">Act as a Content Platform Engineer. Build the Homepage Builder in `apps/admin/src/app/(builders)/homepage/`.
+
+1. Section Reordering Canvas:
+   - Reorder the 15 default homepage sections using drag-and-drop:
+     Hero, Dropzone, Stats Band, Features Grid, Compression Highlight, How It Works, Comparison Table, Pricing, Testimonials, FAQ, Blog Posts, CTA Band.
+   - Toggle visibility on/off for any section.
+2. Section Block Editors:
+   - Hero Editor: Main headline text, subtitle, badge text, quick-try sample file tags.
+   - Features Grid Editor: Edit titles, descriptions, and icons for the 4 feature cards.
+   - FAQ Accordion Editor: Add, edit, reorder, or delete question and answer items. Automatically generates `FAQPage` JSON-LD schema.
+3. Draft Staging &amp; Instant Publish:
+   - Live preview iframe reflects changes in real time.
+   - Publish invalidates `cache:config:page:home`.
+4. Exit criteria: Reorder FAQ above pricing in builder; verify public homepage reflects new section ordering instantly upon publish.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-6" onchange="updateProgress()"><span>Prompt 7.6: Other Pages &amp; Legal Pages Builder</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p7-6', this)">Copy prompt</button></div>
+<p class="muted small">Dynamic page creator for About, Security, Contact, and Legal pages with header/footer placement options.</p>
+<details><summary>Show full prompt</summary><pre id="p7-6">Act as a Web Content Engineer. Build the Custom Pages Builder in `apps/admin/src/app/(builders)/pages/`.
+
+1. Custom Page Management:
+   - Create, edit, and delete dynamic pages (e.g., `/about`, `/security`, `/contact`, `/terms`, `/privacy`, `/refund`, `/dpa`).
+   - Page URL slug validator: Ensures slug is unique and doesn't collide with reserved routes (`/tools`, `/app`, `/admin`, `/api`).
+2. Content Editor:
+   - Rich text editor supporting Headings, Blockquotes, Tables, Callout alerts, and embedded Tool Cards.
+   - SEO settings per page: Custom Meta Title, Meta Description, and Canonical URL.
+3. Header &amp; Footer Link Placement:
+   - Checkboxes: "Include link in Header Menu", "Include link in Footer Column (Select Column)".
+4. Exit criteria: Create a new `/security-policy` page; verify it renders with site header and footer at `https://simplifypdf.com/security-policy`.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-7" onchange="updateProgress()"><span>Prompt 7.7: Blog Builder (Block Editor, Categories, Tags, Authors, SEO, Scheduling)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p7-7', this)">Copy prompt</button></div>
+<p class="muted small">Article publishing studio with block editor, category taxonomies, Unsplash cover photo picker, and scheduled publishing.</p>
+<details><summary>Show full prompt</summary><pre id="p7-7">Act as a Digital Publishing Engineer. Build the Blog Builder in `apps/admin/src/app/(builders)/blog/`.
+
+1. Article Publishing Studio:
+   - Title, Slug (auto-generated from title with edit capability), Excerpt, and Author profile selector.
+   - Content Editor: Markdown/MDX editor with live side-by-side preview, image uploader, and tool card embed shortcuts.
+   - Categories &amp; Tags manager: Assign categories (Guides, Security, Tutorials) and custom tags.
+   - Cover Image: Upload custom image or select photo from Unsplash with automatic photographer credit line.
+2. SEO Optimization Controls:
+   - Snippet preview (Google Search result simulation: Title, URL, Description).
+   - Social preview card (Twitter/Facebook OpenGraph card simulation).
+3. Publishing &amp; Scheduling:
+   - Status: Draft, Scheduled (pick future date/time), Published.
+4. Exit criteria: Write and publish an article titled "How to Compress PDF Without Losing Quality"; verify it appears in `/blog` listing and renders cleanly.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p7-8" onchange="updateProgress()"><span>Prompt 7.8: Live Design System Studio (Theme Colors, Button Style, Radius, Live Propagation)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p7-8', this)">Copy prompt</button></div>
+<p class="muted small">Real-time design token customizer with instant CSS variable propagation to public website and user portals.</p>
+<details><summary>Show full prompt</summary><pre id="p7-8">Act as a Design Systems Architect. Build the Live Design Studio in `apps/admin/src/app/(settings)/design-studio/`.
+
+1. Token Customization Controls:
+   - Primary Brand Color: Color picker + HEX input (defaults to Nuvexa Violet `#864FFE`).
+   - Secondary Brand Color: Color picker + HEX input (defaults to Near-black `#1A1A1C`).
+   - Accent Colors: Lime (`#C6F56F`), Cyan (`#83E7EE`), Yellow (`#F9EB57`).
+   - Corner Radius: Slider / preset pills (Sharp 6px, Standard 14px, Pill 24px, Soft 32px).
+   - Typography: Font selector (Inter Tight / Inter, Plus Jakarta Sans, Outfit, Geist).
+   - Button Variant Selector: NextSaaS Rolling Flip `.btn-v6`, Lateral Arrow Slide `.nextsaas-btn`, Neon Border Glow, Classic Solid.
+2. Real-Time Frontend Propagation Engine:
+   - On change, writes tokens to database `SiteSettings.themeJson`.
+   - Generates dynamic CSS `&lt;style id="theme-overrides"&gt;` block injected into `&lt;head&gt;` of all apps.
+   - Publishes WebSocket / Redis Pub/Sub event so open frontend browser tabs update their CSS custom properties (`--brand-600`, `--accent-600`, etc.) **instantly without page reload**!
+3. "Reset to Nuvexa Defaults" button:
+   - One-click restore to official Nuvexa brand tokens with white primary button text.
+4. Exit criteria: Change primary color to `#4F46E5` in Design Studio; verify public website button and badges update in real time.</pre></details>
+</div></section>
+
+<section id="phase-8" class="card phase" style="--acc:#14B8A6">
+<div class="phase-head"><div><span class="eyebrow" style="color:#14B8A6">Phase 08</span><h3>Payments (Stripe + Razorpay), Provisioning &amp; Dunning</h3></div><span class="mono muted">Prompts 8.1 – 8.2</span></div>
+<p class="lead">Builds multi-currency billing: Razorpay Subscriptions for domestic Indian INR (UPI, RuPay) and Stripe Billing for international USD cards.</p>
+<div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p8-1" onchange="updateProgress()"><span>Prompt 8.1: Pricing Page &amp; Dual Currency Checkout (USD / INR)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p8-1', this)">Copy prompt</button></div>
+<p class="muted small">Interactive pricing comparison table with live INR/USD currency toggle and checkout modal redirect.</p>
+<details><summary>Show full prompt</summary><pre id="p8-1">Act as a Monetization &amp; Payment Engineer. Build the pricing and checkout flow in `apps/web/src/app/(public)/pricing/`.
+
+1. Pricing Table Component:
+   - Currency toggle: INR (₹249/mo, ₹2,499/yr) vs USD ($4.99/mo, $49/yr). Auto-detects visitor country via Cloudflare `request.headers['cf-ipcountry']` (defaults to INR if India, USD worldwide).
+   - Plan comparison cards: Free Forever vs SimplifyPDF Pro with detailed capability checklist.
+   - Monthly / Annual billing toggle: "Save 40% with Annual Billing".
+2. Checkout Flow Initiation:
+   - For INR checkout: Initiates Razorpay Subscription via Razorpay Standard Checkout SDK (supports UPI, Google Pay, PhonePe, Paytm, and Indian credit/debit cards).
+   - For USD checkout: Creates Stripe Checkout Session and redirects to Stripe-hosted checkout page.
+3. Idempotent Success &amp; Cancel Routes:
+   - `/checkout/success?session_id={id}`: Polls API for subscription activation, shows animated confetti, and redirects to Pro workspace.
+   - `/checkout/cancel`: Friendly return page with FAQ and support link.
+4. Exit criteria: Test complete sandbox checkout via both Stripe test card and Razorpay UPI test flow; verify success redirects.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p8-2" onchange="updateProgress()"><span>Prompt 8.2: Webhooks, Role Provisioning, Dunning &amp; Lifecycle Emails</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p8-2', this)">Copy prompt</button></div>
+<p class="muted small">Robust webhook handlers for Stripe and Razorpay, instant Pro tier provisioning, dunning retries, and transactional emails.</p>
+<details><summary>Show full prompt</summary><pre id="p8-2">Act as a Fintech Backend Architect. Build the webhook processing and lifecycle email engine in `apps/api/src/modules/billing/`.
+
+1. Webhook Handlers (`POST /api/webhooks/stripe` &amp; `POST /api/webhooks/razorpay`):
+   - Cryptographic signature verification (`stripe.webhooks.constructEvent` &amp; Razorpay HMAC-SHA256 signature).
+   - Idempotent processing: Store processed event IDs in database table `WebhookEvent` to prevent double-processing.
+   - Handled events:
+     - `checkout.session.completed` / `subscription.authenticated`: Upgrade user role to `PRO`, activate `Subscription` record, unlock 2GB limit.
+     - `invoice.paid` / `subscription.charged`: Record `Invoice`, send payment receipt email via Resend.
+     - `invoice.payment_failed` / `subscription.halted`: Set status `PAST_DUE`, trigger dunning retry notification.
+     - `customer.subscription.deleted` / `subscription.cancelled`: Downgrade user role to `USER` at period end.
+2. Transactional Email Automation (`React Email` + Resend):
+   - Welcome Pro Member email with quick-start guide.
+   - Payment Receipt / Tax Invoice email with downloadable PDF receipt.
+   - Payment Failed / Grace Period warning email.
+3. Exit criteria: Simulate webhook events using Stripe CLI (`stripe trigger checkout.session.completed`); verify user record updates to PRO in database instantly.</pre></details>
+</div></section>
+
+<section id="phase-9" class="card phase" style="--acc:#64748B">
+<div class="phase-head"><div><span class="eyebrow" style="color:#64748B">Phase 09</span><h3>PWA, Security Hardening, QA &amp; Production Launch</h3></div><span class="mono muted">Prompts 9.1 – 9.4</span></div>
+<p class="lead">Builds mobile PWA with Web Share Target, OWASP security hardening, comprehensive load testing, and production deployment on Hostinger VPS with Coolify.</p>
+<div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p9-1" onchange="updateProgress()"><span>Prompt 9.1: Mobile PWA with Share Target</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p9-1', this)">Copy prompt</button></div>
+<p class="muted small">Progressive Web App manifest, offline shell caching, and native mobile Share Target receiving PDF files.</p>
+<details><summary>Show full prompt</summary><pre id="p9-1">Act as a Mobile Web &amp; PWA Specialist. Implement Progressive Web App capabilities in `apps/web`.
+
+1. Web App Manifest (`manifest.json`):
+   - Name: "SimplifyPDF — All-in-One PDF Tools", Short name: "SimplifyPDF".
+   - Theme color: `#864FFE`, Background color: `#FAF9F7`.
+   - High-resolution SVG and PNG app icons (192x192, 512x512, maskable).
+2. Service Worker (`Serwist` / `next-pwa`):
+   - Caches static CSS, fonts, and UI component shells for instant offline load.
+   - Network-first strategy for dynamic tool execution routes.
+3. Web Share Target API:
+   - Configure manifest `share_target`:
+     `{ "action": "/tools/compress-pdf", "method": "POST", "enctype": "multipart/form-data", "params": { "files": [{ "name": "file", "accept": ["application/pdf"] }] } }`
+   - Allows users on Android and iOS to click "Share to SimplifyPDF" directly from any file manager or messaging app.
+4. Exit criteria: Test PWA installation on Chrome Android and Safari iOS; verify app installs to home screen and accepts shared PDF file.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p9-2" onchange="updateProgress()"><span>Prompt 9.2: Security Hardening (OWASP Top 10, Rate Limiting, Polyglot PDF Guard)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p9-2', this)">Copy prompt</button></div>
+<p class="muted small">Production security review: Content Security Policy, rate limits, ClamAV upload validation, and malicious polyglot PDF defense.</p>
+<details><summary>Show full prompt</summary><pre id="p9-2">Act as a Lead Penetration Tester &amp; Application Security Engineer. Harden SimplifyPDF against attacks.
+
+1. HTTP Security Headers:
+   - Configure strict security headers in Next.js and NestJS:
+     - `Content-Security-Policy`: Disallow inline scripts (nonce-based), restrict connect-src to API and MinIO.
+     - `Strict-Transport-Security`: `max-age=63072000; includeSubDomains; preload`
+     - `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`.
+2. Malicious PDF &amp; Polyglot Defense:
+   - Verify file header magic bytes (`%PDF-1.x`) before parsing.
+   - Reject polyglot executable files disguised as PDFs.
+   - Strip automated JavaScript execution actions (`/JavaScript`, `/JS`, `/Launch`, `/EmbeddedFiles`) before rendering.
+3. Global Rate Limiting:
+   - Cloudflare WAF rules: Block malicious scrapers and DDoS traffic.
+   - Redis token bucket rate limiter in NestJS API: 60 requests/minute per IP for standard endpoints.
+4. Exit criteria: Run automated security scan with OWASP ZAP; verify zero high/critical vulnerabilities.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p9-3" onchange="updateProgress()"><span>Prompt 9.3: Testing &amp; QA (Corpus Load Test at 3x Peak, Playwright E2E, Accessibility)</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p9-3', this)">Copy prompt</button></div>
+<p class="muted small">Automated testing suite with 300-file PDF test corpus, Playwright E2E flows, and Axe accessibility audits.</p>
+<details><summary>Show full prompt</summary><pre id="p9-3">Act as a QA Lead &amp; Test Automation Engineer. Build the testing suite across `apps/web`, `apps/app`, and `apps/workers`.
+
+1. PDF Test Corpus (300 Test Files):
+   - Curate sample PDFs: Large 500MB documents, scanned forms, password-encrypted files, corrupt trailers, and multi-language Unicode text.
+   - Run automated worker regression suite: Verify all 40+ tools process corresponding test corpus files without unhandled exceptions.
+2. Playwright E2E Test Suite (`packages/testing/e2e/`):
+   - Flow 1: Guest visits homepage → Drops PDF → Compresses → Downloads result.
+   - Flow 2: User registers → Upgrades to Pro via sandbox Stripe → Uploads 20-file batch → Downloads ZIP.
+   - Flow 3: Admin logs in with 2FA → Toggles tool in Admin → Changes hero text in Homepage Builder → Verifies live frontend update.
+3. Automated Accessibility Audit:
+   - Run `@axe-core/playwright` across all pages. Verify zero WCAG 2.2 AA violations (including focus rings and contrast).
+4. Exit criteria: All Playwright E2E tests pass in CI; load test with k6 simulates 200 concurrent users with 99% responses &lt; 1.5s.</pre></details>
+</div><div class="prompt">
+<div class="prompt-top"><label class="chk"><input type="checkbox" class="prompt-check" data-id="p9-4" onchange="updateProgress()"><span>Prompt 9.4: Production VPS Setup, Scaling &amp; Cloudflare R2 Backup Drill</span></label>
+<button class="btn btn-sm" onclick="copyPrompt('p9-4', this)">Copy prompt</button></div>
+<p class="muted small">Production Hostinger VPS deployment, Coolify container orchestration, SSL certificates, and off-site backup restore drill.</p>
+<details><summary>Show full prompt</summary><pre id="p9-4">Act as a Principal DevOps &amp; Infrastructure Engineer. Finalize production deployment for SimplifyPDF.com.
+
+1. Hostinger Ubuntu LTS VPS Configuration (Mumbai Region):
+   - Provision VPS with hardened UFW firewall: open ports 22 (SSH keys only), 80, 443. Install fail2ban.
+   - Install Coolify PaaS controller. Configure Docker container resource caps (CPU and RAM limits per service).
+2. Cloudflare Edge Integration:
+   - DNS proxy enabled for `simplifypdf.com`, `app.simplifypdf.com`, `admin.simplifypdf.com`, `api.simplifypdf.com`.
+   - SSL mode: "Full (Strict)" communicating with Coolify Traefik Let's Encrypt certificates.
+   - Forward `CF-Connecting-IP` to Traefik proxy and ensure backend receives trusted client IP.
+3. Off-Site Backup Pipeline (Cloudflare R2):
+   - Automated nightly database dump of PostgreSQL to Cloudflare R2 bucket.
+   - MinIO configuration snapshot sync to R2.
+4. Disaster Recovery Drill:
+   - Perform live restore drill on secondary staging server: spin up fresh containers, restore database from R2 backup, and verify complete platform recovery within 15 minutes.
+5. Exit criteria: Platform live in production with 100% uptime monitoring via Better Stack, zero errors in Sentry, and verified disaster recovery drill.</pre></details>
+</div></section>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="card">
+<div class="sec-head"><span class="eyebrow">Execution strategy</span><h2>Roadmap, risks &amp; next step</h2>
+<p class="lead">Solo developer milestone timeline, risk mitigations, and execution sign-off.</p></div>
+
+<h3 style="margin-bottom:12px">Risk mitigation matrix</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Risk</th><th>Severity</th><th>Impact</th><th>Mitigation</th></tr></thead>
+<tbody>
+<tr><td><b>AGPL v3 IP Contamination</b></td><td>Critical</td><td>Forced open-sourcing of proprietary backend.</td><td>Strictly banned PyMuPDF and Ghostscript. Powered 100% by permissive engines: <code>pypdfium2</code> (Apache 2.0 / BSD), <code>pikepdf</code> (MPL 2.0), <code>qpdf</code> (Apache 2.0).</td></tr>
+<tr><td><b>VPS Memory Exhaustion (OOM)</b></td><td>High</td><td>Server crash from concurrent LibreOffice conversions.</td><td>Direct-to-S3 presigned uploads bypass Node.js; LibreOffice runs with strict concurrency semaphore (limit = 1) and 60s hard timeout.</td></tr>
+<tr><td><b>Guest Quota False Positives</b></td><td>Medium</td><td>All guests sharing Cloudflare IP getting blocked.</td><td>Extract verified real client IP strictly from <code>CF-Connecting-IP</code> header with trusted proxy validation.</td></tr>
+<tr><td><b>Sensitive Document Leaks</b></td><td>High</td><td>User private files lingering on server disk.</td><td>Automated S3 lifecycle rules delete files after retention (1h/2h/24h); AES-256 encryption at rest; ClamAV virus scan on upload.</td></tr>
+<tr><td><b>Data Residency &amp; Compliance</b></td><td>Medium</td><td>Regulatory penalties under DPDP Act / GDPR.</td><td>Hostinger Mumbai servers ensure Indian data residency; privacy-by-default cookies; one-click GDPR account and file erasure.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 style="margin-top:24px; margin-bottom:12px">Solo developer milestone schedule</h3>
+<div class="grid g3">
+<div class="tile"><h4>Month 1 · Foundations &amp; UI</h4><ul>
+<li>P00: Nuvexa Design System &amp; Auth Screens</li>
+<li>P01: Monorepo, Prisma Schema &amp; RBAC</li>
+<li>P04: Public Website &amp; Universal Drop Zone</li>
+<li><b>Git Action:</b> Commit &amp; push Milestone 1</li>
+</ul></div>
+
+<div class="tile"><h4>Month 2 · Core Engine</h4><ul>
+<li>P02: S3 Presigned Uploads &amp; Python Workers</li>
+<li>P02: Merge, Split, Compress, Office tools</li>
+<li>P03: Security, e-Sign &amp; OCR suite</li>
+<li><b>Git Action:</b> Commit &amp; push Milestone 2</li>
+</ul></div>
+
+<div class="tile"><h4>Month 3 · Launch &amp; Monetization</h4><ul>
+<li>P05: Free &amp; Pro User Workspaces (Batch ZIP)</li>
+<li>P06: Admin Command Center</li>
+<li>P07: Admin Website Builders</li>
+<li>P08: Stripe &amp; Razorpay Subscriptions</li>
+<li>P09: Security, Coolify Auto-Deploy &amp; Launch</li>
+<li><b>Git Action:</b> Production release <code>v1.0.0</code></li>
+</ul></div>
+</div>
+
+<div class="tile" style="margin-top:20px; border-left:4px solid var(--primary); background:var(--primary-50)">
+<h4 style="color:var(--primary)">Next Action: Start Phase 00 (Prompt 0.1)</h4>
+<p style="margin:4px 0 0; font-size:14px; color:var(--text)">Copy <b>Prompt 0.1</b> from Phase 00 to generate the token system, Tailwind setup, and light/dark theme switches. Mark prompts done as they are completed; progress saves in this browser.</p>
+</div>
+</section>
+
+
+</main>
+</div>
+
+<script>
+function toggleTheme(){
+  var r = document.documentElement;
+  var t = r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  r.setAttribute('data-theme', t);
+  try { localStorage.setItem('plan_theme', t); } catch(e){}
+}
+
+function copyPrompt(id, btn){
+  var el = document.getElementById(id);
+  if (!el) return;
+  var txt = el.textContent;
+  var done = function(){
+    var o = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.classList.add('ok');
+    setTimeout(function(){
+      btn.textContent = o;
+      btn.classList.remove('ok');
+    }, 1600);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(done, function(){ fallback(txt); done(); });
+  } else {
+    fallback(txt);
+    done();
+  }
+}
+
+function fallback(t){
+  var a = document.createElement('textarea');
+  a.value = t;
+  document.body.appendChild(a);
+  a.select();
+  try { document.execCommand('copy'); } catch(e){}
+  a.remove();
+}
+
+function updateProgress(){
+  var c = document.querySelectorAll('.prompt-check');
+  var n = 0;
+  var s = {};
+  c.forEach(function(x){
+    if (x.checked) n++;
+    s[x.dataset.id] = x.checked;
+  });
+  try { localStorage.setItem('simplify_plan_progress', JSON.stringify(s)); } catch(e){}
+  var badge = document.getElementById('progress-badge');
+  if (badge) {
+    badge.textContent = n + ' / ' + c.length + ' prompts done (' + Math.round((n / c.length) * 100) + '%)';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  var s = {};
+  try { s = JSON.parse(localStorage.getItem('simplify_plan_progress') || '{}'); } catch(e){}
+  document.querySelectorAll('.prompt-check').forEach(function(x){
+    if (s[x.dataset.id]) x.checked = true;
+  });
+  updateProgress();
+});
+</script>
+</body>
+</html>

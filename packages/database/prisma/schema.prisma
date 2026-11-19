@@ -1,0 +1,466 @@
+// Prisma Schema for SimplifyPDF
+// Database: PostgreSQL 16
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =========================================================================
+// ENUMS
+// =========================================================================
+
+enum UserRole {
+  GUEST
+  USER
+  PRO
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  TRIALING
+  INCOMPLETE
+}
+
+enum PaymentGateway {
+  STRIPE
+  RAZORPAY
+}
+
+enum ToolType {
+  COMPRESS
+  MERGE
+  SPLIT
+  WORD_TO_PDF
+  PDF_TO_WORD
+  PDF_TO_IMAGES
+  IMAGES_TO_PDF
+  PROTECT
+  UNLOCK
+  OCR
+  ESIGN
+  REDACT
+  FLATTEN
+  CROP
+  WATERMARK
+  ORGANIZE
+  ROTATE
+}
+
+enum JobStatus {
+  QUEUED
+  SCANNING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum SectionType {
+  HERO
+  DROPZONE
+  TRUST
+  TOOLS
+  HOW_IT_WORKS
+  PRICING
+  FAQ
+  CTA
+  TESTIMONIALS
+  STATS
+  COMPARISON
+}
+
+// =========================================================================
+// 1. AUTHENTICATION & USERS
+// =========================================================================
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  name          String?
+  passwordHash  String?
+  emailVerified DateTime?
+  role          UserRole       @default(USER)
+  avatarUrl     String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  mfa           AdminMfa?
+  quota         UserQuota?
+  subscriptions Subscription[]
+  invoices      Invoice[]
+  jobs          Job[]
+  auditLogs     AuditLog[]     @relation("UserAuditLogs")
+
+  @@index([email])
+  @@index([role])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model AdminMfa {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  secret      String   // Encrypted TOTP secret
+  backupCodes String[] // Hashed backup recovery codes
+  isEnabled   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// =========================================================================
+// 2. TIERS, PLANS & LIMITS
+// =========================================================================
+
+model Plan {
+  id                   String   @id @default(cuid())
+  name                 String   // "Free Plan", "Pro Plan"
+  slug                 String   @unique // "FREE", "PRO"
+  priceInrMonthly      Int      @default(0) // in paise (e.g. 49900 = ₹499)
+  priceInrYearly       Int      @default(0) // in paise (e.g. 478800 = ₹4,788)
+  priceUsdMonthly      Int      @default(0) // in cents (e.g. 700 = $7.00)
+  priceUsdYearly       Int      @default(0) // in cents (e.g. 6700 = $67.00)
+  stripePriceIdMonthly String?
+  stripePriceIdYearly  String?
+  razorpayPlanIdMonthly String?
+  razorpayPlanIdYearly String?
+  maxFileSizeMb        Int      @default(50) // Free: 50, Pro: 2048 (2GB)
+  dailyTasks           Int      @default(10) // Free: 10, Pro: 250
+  batchLimit           Int      @default(1)  // Free: 1, Pro: 100
+  retentionHours       Int      @default(2)  // Free: 2, Pro: 24
+  ocrPageAllowance     Int      @default(5)  // Free: 5, Pro: 500
+  isDefault            Boolean  @default(false)
+  isActive             Boolean  @default(true)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  subscriptions Subscription[]
+}
+
+model UserQuota {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  tasksUsedToday     Int      @default(0)
+  ocrPagesUsedMonth  Int      @default(0)
+  resetAt            DateTime
+  updatedAt          DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model GuestQuota {
+  id             String   @id @default(cuid())
+  ipAddressHash  String   @unique // SHA256(CF-Connecting-IP + daily_salt)
+  tasksUsedToday Int      @default(0)
+  resetAt        DateTime
+  updatedAt      DateTime @updatedAt
+
+  @@index([ipAddressHash])
+}
+
+// =========================================================================
+// 3. PDF JOBS & PROCESSING
+// =========================================================================
+
+model Job {
+  id              String      @id @default(cuid())
+  userId          String?
+  guestIpHash     String?
+  toolType        ToolType
+  status          JobStatus   @default(QUEUED)
+  sourceKey       String      // S3 object key for input
+  outputKey       String?     // S3 object key for processed output
+  sourceFilename  String
+  outputFilename  String?
+  sourceSizeBytes BigInt
+  outputSizeBytes BigInt?
+  durationMs      Int?
+  errorReason     String?
+  expiresAt       DateTime    // 2 hours for Free/Guest, 24 hours for Pro
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  jobFiles JobFile[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([expiresAt])
+}
+
+model JobFile {
+  id           String   @id @default(cuid())
+  jobId        String
+  fileKey      String
+  originalName String
+  sizeBytes    BigInt
+  sortOrder    Int      @default(0)
+  status       String   @default("UPLOADED") // UPLOADED, SCANNED_CLEAN, INFECTED, PROCESSED
+  createdAt    DateTime @default(now())
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+}
+
+// =========================================================================
+// 4. SUBSCRIPTIONS & BILLING
+// =========================================================================
+
+model Subscription {
+  id                     String             @id @default(cuid())
+  userId                 String
+  planId                 String
+  gateway                PaymentGateway     @default(STRIPE)
+  externalSubscriptionId String             @unique
+  status                 SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart     DateTime
+  currentPeriodEnd       DateTime
+  cancelAtPeriodEnd      Boolean            @default(false)
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan     Plan      @relation(fields: [planId], references: [id])
+  invoices Invoice[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Invoice {
+  id             String   @id @default(cuid())
+  userId         String
+  subscriptionId String?
+  invoiceNumber  String   @unique
+  amount         Int      // in minor currency units (paise / cents)
+  currency       String   @default("INR") // INR or USD
+  pdfUrl         String?
+  status         String   @default("PAID") // PAID, PENDING, FAILED
+  createdAt      DateTime @default(now())
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+}
+
+// =========================================================================
+// 5. WEBSITE BUILDERS & DESIGN SYSTEM STUDIO (LIVE PROPAGATION)
+// =========================================================================
+
+model SiteSettings {
+  id                 String   @id @default("singleton")
+  // Design Tokens (Nuvexa Baseline)
+  primaryColor       String   @default("#864FFE") // Nuvexa Violet
+  primaryHover       String   @default("#6D1FE2")
+  secondaryColor     String   @default("#1A1A1C") // Nuvexa Near-black
+  inkColor           String   @default("#11141D")
+  accentLime         String   @default("#C6F56F") // Nuvexa Lime PRO
+  accentCyan         String   @default("#83E7EE")
+  accentYellow       String   @default("#F9EB57")
+  paperLight         String   @default("#FAF9F7") // Nuvexa Light Paper
+  backgroundDark     String   @default("#0B0B10") // Nuvexa Dark
+  borderRadius       String   @default("16px")
+  fontHeading        String   @default("Inter Tight")
+  fontBody           String   @default("Inter")
+  
+  // Branding Assets
+  logoUrl            String?
+  faviconUrl         String?
+  announcementText   String?
+  isBannerActive     Boolean  @default(false)
+  
+  // Real-time Live Sync Version tracking
+  liveSyncVersion    Int      @default(1)
+  updatedAt          DateTime @updatedAt
+}
+
+model HeaderConfig {
+  id           String   @id @default("singleton")
+  logoText     String   @default("SimplifyPDF")
+  navItemsJson Json     // Array of { label, href, badge?, children? }
+  ctaText      String   @default("Get Started")
+  ctaLink      String   @default("/tools/compress")
+  version      Int      @default(1)
+  isPublished  Boolean  @default(true)
+  updatedAt    DateTime @updatedAt
+}
+
+model NavigationItem {
+  id         String   @id @default(cuid())
+  label      String
+  href       String
+  icon       String?
+  isExternal Boolean  @default(false)
+  sortOrder  Int      @default(0)
+  parentId   String?
+}
+
+model FooterConfig {
+  id              String   @id @default("singleton")
+  columnsJson     Json     // Array of { title, links: [{ label, href }] }
+  copyrightText   String   @default("© 2026 SimplifyPDF. All rights reserved.")
+  socialLinksJson Json     // Array of { platform, url }
+  version         Int      @default(1)
+  isPublished     Boolean  @default(true)
+  updatedAt       DateTime @updatedAt
+}
+
+model FooterColumn {
+  id        String @id @default(cuid())
+  title     String
+  sortOrder Int    @default(0)
+  linksJson Json
+}
+
+model FooterLink {
+  id         String  @id @default(cuid())
+  label      String
+  href       String
+  isExternal Boolean @default(false)
+  sortOrder  Int     @default(0)
+}
+
+model NotificationBar {
+  id              String    @id @default("singleton")
+  message         String    @default("🚀 SimplifyPDF 2.0 is live! Process up to 2GB PDFs with Nuvexa high-speed engines.")
+  ctaText         String?   @default("Try PRO Free")
+  ctaLink         String?   @default("/pricing")
+  startAt         DateTime?
+  endAt           DateTime?
+  isActive        Boolean   @default(true)
+  backgroundColor String    @default("#864FFE")
+  textColor       String    @default("#FFFFFF")
+  updatedAt       DateTime  @updatedAt
+}
+
+model PageBlock {
+  id          String      @id @default(cuid())
+  pageSlug    String      @default("home") // "home", "about", "pricing", "privacy", "terms"
+  sectionType SectionType
+  contentJson Json        // Complete section data payload
+  sortOrder   Int         @default(0)
+  isVisible   Boolean     @default(true)
+  updatedAt   DateTime    @updatedAt
+
+  @@index([pageSlug, sortOrder])
+}
+
+model BlogPost {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  excerpt     String    @db.Text
+  contentMdx  String    @db.Text
+  authorName  String    @default("SimplifyPDF Editorial Team")
+  authorAvatar String?
+  coverImage  String?
+  tags        String[]
+  metaTitle   String?
+  metaDesc    String?
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([slug])
+  @@index([isPublished])
+}
+
+model ToolConfig {
+  id                    String   @id @default(cuid())
+  slug                  String   @unique // "compress", "merge", "split", "word-to-pdf", etc.
+  toolName              String   // "Compress PDF"
+  category              String   // "OPTIMIZE", "CONVERT", "SECURITY", "EDIT"
+  isEnabled             Boolean  @default(true)
+  isMaintenance         Boolean  @default(false)
+  maintenanceMessage    String?
+  optionsJson           Json?    // Tool-specific settings, compression levels, DPI
+  sortOrder             Int      @default(0)
+  maxFileSizeMbOverride Int?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([slug])
+  @@index([category])
+}
+
+// =========================================================================
+// 6. AUDIT LOGS & HEALTH MONITORING
+// =========================================================================
+
+model AuditLog {
+  id             String   @id @default(cuid())
+  actorId        String?
+  action         String   // "DESIGN_TOKENS_UPDATED", "TOOL_DISABLED", "PLAN_MODIFIED", "USER_BANNED"
+  targetResource String   // "SiteSettings", "ToolConfig:compress", "User:cuid"
+  ipAddress      String?
+  diffJson       Json?    // Before & after snapshot
+  createdAt      DateTime @default(now())
+
+  actor User? @relation("UserAuditLogs", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model SystemHealthSnapshot {
+  id                  String   @id @default(cuid())
+  cpuUsagePercent     Float
+  memoryUsagePercent  Float
+  diskUsagePercent    Float
+  redisJobsPending    Int      @default(0)
+  activeWorkers       Int      @default(1)
+  createdAt           DateTime @default(now())
+
+  @@index([createdAt])
+}

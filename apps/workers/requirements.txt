@@ -1,0 +1,11 @@
+# SimplifyPDF Worker Dependencies (100% Permissive Open-Source Engines)
+# STRICTLY NO PyMuPDF / fitz (AGPL v3) and NO Ghostscript (AGPL v3)
+pypdfium2==4.30.0
+pikepdf==9.4.2
+pdf2docx==0.5.8
+Pillow==11.0.0
+redis==5.2.0
+boto3==1.35.71
+psycopg2-binary==2.9.10
+pyclamd==0.5.1
+python-dotenv==1.0.1

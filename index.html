@@ -1,0 +1,1403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SimplifyPDF — All-in-One PDF Platform & Design System</title>
+<!-- Tailwind CSS via CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<!-- Google Fonts: Inter & Plus Jakarta Sans & Outfit -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            600: 'var(--brand-600, #FF5B04)',
+            500: 'var(--brand-500, #FF7A2E)',
+            50: 'var(--brand-50, #FFF3EB)',
+          },
+          accent: {
+            600: 'var(--accent-600, #075056)',
+            500: 'var(--accent-500, #0A6C74)',
+            50: 'var(--accent-50, #E6F5F6)',
+          },
+          ink: {
+            900: 'var(--ink-900, #16232A)',
+            700: 'var(--ink-700, #33444D)',
+            500: 'var(--ink-500, #5C6B73)',
+            300: 'var(--ink-300, #CAD5D8)',
+            100: 'var(--ink-100, #E4EEF0)',
+          },
+          canvas: 'var(--bg, #F5F8F9)',
+          surface: 'var(--surface, #FFFFFF)',
+          success: 'var(--success-600, #15803D)'
+        },
+        fontFamily: {
+          sans: ['var(--ui-font, "Inter")', 'system-ui', 'sans-serif'],
+          heading: ['var(--ui-font-heading, "Plus Jakarta Sans")', 'sans-serif'],
+        },
+        borderRadius: {
+          custom: 'var(--ui-radius, 14px)',
+          control: 'var(--ui-radius-control, 9999px)'
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root {
+    /* Nuvexa Brand Design Tokens */
+    --brand-600: #864FFE; /* Nuvexa Primary 500 (Violet) */
+    --brand-700: #6D1FE2; /* Nuvexa Primary 700 */
+    --brand-500: #864FFE;
+    --brand-50: #F4F0FF;
+    --accent-600: #1A1A1C; /* Nuvexa Secondary (Near-black) */
+    --accent-500: #11141D;
+    --accent-50: #F7F7F9;
+    --lime: #C6F56F;
+    --cyan: #83E7EE;
+    --yellow: #F9EB57;
+    --paper: #FAF9F7;
+    --dark-bg: #0B0B10;
+    --dark-card: #19191F;
+    --success-600: #16A34A;
+    --success-50: #E6F4EA;
+    --warn-500: #F59E0B;
+    --danger-500: #E5484D;
+    --ink-900: #11141D;
+    --ink-700: #20202A;
+    --ink-500: #686873;
+    --ink-300: #E4E4EA;
+    --ink-100: #DDDDE4;
+    --surface: #FFFFFF;
+    --bg: #FAF9F7;
+    --ui-radius: 14px;
+    --ui-radius-control: 9999px;
+    --ui-font: "Inter";
+    --ui-font-heading: "Inter Tight";
+    --btn-style: "btn-v6-roll";
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink-900);
+    font-family: var(--ui-font), system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ==========================================================================
+     NEXTSAAS BUTTON COMPONENTS (Adapted from pixels71.com/digital-agency)
+     ========================================================================== */
+
+  /* 1. NextSaaS Roll-Hover Button (btn-v6) */
+  .btn-v6 {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    overflow: hidden;
+    border-radius: var(--ui-radius-control, 9999px);
+    padding: 11px 24px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    border: 1px solid transparent;
+    user-select: none;
+  }
+  .btn-v6-primary {
+    background: var(--brand-600);
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(134, 79, 254, 0.28);
+  }
+  .btn-v6-primary:hover {
+    background: var(--brand-700, #6D1FE2);
+    color: #ffffff !important;
+    box-shadow: 0 8px 24px rgba(134, 79, 254, 0.38);
+    transform: translateY(-1.5px);
+  }
+  .btn-v6-secondary {
+    background: var(--accent-600);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(7, 80, 86, 0.22);
+  }
+  .btn-v6-secondary:hover {
+    background: var(--accent-500);
+    box-shadow: 0 8px 24px rgba(7, 80, 86, 0.34);
+    transform: translateY(-1.5px);
+  }
+  .btn-v6-outline {
+    background: transparent;
+    color: var(--ink-900);
+    border: 1px solid var(--ink-300);
+  }
+  .btn-v6-outline:hover {
+    background: var(--ink-100);
+    border-color: var(--ink-500);
+    transform: translateY(-1px);
+  }
+
+  /* Rolling text slide animation */
+  .btn-v6-roll-wrap {
+    position: relative;
+    display: block;
+    height: 20px;
+    overflow: hidden;
+    line-height: 20px;
+  }
+  .btn-v6-text-upper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 20px;
+    transition: transform 0.35s cubic-bezier(0.76, 0, 0.24, 1);
+    transform: translateY(0%);
+  }
+  .btn-v6:hover .btn-v6-text-upper {
+    transform: translateY(-100%);
+  }
+  .btn-v6-text-lower {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 20px;
+    transition: transform 0.35s cubic-bezier(0.76, 0, 0.24, 1);
+    transform: translateY(100%);
+  }
+  .btn-v6:hover .btn-v6-text-lower {
+    transform: translateY(0%);
+  }
+
+  /* 2. NextSaaS Lateral Arrow / Icon Slide Button (nextsaas-button) */
+  .nextsaas-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--ui-radius-control, 9999px);
+    padding: 10px 22px;
+    font-weight: 600;
+    font-size: 14px;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    text-decoration: none;
+    border: 1px solid transparent;
+  }
+  .nextsaas-icon-box {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+  }
+  .nextsaas-icon-1 {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.35s cubic-bezier(0.76, 0, 0.24, 1);
+    transform: translateX(0);
+  }
+  .nextsaas-btn:hover .nextsaas-icon-1 {
+    transform: translateX(120%);
+  }
+  .nextsaas-icon-2 {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.35s cubic-bezier(0.76, 0, 0.24, 1);
+    transform: translateX(-120%);
+  }
+  .nextsaas-btn:hover .nextsaas-icon-2 {
+    transform: translateX(0);
+  }
+
+  /* 3. NextSaaS Glowing Cards & Mouse-following Light */
+  .nextsaas-glow-card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--ink-100);
+    border-radius: var(--ui-radius, 14px);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(22, 35, 42, 0.04), 0 8px 24px rgba(22, 35, 42, 0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .nextsaas-glow-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 36px rgba(22, 35, 42, 0.09);
+    border-color: var(--brand-600);
+  }
+  .nextsaas-glow-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(450px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 91, 4, 0.08), transparent 50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .nextsaas-glow-card:hover::before {
+    opacity: 1;
+  }
+
+  /* 4. NextSaaS Pill Badges */
+  .nextsaas-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 14px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    background: var(--brand-50);
+    color: var(--brand-600);
+    border: 1px solid rgba(255, 91, 4, 0.2);
+    box-shadow: 0 1px 2px rgba(255, 91, 4, 0.05);
+  }
+  .nextsaas-badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--brand-600);
+    box-shadow: 0 0 8px var(--brand-600);
+    animation: pulse-dot 2s infinite ease-in-out;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.75); }
+  }
+
+  /* Subtle animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+  }
+  .animate-float { animation: float 4s ease-in-out infinite; }
+
+  /* Custom Tab styling */
+  .nav-pill-active {
+    background: var(--brand-600);
+    color: var(--ink-900);
+    font-weight: 700;
+  }
+</style>
+</head>
+<body class="bg-canvas text-ink-900 min-h-screen flex flex-col selection:bg-brand-50 selection:text-brand-600">
+
+<!-- ==========================================================================
+     GLOBAL TOP DEMO BAR: VIEW SWITCHER & LIVE DESIGN CONTROLLER
+     ========================================================================== -->
+<header class="sticky top-0 z-50 bg-ink-900/95 backdrop-blur-md border-b border-ink-700/50 text-white px-4 py-2.5">
+  <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+    <!-- Brand Tag & Mode -->
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 font-heading font-extrabold text-lg tracking-tight">
+        <span class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-ink-900 shadow-md">
+          <i data-lucide="file-check-2" class="w-5 h-5"></i>
+        </span>
+        <span id="globalBrandName">SimplifyPDF</span>
+      </div>
+      <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono bg-white/10 text-white/80 border border-white/10">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        v1.0 Live Prototype
+      </span>
+    </div>
+
+    <!-- Active View Switcher Navigation -->
+    <div class="flex items-center bg-ink-700/60 p-1 rounded-full border border-ink-500/30 text-xs font-medium">
+      <button onclick="switchView('website')" id="tab-website" class="nav-view-btn px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 nav-pill-active">
+        <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+        <span>Public Web</span>
+      </button>
+      <button onclick="switchView('free-user')" id="tab-free-user" class="nav-view-btn px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 text-white/70 hover:text-white">
+        <i data-lucide="user" class="w-3.5 h-3.5"></i>
+        <span>Free User</span>
+      </button>
+      <button onclick="switchView('paid-user')" id="tab-paid-user" class="nav-view-btn px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 text-white/70 hover:text-white">
+        <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>Paid (Pro) User</span>
+      </button>
+      <button onclick="switchView('admin')" id="tab-admin" class="nav-view-btn px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 text-white/70 hover:text-white">
+        <i data-lucide="gauge" class="w-3.5 h-3.5 text-brand-500"></i>
+        <span>Admin &amp; Design Studio</span>
+      </button>
+      <button onclick="switchView('components')" id="tab-components" class="nav-view-btn px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 text-white/70 hover:text-white">
+        <i data-lucide="palette" class="w-3.5 h-3.5"></i>
+        <span>NextSaaS UI Kit</span>
+      </button>
+    </div>
+
+    <!-- Quick Live Palette Pill -->
+    <div class="hidden lg:flex items-center gap-2 text-xs text-white/70">
+      <span>Theme:</span>
+      <button onclick="quickSetColor('#864FFE', '#1A1A1C')" title="Nuvexa Violet & Near-Black (Brand)" class="w-5 h-5 rounded-full bg-[#864FFE] ring-2 ring-white/20 hover:scale-110 transition-transform"></button>
+      <button onclick="quickSetColor('#4F46E5', '#1E1B4B')" title="Indigo Modern" class="w-5 h-5 rounded-full bg-[#4F46E5] ring-1 ring-white/20 hover:scale-110 transition-transform"></button>
+      <button onclick="quickSetColor('#0D9488', '#134E4A')" title="Teal Horizon" class="w-5 h-5 rounded-full bg-[#0D9488] ring-1 ring-white/20 hover:scale-110 transition-transform"></button>
+      <button onclick="quickSetColor('#E11D48', '#881337')" title="Ruby Crimson" class="w-5 h-5 rounded-full bg-[#E11D48] ring-1 ring-white/20 hover:scale-110 transition-transform"></button>
+    </div>
+  </div>
+</header>
+
+<!-- Site-wide Dynamic Announcement Banner (Controlled from Admin) -->
+<div id="dynamicBanner" class="bg-gradient-to-r from-ink-900 via-accent-600 to-ink-900 text-white text-xs md:text-sm py-2 px-4 text-center font-medium flex items-center justify-center gap-2 border-b border-white/10">
+  <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-brand-600 text-ink-900 text-[10px] font-bold">NEW</span>
+  <span id="bannerText">✦ SimplifyPDF v1.0 Launch: Zero advertisements, privacy-first 100% permissive engine.</span>
+  <a href="javascript:void(0)" onclick="switchView('admin')" class="underline underline-offset-2 opacity-90 hover:opacity-100 font-semibold ml-1">Edit in Admin →</a>
+</div>
+
+<!-- ==========================================================================
+     VIEW 1: PUBLIC FRONTEND WEBSITE
+     ========================================================================== -->
+<div id="view-website" class="view-panel block">
+  <!-- Public Main Navigation -->
+  <nav class="bg-surface/80 backdrop-blur-md border-b border-ink-100 sticky top-12 z-40 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-8">
+        <a href="#" class="flex items-center gap-2 font-heading font-extrabold text-xl text-ink-900">
+          <i data-lucide="file-check-2" class="w-6 h-6 text-brand-600"></i>
+          <span class="brand-text">SimplifyPDF</span>
+        </a>
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium text-ink-700">
+          <a href="#tools-section" class="hover:text-brand-600 transition-colors">All Tools</a>
+          <a href="#convert-tab" class="hover:text-brand-600 transition-colors">Convert</a>
+          <a href="#compress-tab" class="hover:text-brand-600 transition-colors">Compress</a>
+          <a href="#pricing-section" class="hover:text-brand-600 transition-colors">Pricing</a>
+          <a href="javascript:void(0)" onclick="switchView('admin')" class="hover:text-brand-600 transition-colors flex items-center gap-1 text-accent-600">
+            <i data-lucide="shield" class="w-3.5 h-3.5"></i> Admin
+          </a>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="switchView('free-user')" class="btn-v6 btn-v6-outline text-xs px-4 py-2">
+          <div class="btn-v6-roll-wrap">
+            <span class="btn-v6-text-upper">Log in</span>
+            <span class="btn-v6-text-lower">Log in</span>
+          </div>
+        </button>
+        <!-- NextSaaS Rolling CTA -->
+        <button onclick="switchView('paid-user')" class="btn-v6 btn-v6-primary text-xs px-5 py-2">
+          <div class="btn-v6-roll-wrap">
+            <span class="btn-v6-text-upper">
+              <span>Try Pro Free</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </span>
+            <span class="btn-v6-text-lower">
+              <span>Try Pro Free</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section with NextSaaS Micro-Interactions -->
+  <section class="relative pt-16 pb-20 px-6 overflow-hidden">
+    <!-- Background glow orb -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-brand-50 rounded-full blur-3xl -z-10 opacity-70 pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto text-center">
+      <!-- Pill Badge -->
+      <div class="inline-flex mb-6">
+        <div class="nextsaas-badge">
+          <span class="nextsaas-badge-dot"></span>
+          <span>Fast, Privacy-First PDF Utility Platform</span>
+        </div>
+      </div>
+
+      <!-- Main Dynamic Headline -->
+      <h1 id="heroHeadline" class="font-heading font-extrabold text-4xl sm:text-5xl md:text-6xl text-ink-900 tracking-tight leading-[1.15] mb-6">
+        One simple, fast &amp; trustworthy home for every PDF job
+      </h1>
+
+      <!-- Subtitle -->
+      <p id="heroSubtitle" class="text-ink-500 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+        Drop any file to convert, compress, organize, or password-protect. Direct browser-to-storage processing with zero ad clutter.
+      </p>
+
+      <!-- NextSaaS Button Variations row -->
+      <div class="flex flex-wrap items-center justify-center gap-4 mb-14">
+        <!-- NextSaaS btn-v6 Primary Roll -->
+        <a href="#universal-drop" class="btn-v6 btn-v6-primary text-base px-7 py-3.5">
+          <div class="btn-v6-roll-wrap">
+            <span class="btn-v6-text-upper">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span>Drop File to Start</span>
+            </span>
+            <span class="btn-v6-text-lower">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span>Drop File to Start</span>
+            </span>
+          </div>
+        </a>
+
+        <!-- NextSaaS Lateral Arrow Slide Button -->
+        <a href="#tools-section" class="nextsaas-btn bg-surface hover:bg-ink-100 text-ink-900 border border-ink-300 text-base px-6 py-3.5 shadow-sm">
+          <span>Explore 15+ Tools</span>
+          <div class="nextsaas-icon-box">
+            <span class="nextsaas-icon-1"><i data-lucide="arrow-right" class="w-4 h-4 text-brand-600"></i></span>
+            <span class="nextsaas-icon-2"><i data-lucide="arrow-right" class="w-4 h-4 text-brand-600"></i></span>
+          </div>
+        </a>
+      </div>
+
+      <!-- UNIVERSAL INTERACTIVE DROP ZONE -->
+      <div id="universal-drop" class="relative max-w-2xl mx-auto">
+        <div id="dropZoneContainer" class="nextsaas-glow-card border-2 border-dashed border-brand-600/50 bg-surface hover:border-brand-600 transition-all cursor-pointer p-8 sm:p-12 text-center group" onclick="triggerFileSelect()">
+          <input type="file" id="realFileInput" class="hidden" onchange="handleFileSelected(event)">
+          
+          <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-ink-900 transition-all duration-300 shadow-md">
+            <i data-lucide="file-up" class="w-8 h-8"></i>
+          </div>
+
+          <h3 class="font-heading font-bold text-xl text-ink-900 mb-2">Drop your file here, or browse</h3>
+          <p class="text-sm text-ink-500 max-w-md mx-auto mb-4">Supports PDF, Word (DOCX), Excel, PowerPoint, JPG, PNG, and EPUB up to 50MB free (2GB Pro).</p>
+          
+          <!-- Sample file quick-try pills -->
+          <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+            <span class="text-xs text-ink-500 font-medium mr-1">Quick Try:</span>
+            <button type="button" onclick="event.stopPropagation(); simulateFile('Quarterly_Report_Q3.pdf', 3.4)" class="px-3 py-1 rounded-full text-xs font-medium bg-ink-100 hover:bg-brand-50 hover:text-brand-600 text-ink-700 transition-colors">
+              📄 Sample PDF (3.4 MB)
+            </button>
+            <button type="button" onclick="event.stopPropagation(); simulateFile('Contract_Agreement.docx', 1.8)" class="px-3 py-1 rounded-full text-xs font-medium bg-ink-100 hover:bg-brand-50 hover:text-brand-600 text-ink-700 transition-colors">
+              📝 Sample DOCX (1.8 MB)
+            </button>
+          </div>
+        </div>
+
+        <!-- LIVE PROCESSING RAIL MODAL / PANEL (Visible when file is dropped) -->
+        <div id="processPanel" class="hidden mt-4 nextsaas-glow-card p-6 text-left border border-brand-600/30">
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-ink-100">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold">
+                <i data-lucide="file-text" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 id="processFileName" class="font-bold text-ink-900 text-base">document.pdf</h4>
+                <p id="processFileSize" class="text-xs text-ink-500">2.4 MB · Ready for direct processing</p>
+              </div>
+            </div>
+            <button onclick="resetProcessor()" class="text-xs text-ink-500 hover:text-danger-500">Cancel</button>
+          </div>
+
+          <!-- Suggested Tool Selection -->
+          <div id="toolPickerRow" class="mb-5">
+            <p class="text-xs font-bold text-ink-700 uppercase tracking-wider mb-2">Select an action for this file:</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <button onclick="executeJob('compress')" class="p-2.5 rounded-lg border border-brand-600/40 bg-brand-50/50 hover:bg-brand-50 text-left text-xs font-semibold text-ink-900 flex items-center gap-2">
+                <i data-lucide="minimize-2" class="w-4 h-4 text-brand-600"></i> Compress
+              </button>
+              <button onclick="executeJob('pdf-to-word')" class="p-2.5 rounded-lg border border-ink-100 hover:border-brand-600 text-left text-xs font-semibold text-ink-900 flex items-center gap-2">
+                <i data-lucide="file-type-2" class="w-4 h-4 text-accent-600"></i> PDF to Word
+              </button>
+              <button onclick="executeJob('split')" class="p-2.5 rounded-lg border border-ink-100 hover:border-brand-600 text-left text-xs font-semibold text-ink-900 flex items-center gap-2">
+                <i data-lucide="scissors" class="w-4 h-4 text-violet-600"></i> Split Pages
+              </button>
+              <button onclick="executeJob('protect')" class="p-2.5 rounded-lg border border-ink-100 hover:border-brand-600 text-left text-xs font-semibold text-ink-900 flex items-center gap-2">
+                <i data-lucide="lock" class="w-4 h-4 text-emerald-600"></i> Protect
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Step Progress Stream (SSE simulation) -->
+          <div id="progressFlow" class="hidden space-y-3">
+            <div class="flex items-center justify-between text-xs font-semibold">
+              <span id="progressStepTitle" class="text-brand-600 flex items-center gap-2">
+                <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Direct Presigned S3 Upload...
+              </span>
+              <span id="progressPercent" class="text-ink-700">30%</span>
+            </div>
+            <div class="w-full bg-ink-100 rounded-full h-2 overflow-hidden">
+              <div id="progressBar" class="bg-brand-600 h-2 rounded-full transition-all duration-300" style="width: 30%"></div>
+            </div>
+            <p id="progressDetail" class="text-[11px] text-ink-500 font-mono">Bypassing Node.js proxy → Uploading direct to MinIO S3 storage.</p>
+          </div>
+
+          <!-- Finished Result Box -->
+          <div id="downloadBox" class="hidden mt-4 p-4 rounded-xl bg-success-50 border border-success-600/30 text-ink-900">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-1.5 text-success-600 font-bold text-sm">
+                  <i data-lucide="check-circle-2" class="w-4 h-4"></i> Processing Finished!
+                </div>
+                <p id="downloadSummary" class="text-xs text-ink-700 mt-0.5">Reduced by 68% (3.4 MB → 1.1 MB). Auto-deletes in 1 hour.</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="alert('Downloading processed document via signed S3 URL!')" class="btn-v6 btn-v6-primary text-xs px-4 py-2">
+                  <div class="btn-v6-roll-wrap">
+                    <span class="btn-v6-text-upper"><i data-lucide="download" class="w-3.5 h-3.5"></i> Download PDF</span>
+                    <span class="btn-v6-text-lower"><i data-lucide="download" class="w-3.5 h-3.5"></i> Download PDF</span>
+                  </div>
+                </button>
+                <button onclick="resetProcessor()" class="btn-v6 btn-v6-outline text-xs px-3 py-2">New Task</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools Grid Section -->
+  <section id="tools-section" class="py-16 px-6 max-w-7xl mx-auto border-t border-ink-100">
+    <div class="text-center max-w-xl mx-auto mb-12">
+      <h2 class="font-heading font-extrabold text-3xl text-ink-900 mb-3">Popular PDF Utilities</h2>
+      <p class="text-ink-500 text-sm">All tools powered by permissive engines: <code>pypdfium2</code>, <code>pikepdf</code>, and <code>qpdf</code>.</p>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
+      <button class="px-4 py-1.5 rounded-full text-xs font-semibold bg-brand-600 text-ink-900">All Tools</button>
+      <button class="px-4 py-1.5 rounded-full text-xs font-semibold bg-surface hover:bg-ink-100 text-ink-700 border border-ink-100">Convert from PDF</button>
+      <button class="px-4 py-1.5 rounded-full text-xs font-semibold bg-surface hover:bg-ink-100 text-ink-700 border border-ink-100">Convert to PDF</button>
+      <button class="px-4 py-1.5 rounded-full text-xs font-semibold bg-surface hover:bg-ink-100 text-ink-700 border border-ink-100">Organize &amp; Split</button>
+      <button class="px-4 py-1.5 rounded-full text-xs font-semibold bg-surface hover:bg-ink-100 text-ink-700 border border-ink-100">Security &amp; OCR</button>
+    </div>
+
+    <!-- Bento Grid of Tools -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Tool 1: Compress -->
+      <div class="nextsaas-glow-card p-5 group cursor-pointer" onclick="simulateFile('Compressed_Report.pdf', 8.2); executeJob('compress')">
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <i data-lucide="minimize-2" class="w-6 h-6"></i>
+        </div>
+        <h3 class="font-heading font-bold text-base text-ink-900 mb-1">Compress PDF</h3>
+        <p class="text-xs text-ink-500 leading-relaxed mb-4">Reduce file size while keeping high visual resolution via <code>qpdf</code>.</p>
+        <span class="text-xs font-semibold text-brand-600 inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+          Compress now →
+        </span>
+      </div>
+
+      <!-- Tool 2: Merge -->
+      <div class="nextsaas-glow-card p-5 group cursor-pointer" onclick="simulateFile('Combined_Files.pdf', 4.1); executeJob('split')">
+        <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <i data-lucide="layers" class="w-6 h-6"></i>
+        </div>
+        <h3 class="font-heading font-bold text-base text-ink-900 mb-1">Merge PDF</h3>
+        <p class="text-xs text-ink-500 leading-relaxed mb-4">Combine multiple PDF files into one clean document with custom order.</p>
+        <span class="text-xs font-semibold text-brand-600 inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+          Merge files →
+        </span>
+      </div>
+
+      <!-- Tool 3: PDF to Word -->
+      <div class="nextsaas-glow-card p-5 group cursor-pointer" onclick="simulateFile('Extracted_Doc.pdf', 2.3); executeJob('pdf-to-word')">
+        <div class="w-12 h-12 rounded-xl bg-accent-50 text-accent-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <i data-lucide="file-type-2" class="w-6 h-6"></i>
+        </div>
+        <h3 class="font-heading font-bold text-base text-ink-900 mb-1">PDF to Word</h3>
+        <p class="text-xs text-ink-500 leading-relaxed mb-4">Convert PDF pages into editable DOCX files with precise formatting.</p>
+        <span class="text-xs font-semibold text-brand-600 inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+          Convert to DOCX →
+        </span>
+      </div>
+
+      <!-- Tool 4: Protect -->
+      <div class="nextsaas-glow-card p-5 group cursor-pointer" onclick="simulateFile('Encrypted_Statement.pdf', 1.5); executeJob('protect')">
+        <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <i data-lucide="shield-check" class="w-6 h-6"></i>
+        </div>
+        <h3 class="font-heading font-bold text-base text-ink-900 mb-1">Protect PDF</h3>
+        <p class="text-xs text-ink-500 leading-relaxed mb-4">Add strong AES-256 encryption password and granular copy/print permissions.</p>
+        <span class="text-xs font-semibold text-brand-600 inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+          Encrypt document →
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Comparison Section with Currency Toggle -->
+  <section id="pricing-section" class="py-16 px-6 max-w-7xl mx-auto border-t border-ink-100">
+    <div class="text-center max-w-xl mx-auto mb-10">
+      <div class="inline-flex mb-3">
+        <span class="nextsaas-badge">Transparent Pricing</span>
+      </div>
+      <h2 class="font-heading font-extrabold text-3xl text-ink-900 mb-3">Simple plans, no hidden limits</h2>
+      <p class="text-ink-500 text-sm">Always ad-free. Pay in INR (UPI / RuPay) or USD (Stripe).</p>
+
+      <!-- Currency Switcher -->
+      <div class="inline-flex items-center bg-ink-100 p-1 rounded-full mt-4 text-xs font-bold text-ink-700">
+        <button id="curr-inr" onclick="setCurrency('INR')" class="px-4 py-1.5 rounded-full bg-surface shadow-sm text-ink-900 transition-all">🇮🇳 INR (₹)</button>
+        <button id="curr-usd" onclick="setCurrency('USD')" class="px-4 py-1.5 rounded-full text-ink-500 hover:text-ink-900 transition-all">🇺🇸 USD ($)</button>
+      </div>
+    </div>
+
+    <!-- Pricing Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <!-- Free Plan -->
+      <div class="nextsaas-glow-card p-8 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-heading font-bold text-xl text-ink-900">Free Forever</h3>
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-ink-100 text-ink-700">Guest &amp; Registered</span>
+          </div>
+          <p class="text-xs text-ink-500 mb-6">Perfect for everyday casual tasks and single-file conversions.</p>
+          <div class="mb-6">
+            <span class="text-4xl font-extrabold text-ink-900">Free</span>
+            <span class="text-xs text-ink-500 font-medium"> / no card required</span>
+          </div>
+          <ul class="space-y-3 text-xs text-ink-700 mb-8">
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-success-600"></i> Up to 50 MB file size limit</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-success-600"></i> 10 tasks per day (3 for guests)</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-success-600"></i> 10+ Core PDF tools (Merge, Compress, Convert)</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-success-600"></i> 2-hour secure auto-delete policy</li>
+            <li class="flex items-center gap-2 text-ink-500"><i data-lucide="x" class="w-4 h-4"></i> Batch processing (single files only)</li>
+            <li class="flex items-center gap-2 text-ink-500"><i data-lucide="x" class="w-4 h-4"></i> Scanned OCR (5 pages trial only)</li>
+          </ul>
+        </div>
+        <button onclick="switchView('free-user')" class="btn-v6 btn-v6-outline w-full py-3">
+          <div class="btn-v6-roll-wrap">
+            <span class="btn-v6-text-upper">Continue with Free</span>
+            <span class="btn-v6-text-lower">Continue with Free</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Pro Plan -->
+      <div class="nextsaas-glow-card p-8 border-2 border-brand-600 flex flex-col justify-between relative shadow-lg">
+        <div class="absolute -top-3.5 right-6 px-3 py-1 rounded-full bg-brand-600 text-ink-900 text-xs font-bold uppercase tracking-wider shadow">
+          Most Popular
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-heading font-bold text-xl text-ink-900">SimplifyPDF Pro</h3>
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-accent-50 text-accent-600 font-mono">Power Users</span>
+          </div>
+          <p class="text-xs text-ink-500 mb-6">Unlimited batch processing, 2GB files, priority queue &amp; full OCR.</p>
+          <div class="mb-6 flex items-baseline gap-1">
+            <span id="proPriceAmount" class="text-4xl font-extrabold text-ink-900">₹249</span>
+            <span id="proPricePeriod" class="text-xs text-ink-500 font-medium">/ month (or ₹2,499/year)</span>
+          </div>
+          <ul class="space-y-3 text-xs text-ink-700 mb-8">
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-600 font-bold"></i> <b>2 GB file size limit</b> (40× free)</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-600 font-bold"></i> <b>Batch ZIP processing</b> up to 100 files</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-600 font-bold"></i> <b>Unlimited daily tasks</b> &amp; priority worker queue</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-600 font-bold"></i> Full multilingual <b>OCR</b> &amp; Extreme Compression</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-600"></i> 24-hour file retention policy</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-600"></i> Priority 12h email support</li>
+          </ul>
+        </div>
+        <button onclick="switchView('paid-user')" class="btn-v6 btn-v6-primary w-full py-3.5">
+          <div class="btn-v6-roll-wrap">
+            <span class="btn-v6-text-upper flex items-center justify-center gap-1.5">
+              <span>Upgrade to Pro Now</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </span>
+            <span class="btn-v6-text-lower flex items-center justify-center gap-1.5">
+              <span>Upgrade to Pro Now</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Public Footer -->
+  <footer class="bg-surface border-t border-ink-100 py-12 px-6 text-xs text-ink-500">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2 font-heading font-bold text-ink-900 text-sm">
+        <i data-lucide="file-check-2" class="w-4 h-4 text-brand-600"></i>
+        <span class="brand-text">SimplifyPDF</span>
+        <span class="text-ink-500 font-normal">· Clean, Fast &amp; Ad-Free</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="#tools-section" class="hover:text-brand-600">Tools</a>
+        <a href="#pricing-section" class="hover:text-brand-600">Pricing</a>
+        <a href="javascript:void(0)" onclick="switchView('admin')" class="hover:text-brand-600">Admin Studio</a>
+        <a href="javascript:void(0)" onclick="alert('Privacy Policy: All files deleted automatically.')" class="hover:text-brand-600">Privacy</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ==========================================================================
+     VIEW 2: FREE USER PORTAL
+     ========================================================================== -->
+<div id="view-free-user" class="view-panel hidden">
+  <div class="bg-surface border-b border-ink-100 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-ink-100 text-ink-700 flex items-center justify-center font-bold text-xs">
+          JD
+        </div>
+        <div>
+          <h3 class="font-bold text-sm text-ink-900">john.demo@example.com</h3>
+          <p class="text-xs text-ink-500 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Free Member Account
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="switchView('paid-user')" class="btn-v6 btn-v6-primary text-xs px-4 py-2">
+          <div class="btn-v6-roll-wrap">
+            <span class="btn-v6-text-upper">Upgrade to Pro ($4.99/mo)</span>
+            <span class="btn-v6-text-lower">Upgrade to Pro ($4.99/mo)</span>
+          </div>
+        </button>
+        <button onclick="switchView('website')" class="text-xs text-ink-500 hover:text-ink-900">Back to Web</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto p-6 sm:p-8 space-y-8">
+    <!-- Free Quota Status Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="nextsaas-glow-card p-5">
+        <div class="flex items-center justify-between text-xs text-ink-500 mb-2">
+          <span>Daily Quota</span>
+          <span class="font-bold text-ink-900">3 of 10 used</span>
+        </div>
+        <div class="w-full bg-ink-100 rounded-full h-2 overflow-hidden mb-2">
+          <div class="bg-brand-600 h-2 rounded-full" style="width: 30%"></div>
+        </div>
+        <p class="text-[11px] text-ink-500">Resets in 7 hours 42 minutes.</p>
+      </div>
+
+      <div class="nextsaas-glow-card p-5">
+        <div class="text-xs text-ink-500 mb-1">Max File Limit</div>
+        <div class="text-2xl font-extrabold text-ink-900 mb-1">50 MB</div>
+        <p class="text-[11px] text-brand-600 font-semibold cursor-pointer" onclick="switchView('paid-user')">Need up to 2 GB? Upgrade to Pro →</p>
+      </div>
+
+      <div class="nextsaas-glow-card p-5">
+        <div class="text-xs text-ink-500 mb-1">File Retention Window</div>
+        <div class="text-2xl font-extrabold text-ink-900 mb-1">2 Hours</div>
+        <p class="text-[11px] text-ink-500">Auto-deleted permanently from MinIO S3.</p>
+      </div>
+    </div>
+
+    <!-- Free User File Workspace -->
+    <div class="nextsaas-glow-card p-6">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h3 class="font-heading font-bold text-lg text-ink-900">Recent Processed Files</h3>
+          <p class="text-xs text-ink-500">Files are kept strictly for 2 hours for security, then permanently expunged.</p>
+        </div>
+        <button onclick="simulateFile('Client_Contract_v2.pdf', 4.1); switchView('website'); executeJob('compress')" class="btn-v6 btn-v6-primary text-xs px-4 py-2">
+          <div class="btn-v6-roll-wrap">
+            <span class="btn-v6-text-upper"><i data-lucide="plus" class="w-3.5 h-3.5"></i> New Job</span>
+            <span class="btn-v6-text-lower"><i data-lucide="plus" class="w-3.5 h-3.5"></i> New Job</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- File Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left">
+          <thead class="bg-ink-100/60 text-ink-700 uppercase font-semibold">
+            <tr>
+              <th class="p-3 rounded-l-lg">File Name</th>
+              <th class="p-3">Action</th>
+              <th class="p-3">Original Size</th>
+              <th class="p-3">Result</th>
+              <th class="p-3">Time Left</th>
+              <th class="p-3 text-right rounded-r-lg">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-ink-100">
+            <tr>
+              <td class="p-3 font-medium text-ink-900 flex items-center gap-2">
+                <i data-lucide="file-text" class="w-4 h-4 text-brand-600"></i> Annual_Report_2026.pdf
+              </td>
+              <td class="p-3"><span class="px-2 py-0.5 rounded bg-brand-50 text-brand-600 font-semibold">Compress</span></td>
+              <td class="p-3 text-ink-500">12.4 MB</td>
+              <td class="p-3 font-semibold text-success-600">3.8 MB (-69%)</td>
+              <td class="p-3 text-amber-600 font-mono">1h 14m left</td>
+              <td class="p-3 text-right space-x-2">
+                <button onclick="alert('Downloading via signed MinIO URL')" class="text-brand-600 hover:underline font-semibold">Download</button>
+                <button onclick="this.closest('tr').remove()" class="text-danger-500 hover:underline">Delete Now</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="p-3 font-medium text-ink-900 flex items-center gap-2">
+                <i data-lucide="file-text" class="w-4 h-4 text-accent-600"></i> Vendor_Agreement.pdf
+              </td>
+              <td class="p-3"><span class="px-2 py-0.5 rounded bg-accent-50 text-accent-600 font-semibold">Protect</span></td>
+              <td class="p-3 text-ink-500">1.8 MB</td>
+              <td class="p-3 text-ink-700">AES-256 Encrypted</td>
+              <td class="p-3 text-amber-600 font-mono">0h 42m left</td>
+              <td class="p-3 text-right space-x-2">
+                <button onclick="alert('Downloading via signed MinIO URL')" class="text-brand-600 hover:underline font-semibold">Download</button>
+                <button onclick="this.closest('tr').remove()" class="text-danger-500 hover:underline">Delete Now</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ==========================================================================
+     VIEW 3: PAID (PRO) USER PORTAL
+     ========================================================================== -->
+<div id="view-paid-user" class="view-panel hidden">
+  <div class="bg-surface border-b border-ink-100 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs ring-2 ring-amber-400">
+          <i data-lucide="crown" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="font-bold text-sm text-ink-900">sarah.pro@designstudio.io</h3>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 uppercase tracking-wider">Pro Active</span>
+          </div>
+          <p class="text-xs text-ink-500">Stripe Billing Active · Renews Dec 19, 2026</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="alert('Opening Stripe Customer Portal for Sarah')" class="btn-v6 btn-v6-outline text-xs px-3 py-1.5">
+          Billing &amp; Invoices
+        </button>
+        <button onclick="switchView('website')" class="text-xs text-ink-500 hover:text-ink-900">Back to Web</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto p-6 sm:p-8 space-y-8">
+    <!-- Pro Tier Power Perks Bar -->
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      <div class="nextsaas-glow-card p-5 border-l-4 border-l-brand-600">
+        <span class="text-xs text-ink-500 block mb-1">Max File Size</span>
+        <span class="text-2xl font-extrabold text-ink-900">2 GB</span>
+        <span class="text-[11px] text-emerald-600 font-semibold block mt-1">✓ Unlimited Heavy Files</span>
+      </div>
+
+      <div class="nextsaas-glow-card p-5 border-l-4 border-l-accent-600">
+        <span class="text-xs text-ink-500 block mb-1">Batch Operations</span>
+        <span class="text-2xl font-extrabold text-ink-900">100 Files</span>
+        <span class="text-[11px] text-accent-600 font-semibold block mt-1">✓ ZIP Archive Output</span>
+      </div>
+
+      <div class="nextsaas-glow-card p-5 border-l-4 border-l-emerald-600">
+        <span class="text-xs text-ink-500 block mb-1">Worker Priority</span>
+        <span class="text-2xl font-extrabold text-emerald-600">Dedicated</span>
+        <span class="text-[11px] text-ink-500 block mt-1">Zero wait time queue</span>
+      </div>
+
+      <div class="nextsaas-glow-card p-5 border-l-4 border-l-indigo-600">
+        <span class="text-xs text-ink-500 block mb-1">Retention Window</span>
+        <span class="text-2xl font-extrabold text-ink-900">24 Hours</span>
+        <span class="text-[11px] text-ink-500 block mt-1">Extended secure buffer</span>
+      </div>
+    </div>
+
+    <!-- Pro Multi-File Batch Processor Box -->
+    <div class="nextsaas-glow-card p-8 border border-brand-600/30">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="font-heading font-bold text-xl text-ink-900 flex items-center gap-2">
+            <i data-lucide="layers" class="w-5 h-5 text-brand-600"></i> Pro Batch Compressor &amp; Converter
+          </h3>
+          <p class="text-xs text-ink-500">Drop up to 100 files simultaneously. They will be processed in parallel and zipped.</p>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-600">Pro Feature</span>
+      </div>
+
+      <div class="border-2 border-dashed border-ink-300 rounded-xl p-8 text-center bg-canvas hover:border-brand-600 transition-colors cursor-pointer" onclick="alert('Batch multi-select triggered. Uploading 12 files to MinIO...')">
+        <i data-lucide="folder-archive" class="w-10 h-10 mx-auto text-brand-600 mb-2"></i>
+        <p class="font-bold text-sm text-ink-900">Click to Select Multiple Files for Batch Processing</p>
+        <p class="text-xs text-ink-500 mt-1">Or drag a folder of PDFs here to generate a consolidated ZIP</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ==========================================================================
+     VIEW 4: UNIFIED ADMIN DASHBOARD & LIVE DESIGN SYSTEM STUDIO
+     ========================================================================== -->
+<div id="view-admin" class="view-panel hidden">
+  <div class="bg-ink-900 text-white px-6 py-6 border-b border-ink-700">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 text-xs font-mono text-brand-500 uppercase tracking-widest mb-1">
+          <i data-lucide="shield-check" class="w-4 h-4"></i> Admin Headquarters
+        </div>
+        <h2 class="font-heading font-extrabold text-2xl text-white">Platform Controls &amp; Design System Studio</h2>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="resetDesignDefaults()" class="btn-v6 btn-v6-outline border-white/20 text-white hover:bg-white/10 text-xs px-3.5 py-2">
+          Reset Brand Defaults
+        </button>
+        <button onclick="switchView('website')" class="btn-v6 btn-v6-primary text-xs px-4 py-2">
+          <div class="btn-v6-roll-wrap">
+            <span class="btn-v6-text-upper">View Live Frontend →</span>
+            <span class="btn-v6-text-lower">View Live Frontend →</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto p-6 sm:p-8 space-y-8">
+    <!-- Live KPIs Row -->
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+      <div class="nextsaas-glow-card p-4">
+        <span class="text-[11px] text-ink-500 uppercase font-semibold">Active Visitors</span>
+        <div class="text-2xl font-extrabold text-ink-900 mt-1">1,482</div>
+        <span class="text-[10px] text-emerald-600 font-bold">+18% today</span>
+      </div>
+      <div class="nextsaas-glow-card p-4">
+        <span class="text-[11px] text-ink-500 uppercase font-semibold">Monthly Revenue</span>
+        <div class="text-2xl font-extrabold text-ink-900 mt-1">$12,480</div>
+        <span class="text-[10px] text-emerald-600 font-bold">Stripe + Razorpay</span>
+      </div>
+      <div class="nextsaas-glow-card p-4">
+        <span class="text-[11px] text-ink-500 uppercase font-semibold">Tasks Processed</span>
+        <div class="text-2xl font-extrabold text-ink-900 mt-1">8,920</div>
+        <span class="text-[10px] text-ink-500">Today</span>
+      </div>
+      <div class="nextsaas-glow-card p-4">
+        <span class="text-[11px] text-ink-500 uppercase font-semibold">Conversion Rate</span>
+        <div class="text-2xl font-extrabold text-ink-900 mt-1">4.2%</div>
+        <span class="text-[10px] text-brand-600 font-bold">Free → Pro</span>
+      </div>
+      <div class="nextsaas-glow-card p-4">
+        <span class="text-[11px] text-ink-500 uppercase font-semibold">Worker Error Rate</span>
+        <div class="text-2xl font-extrabold text-ink-900 mt-1">0.01%</div>
+        <span class="text-[10px] text-emerald-600 font-bold">All 3 pools healthy</span>
+      </div>
+    </div>
+
+    <!-- LIVE DESIGN SYSTEM STUDIO SECTION (Instant Front-End Propagation) -->
+    <div class="nextsaas-glow-card p-6 sm:p-8 border-2 border-brand-600">
+      <div class="flex items-center justify-between mb-6 pb-4 border-b border-ink-100">
+        <div>
+          <h3 class="font-heading font-extrabold text-xl text-ink-900 flex items-center gap-2">
+            <i data-lucide="palette" class="w-5 h-5 text-brand-600"></i> Live Design System Studio
+          </h3>
+          <p class="text-xs text-ink-500">Every change made here immediately updates the CSS tokens, typography, and buttons across the public website and user portals!</p>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-brand-50 text-brand-600 animate-pulse">
+          Live Propagation: ACTIVE
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Control 1: Primary Brand Color Picker -->
+        <div>
+          <label class="block text-xs font-bold text-ink-900 uppercase tracking-wider mb-2">Primary Color (Action Buttons)</label>
+          <div class="flex items-center gap-2 mb-3">
+            <input type="color" id="primaryColorInput" value="#864FFE" onchange="updateDesignTokens({ primary: this.value })" class="w-10 h-10 rounded-lg cursor-pointer border border-ink-300">
+            <input type="text" id="primaryColorHex" value="#864FFE" onchange="updateDesignTokens({ primary: this.value })" class="text-xs font-mono px-3 py-2 border border-ink-300 rounded-lg w-28 uppercase">
+          </div>
+          <!-- Quick Preset Swatches -->
+          <div class="flex items-center gap-1.5">
+            <button onclick="updateDesignTokens({ primary: '#FF5B04' })" class="w-6 h-6 rounded-md bg-[#FF5B04] ring-1 ring-ink-300 hover:scale-110 transition-transform" title="Blaze Orange"></button>
+            <button onclick="updateDesignTokens({ primary: '#4F46E5' })" class="w-6 h-6 rounded-md bg-[#4F46E5] ring-1 ring-ink-300 hover:scale-110 transition-transform" title="Indigo"></button>
+            <button onclick="updateDesignTokens({ primary: '#0D9488' })" class="w-6 h-6 rounded-md bg-[#0D9488] ring-1 ring-ink-300 hover:scale-110 transition-transform" title="Teal"></button>
+            <button onclick="updateDesignTokens({ primary: '#E11D48' })" class="w-6 h-6 rounded-md bg-[#E11D48] ring-1 ring-ink-300 hover:scale-110 transition-transform" title="Rose"></button>
+            <button onclick="updateDesignTokens({ primary: '#15803D' })" class="w-6 h-6 rounded-md bg-[#15803D] ring-1 ring-ink-300 hover:scale-110 transition-transform" title="Forest Green"></button>
+          </div>
+        </div>
+
+        <!-- Control 2: Secondary / Pro Color Picker -->
+        <div>
+          <label class="block text-xs font-bold text-ink-900 uppercase tracking-wider mb-2">Secondary Color (Pro Theme)</label>
+          <div class="flex items-center gap-2 mb-3">
+            <input type="color" id="secondaryColorInput" value="#1A1A1C" onchange="updateDesignTokens({ secondary: this.value })" class="w-10 h-10 rounded-lg cursor-pointer border border-ink-300">
+            <input type="text" id="secondaryColorHex" value="#1A1A1C" onchange="updateDesignTokens({ secondary: this.value })" class="text-xs font-mono px-3 py-2 border border-ink-300 rounded-lg w-28 uppercase">
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="updateDesignTokens({ secondary: '#075056' })" class="w-6 h-6 rounded-md bg-[#075056] ring-1 ring-ink-300 hover:scale-110 transition-transform" title="Deep Sea Green"></button>
+            <button onclick="updateDesignTokens({ secondary: '#1E1B4B' })" class="w-6 h-6 rounded-md bg-[#1E1B4B] ring-1 ring-ink-300 hover:scale-110 transition-transform" title="Midnight Slate"></button>
+            <button onclick="updateDesignTokens({ secondary: '#18181B' })" class="w-6 h-6 rounded-md bg-[#18181B] ring-1 ring-ink-300 hover:scale-110 transition-transform" title="Zinc Dark"></button>
+          </div>
+        </div>
+
+        <!-- Control 3: Border Radius Controller -->
+        <div>
+          <label class="block text-xs font-bold text-ink-900 uppercase tracking-wider mb-2">Border Radius Styling</label>
+          <div class="grid grid-cols-4 gap-1.5 mb-3 text-xs font-semibold">
+            <button onclick="updateDesignTokens({ radius: '6px' })" class="py-2 border border-ink-300 rounded-md hover:bg-brand-50 hover:border-brand-600">Sharp (6px)</button>
+            <button onclick="updateDesignTokens({ radius: '14px' })" class="py-2 border border-ink-300 rounded-xl hover:bg-brand-50 hover:border-brand-600 bg-brand-50 border-brand-600 font-bold">Standard</button>
+            <button onclick="updateDesignTokens({ radius: '22px' })" class="py-2 border border-ink-300 rounded-2xl hover:bg-brand-50 hover:border-brand-600">Pill (22px)</button>
+            <button onclick="updateDesignTokens({ radius: '32px' })" class="py-2 border border-ink-300 rounded-3xl hover:bg-brand-50 hover:border-brand-600">Soft (32px)</button>
+          </div>
+          <p class="text-[11px] text-ink-500">Controls card and container roundness site-wide.</p>
+        </div>
+      </div>
+
+      <!-- Live Content Customizer -->
+      <div class="mt-6 pt-6 border-t border-ink-100 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-ink-900 uppercase tracking-wider mb-1">Hero Main Headline</label>
+          <input type="text" id="inputHeroHeadline" value="One simple, fast & trustworthy home for every PDF job" oninput="updateContent({ headline: this.value })" class="w-full text-xs p-2.5 border border-ink-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-ink-900 uppercase tracking-wider mb-1">Top Announcement Banner</label>
+          <input type="text" id="inputBannerText" value="✦ SimplifyPDF v1.0 Launch: Zero advertisements, privacy-first 100% permissive engine." oninput="updateContent({ banner: this.value })" class="w-full text-xs p-2.5 border border-ink-300 rounded-lg">
+        </div>
+      </div>
+    </div>
+
+    <!-- Administrative Quota & Tool Toggles -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Tool Master Switches -->
+      <div class="nextsaas-glow-card p-6">
+        <h4 class="font-heading font-bold text-base text-ink-900 mb-4 flex items-center gap-2">
+          <i data-lucide="wrench" class="w-4 h-4 text-brand-600"></i> PDF Tool Kill-Switches
+        </h4>
+        <div class="space-y-3 text-xs">
+          <label class="flex items-center justify-between p-2 rounded-lg bg-canvas border border-ink-100">
+            <span class="font-semibold text-ink-900">Compress PDF Tool</span>
+            <input type="checkbox" checked onchange="alert('Compress tool toggled on/off in Redis')" class="w-4 h-4 text-brand-600 rounded">
+          </label>
+          <label class="flex items-center justify-between p-2 rounded-lg bg-canvas border border-ink-100">
+            <span class="font-semibold text-ink-900">Merge &amp; Split Tools</span>
+            <input type="checkbox" checked onchange="alert('Merge/Split tool toggled on/off in Redis')" class="w-4 h-4 text-brand-600 rounded">
+          </label>
+          <label class="flex items-center justify-between p-2 rounded-lg bg-canvas border border-ink-100">
+            <span class="font-semibold text-ink-900">LibreOffice Headless Conversions</span>
+            <input type="checkbox" checked onchange="alert('LibreOffice worker toggled on/off in Redis')" class="w-4 h-4 text-brand-600 rounded">
+          </label>
+        </div>
+      </div>
+
+      <!-- Plan Quota Limits Editor -->
+      <div class="nextsaas-glow-card p-6">
+        <h4 class="font-heading font-bold text-base text-ink-900 mb-4 flex items-center gap-2">
+          <i data-lucide="badge-dollar-sign" class="w-4 h-4 text-brand-600"></i> Live Plan Quota Limits
+        </h4>
+        <div class="space-y-3 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-ink-700">Free Max File Size:</span>
+            <span class="font-bold font-mono px-2 py-0.5 bg-ink-100 rounded">50 MB</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-ink-700">Pro Max File Size:</span>
+            <span class="font-bold font-mono px-2 py-0.5 bg-brand-50 text-brand-600 rounded">2,048 MB (2 GB)</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-ink-700">Guest Retention Expiry:</span>
+            <span class="font-bold font-mono px-2 py-0.5 bg-ink-100 rounded">1 Hour</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-ink-700">Pro Retention Expiry:</span>
+            <span class="font-bold font-mono px-2 py-0.5 bg-brand-50 text-brand-600 rounded">24 Hours</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ==========================================================================
+     VIEW 5: NEXTSAAS UI KIT SHOWCASE
+     ========================================================================== -->
+<div id="view-components" class="view-panel hidden">
+  <div class="bg-surface border-b border-ink-100 py-8 px-6 text-center">
+    <div class="inline-flex mb-3">
+      <span class="nextsaas-badge">UI Component Library</span>
+    </div>
+    <h2 class="font-heading font-extrabold text-3xl text-ink-900 mb-2">NextSaaS Digital Agency Design Primitives</h2>
+    <p class="text-xs text-ink-500 max-w-lg mx-auto">Extracted from <code>nextsaas-wp.pixels71.com/digital-agency/</code> and refactored with SimplifyPDF design tokens.</p>
+  </div>
+
+  <main class="max-w-7xl mx-auto p-6 sm:p-8 space-y-10">
+    <!-- Component Set 1: Rolling Buttons (btn-v6) -->
+    <div class="nextsaas-glow-card p-8">
+      <h3 class="font-heading font-bold text-lg text-ink-900 mb-2">1. Rolling Text Flip Buttons (btn-v6)</h3>
+      <p class="text-xs text-ink-500 mb-6">Hover over these buttons to see the vertical rolling text slide animation from NextSaaS.</p>
+      
+      <div class="flex flex-wrap items-center gap-4">
+        <!-- Primary -->
+        <button class="btn-v6 btn-v6-primary">
+          <div class="btn-v6-roll-wrap">
+            <span class="btn-v6-text-upper">Primary Action</span>
+            <span class="btn-v6-text-lower">Primary Action</span>
+          </div>
+        </button>
+
+        <!-- Secondary -->
+        <button class="btn-v6 btn-v6-secondary">
+          <div class="btn-v6-roll-wrap">
+            <span class="btn-v6-text-upper">Secondary Action</span>
+            <span class="btn-v6-text-lower">Secondary Action</span>
+          </div>
+        </button>
+
+        <!-- Outline -->
+        <button class="btn-v6 btn-v6-outline">
+          <div class="btn-v6-roll-wrap">
+            <span class="btn-v6-text-upper">Outline Action</span>
+            <span class="btn-v6-text-lower">Outline Action</span>
+          </div>
+        </button>
+
+        <!-- With Icons -->
+        <button class="btn-v6 btn-v6-primary">
+          <div class="btn-v6-roll-wrap">
+            <span class="btn-v6-text-upper"><i data-lucide="sparkles" class="w-4 h-4"></i> With Icon Roll</span>
+            <span class="btn-v6-text-lower"><i data-lucide="sparkles" class="w-4 h-4"></i> With Icon Roll</span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Component Set 2: NextSaaS Lateral Icon Swap -->
+    <div class="nextsaas-glow-card p-8">
+      <h3 class="font-heading font-bold text-lg text-ink-900 mb-2">2. Lateral Arrow / Icon Swap Buttons (nextsaas-button)</h3>
+      <p class="text-xs text-ink-500 mb-6">Hover over these pills to see the arrow exit right and a new arrow slide in from the left.</p>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <button class="nextsaas-btn bg-brand-600 text-ink-900 shadow">
+          <span>Start Converting</span>
+          <div class="nextsaas-icon-box">
+            <span class="nextsaas-icon-1"><i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+            <span class="nextsaas-icon-2"><i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+          </div>
+        </button>
+
+        <button class="nextsaas-btn bg-accent-600 text-white shadow">
+          <span>Download Pro Tools</span>
+          <div class="nextsaas-icon-box">
+            <span class="nextsaas-icon-1"><i data-lucide="download" class="w-4 h-4"></i></span>
+            <span class="nextsaas-icon-2"><i data-lucide="download" class="w-4 h-4"></i></span>
+          </div>
+        </button>
+
+        <button class="nextsaas-btn bg-surface border border-ink-300 text-ink-900 shadow-sm">
+          <span>Explore All Features</span>
+          <div class="nextsaas-icon-box">
+            <span class="nextsaas-icon-1"><i data-lucide="chevron-right" class="w-4 h-4 text-brand-600"></i></span>
+            <span class="nextsaas-icon-2"><i data-lucide="chevron-right" class="w-4 h-4 text-brand-600"></i></span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Component Set 3: NextSaaS Pill Badges & Chips -->
+    <div class="nextsaas-glow-card p-8">
+      <h3 class="font-heading font-bold text-lg text-ink-900 mb-2">3. NextSaaS Glowing Cards &amp; Status Badges</h3>
+      <p class="text-xs text-ink-500 mb-6">Move your cursor over these cards to see the interactive radial lighting effect.</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="p-6 rounded-xl border border-ink-100 bg-canvas space-y-2">
+          <div class="nextsaas-badge">
+            <span class="nextsaas-badge-dot"></span>
+            <span>Live Sync Active</span>
+          </div>
+          <h4 class="font-bold text-sm text-ink-900">Cursor-Reactive Surface</h4>
+          <p class="text-xs text-ink-500">Dynamic radial lighting follows pointer coordinates.</p>
+        </div>
+
+        <div class="p-6 rounded-xl border border-ink-100 bg-canvas space-y-2">
+          <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-accent-50 text-accent-600">
+            Pro Queue
+          </span>
+          <h4 class="font-bold text-sm text-ink-900">High-Priority Routing</h4>
+          <p class="text-xs text-ink-500">Bypasses default queues directly into dedicated worker pool.</p>
+        </div>
+
+        <div class="p-6 rounded-xl border border-ink-100 bg-canvas space-y-2">
+          <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
+            100% Permissive
+          </span>
+          <h4 class="font-bold text-sm text-ink-900">Zero AGPL Risk</h4>
+          <p class="text-xs text-ink-500">Powered by <code>pypdfium2</code>, <code>pikepdf</code>, and <code>qpdf</code>.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ==========================================================================
+     INTERACTIVE JAVASCRIPT: VIEW SWITCHING & LIVE DESIGN SYSTEM STORE
+     ========================================================================== -->
+<script>
+  // Initialize Lucide icons
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.lucide) { lucide.createIcons(); }
+    initMouseGlow();
+  });
+
+  // Switch between Website, Free User, Paid User, Admin, and UI Kit views
+  function switchView(viewId) {
+    document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('block'));
+
+    const target = document.getElementById('view-' + viewId);
+    if (target) {
+      target.classList.remove('hidden');
+      target.classList.add('block');
+    }
+
+    // Update switcher buttons
+    document.querySelectorAll('.nav-view-btn').forEach(btn => {
+      btn.classList.remove('nav-pill-active', 'text-ink-900');
+      btn.classList.add('text-white/70');
+    });
+
+    const activeBtn = document.getElementById('tab-' + viewId);
+    if (activeBtn) {
+      activeBtn.classList.add('nav-pill-active');
+      activeBtn.classList.remove('text-white/70');
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.lucide) { lucide.createIcons(); }
+  }
+
+  // NextSaaS Mouse-following glow card effect
+  function initMouseGlow() {
+    document.querySelectorAll('.nextsaas-glow-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+  }
+
+  // Currency switcher for pricing
+  function setCurrency(curr) {
+    const btnInr = document.getElementById('curr-inr');
+    const btnUsd = document.getElementById('curr-usd');
+    const priceAmount = document.getElementById('proPriceAmount');
+    const pricePeriod = document.getElementById('proPricePeriod');
+
+    if (curr === 'INR') {
+      btnInr.className = 'px-4 py-1.5 rounded-full bg-surface shadow-sm text-ink-900 transition-all';
+      btnUsd.className = 'px-4 py-1.5 rounded-full text-ink-500 hover:text-ink-900 transition-all';
+      priceAmount.innerText = '₹249';
+      pricePeriod.innerText = '/ month (or ₹2,499/year via UPI)';
+    } else {
+      btnUsd.className = 'px-4 py-1.5 rounded-full bg-surface shadow-sm text-ink-900 transition-all';
+      btnInr.className = 'px-4 py-1.5 rounded-full text-ink-500 hover:text-ink-900 transition-all';
+      priceAmount.innerText = '$4.99';
+      pricePeriod.innerText = '/ month (or $49/year via Stripe)';
+    }
+  }
+
+  // LIVE DESIGN SYSTEM ENGINE (Applies changes to frontend & all views)
+  function updateDesignTokens(tokens) {
+    const root = document.documentElement;
+
+    if (tokens.primary) {
+      root.style.setProperty('--brand-600', tokens.primary);
+      document.getElementById('primaryColorInput').value = tokens.primary;
+      document.getElementById('primaryColorHex').value = tokens.primary;
+    }
+
+    if (tokens.secondary) {
+      root.style.setProperty('--accent-600', tokens.secondary);
+      document.getElementById('secondaryColorInput').value = tokens.secondary;
+      document.getElementById('secondaryColorHex').value = tokens.secondary;
+    }
+
+    if (tokens.radius) {
+      root.style.setProperty('--ui-radius', tokens.radius);
+    }
+  }
+
+  function quickSetColor(prim, sec) {
+    updateDesignTokens({ primary: prim, secondary: sec });
+  }
+
+  function updateContent(content) {
+    if (content.headline) {
+      document.getElementById('heroHeadline').innerText = content.headline;
+    }
+    if (content.banner) {
+      document.getElementById('bannerText').innerText = content.banner;
+    }
+  }
+
+  function resetDesignDefaults() {
+    updateDesignTokens({ primary: '#864FFE', secondary: '#1A1A1C', radius: '14px' });
+    document.getElementById('heroHeadline').innerText = "One simple, fast & trustworthy home for every PDF job";
+    document.getElementById('inputHeroHeadline').value = "One simple, fast & trustworthy home for every PDF job";
+    document.getElementById('bannerText').innerText = "✦ SimplifyPDF v1.0 Launch: Zero advertisements, privacy-first 100% permissive engine.";
+    document.getElementById('inputBannerText').value = "✦ SimplifyPDF v1.0 Launch: Zero advertisements, privacy-first 100% permissive engine.";
+  }
+
+  // SIMULATED FILE DROP & PROCESS PIPELINE
+  function triggerFileSelect() {
+    document.getElementById('realFileInput').click();
+  }
+
+  function handleFileSelected(e) {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      simulateFile(file.name, (file.size / (1024 * 1024)).toFixed(1));
+    }
+  }
+
+  function simulateFile(name, sizeMB) {
+    document.getElementById('processFileName').innerText = name;
+    document.getElementById('processFileSize').innerText = `${sizeMB} MB · Presigned upload ready`;
+    document.getElementById('processPanel').classList.remove('hidden');
+    document.getElementById('toolPickerRow').classList.remove('hidden');
+    document.getElementById('progressFlow').classList.add('hidden');
+    document.getElementById('downloadBox').classList.add('hidden');
+    document.getElementById('processPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (window.lucide) { lucide.createIcons(); }
+  }
+
+  function executeJob(toolType) {
+    document.getElementById('toolPickerRow').classList.add('hidden');
+    document.getElementById('progressFlow').classList.remove('hidden');
+
+    const steps = [
+      { pct: '25%', title: 'Direct Presigned Upload to MinIO S3...', detail: 'Bypassing Node.js proxy to save VPS memory.' },
+      { pct: '50%', title: 'Scanning with ClamAV Engine...', detail: 'Zero malware detected. Pushing task payload to Redis Queue.' },
+      { pct: '80%', title: 'Processing via Python Worker...', detail: `Applying transformation using permissive engine.` },
+      { pct: '100%', title: 'Finished! Generating Signed Download URL...', detail: 'Auto-delete timer registered (1 hour).' }
+    ];
+
+    let currentStep = 0;
+    const interval = setInterval(() => {
+      if (currentStep < steps.length) {
+        document.getElementById('progressBar').style.width = steps[currentStep].pct;
+        document.getElementById('progressPercent').innerText = steps[currentStep].pct;
+        document.getElementById('progressStepTitle').innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> ${steps[currentStep].title}`;
+        document.getElementById('progressDetail').innerText = steps[currentStep].detail;
+        if (window.lucide) { lucide.createIcons(); }
+        currentStep++;
+      } else {
+        clearInterval(interval);
+        document.getElementById('progressFlow').classList.add('hidden');
+        document.getElementById('downloadBox').classList.remove('hidden');
+        if (window.lucide) { lucide.createIcons(); }
+      }
+    }, 600);
+  }
+
+  function resetProcessor() {
+    document.getElementById('processPanel').classList.add('hidden');
+    document.getElementById('realFileInput').value = '';
+  }
+</script>
+</body>
+</html>
