@@ -106,7 +106,7 @@ export default function AdminAuditPage() {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+            <h1 className="font-heading font-bold text- tracking-tight sm:text-3xl text-[var(--ink)]">
               Administrative Audit Trail
             </h1>
             <Badge variant="live" dot>IMMUTABLE POSTGRES LOG</Badge>

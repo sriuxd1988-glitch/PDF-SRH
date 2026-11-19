@@ -39,7 +39,7 @@ export function ToolControls() {
     <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="font-heading font-black text-xl text-[var(--ink)]">
+          <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
             Tool Circuit Breakers & Kill Switches
           </h3>
           <p className="text-xs text-[var(--muted)] mt-1">

@@ -69,7 +69,7 @@ export default function HomepageBuilderPage() {
       <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm flex flex-col gap-6">
         {/* Hero Section Copy Editor */}
         <div>
-          <h3 className="font-heading font-black text-lg text-[var(--ink)] mb-1">
+          <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)] mb-1">
             Hero Section Copy
           </h3>
           <p className="text-xs text-[var(--muted)] mb-3">
@@ -106,7 +106,7 @@ export default function HomepageBuilderPage() {
         <div className="pt-4 border-t border-[var(--line)]">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <h3 className="font-heading font-black text-lg text-[var(--ink)]">
+              <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
                 Section Layout Order ({sections.length} Sections)
               </h3>
               <p className="text-xs text-[var(--muted)]">Reorder or toggle visibility of homepage blocks</p>

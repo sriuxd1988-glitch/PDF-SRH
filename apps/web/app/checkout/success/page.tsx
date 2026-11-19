@@ -85,14 +85,14 @@ function SuccessContent() {
       <ConfettiEffect />
 
       {/* Hero Badge & Heading */}
-      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-black tracking-wide mb-6">
+      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold tracking-wide mb-6">
         <CheckCircle2 className="w-4 h-4 text-emerald-600" /> PAYMENT VERIFIED &bull; PRO ACTIVE
       </div>
 
-      <h1 className="font-heading font-black text-4xl sm:text-5xl text-[var(--ink)] tracking-tight">
+      <h1 className="font-heading font-bold text-4xl sm:text-5xl text-[var(--ink)] tracking-tight">
         You're officially a SimplifyPDF Pro!
       </h1>
-      <p className="text-base sm:text-lg text-[var(--muted)] mt-3 max-w-xl">
+      <p className="text-base sm:text-lg text-[var(--muted)] font-normal mt-3 max-w-xl leading-relaxed">
         Your high-capacity quota has been provisioned instantly. Enjoy 2GB limits, multi-file batch ZIP studio, and dedicated worker queue priority.
       </p>
 
@@ -100,11 +100,11 @@ function SuccessContent() {
       <div className="w-full mt-10 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-lg text-left">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[var(--line)]">
           <div>
-            <span className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider">
+            <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider">
               Subscription Plan
             </span>
             <div className="flex items-center gap-2.5 mt-1">
-              <h2 className="font-heading font-black text-2xl text-[var(--ink)]">
+              <h2 className="font-heading font-semibold text-2xl text-[var(--ink)] tracking-tight">
                 SimplifyPDF Pro Member
               </h2>
               <Badge variant="pro">ACTIVATED</Badge>
@@ -112,7 +112,7 @@ function SuccessContent() {
           </div>
 
           <div className="text-left sm:text-right">
-            <span className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider">
+            <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider">
               Reference ID
             </span>
             <p className="font-mono text-xs text-[var(--ink)] mt-1 truncate max-w-[220px]">
@@ -124,28 +124,28 @@ function SuccessContent() {
         {/* Feature Highlights Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
           <div className="p-4 rounded-2xl bg-[var(--soft)] border border-[var(--line)]">
-            <span className="text-xs text-[var(--muted)] font-semibold flex items-center gap-1.5">
+            <span className="text-xs text-[var(--muted)] font-medium flex items-center gap-1.5">
               <Zap className="w-3.5 h-3.5 text-[var(--primary-500)]" /> Upload Limit
             </span>
-            <span className="block font-heading font-black text-xl text-[var(--ink)] mt-1">
+            <span className="block font-heading font-bold text-xl text-[var(--ink)] tracking-tight mt-1">
               2,048 MB (2 GB)
             </span>
           </div>
 
           <div className="p-4 rounded-2xl bg-[var(--soft)] border border-[var(--line)]">
-            <span className="text-xs text-[var(--muted)] font-semibold flex items-center gap-1.5">
+            <span className="text-xs text-[var(--muted)] font-medium flex items-center gap-1.5">
               <FolderArchive className="w-3.5 h-3.5 text-[var(--primary-500)]" /> Batch ZIP Studio
             </span>
-            <span className="block font-heading font-black text-xl text-[var(--ink)] mt-1">
+            <span className="block font-heading font-bold text-xl text-[var(--ink)] tracking-tight mt-1">
               100 Files / Batch
             </span>
           </div>
 
           <div className="p-4 rounded-2xl bg-[var(--soft)] border border-[var(--line)]">
-            <span className="text-xs text-[var(--muted)] font-semibold flex items-center gap-1.5">
+            <span className="text-xs text-[var(--muted)] font-medium flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-[var(--primary-500)]" /> Retention Vault
             </span>
-            <span className="block font-heading font-black text-xl text-[var(--ink)] mt-1">
+            <span className="block font-heading font-bold text-xl text-[var(--ink)] tracking-tight mt-1">
               24-Hour Vault
             </span>
           </div>
@@ -155,7 +155,7 @@ function SuccessContent() {
         <div className="pt-4 flex flex-col sm:flex-row items-center gap-4">
           <a
             href="http://localhost:3002/batch"
-            className="w-full sm:w-auto flex-1 py-4 px-6 rounded-2xl bg-[var(--primary-500)] hover:bg-[var(--primary-700)] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
+            className="w-full sm:w-auto flex-1 py-4 px-6 rounded-2xl bg-[var(--primary-500)] hover:bg-[var(--primary-700)] text-white font-medium text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
           >
             <span className="text-white">Launch Pro Batch Studio</span>
             <ArrowRight className="w-4 h-4 text-white" />

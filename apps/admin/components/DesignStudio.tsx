@@ -146,7 +146,7 @@ export function DesignStudio() {
                 <Palette className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-heading font-black text-lg text-[var(--ink)]">
+                <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
                   Live Design Tokens
                 </h3>
                 <p className="text-xs text-[var(--muted)]">Updates propagate instantly to public website</p>
@@ -303,7 +303,7 @@ export function DesignStudio() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <Eye className="w-4 h-4 text-[var(--primary-500)]" />
-              <h3 className="font-heading font-black text-lg text-[var(--ink)]">
+              <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
                 Live Interactive Component Preview
               </h3>
             </div>
@@ -369,7 +369,7 @@ export function DesignStudio() {
                   </div>
                   <Badge variant="pro">2GB CAPACITOR</Badge>
                 </div>
-                <h4 className="font-heading font-black text-lg text-[var(--ink)]">
+                <h4 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
                   Compress PDF Engine
                 </h4>
                 <p className="text-xs text-[var(--muted)] mt-1">

@@ -51,7 +51,7 @@ export default function AdminBuildersOverviewPage() {
       {/* Header Banner */}
       <div className="p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div className="flex items-center gap-3">
-          <h1 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+          <h1 className="font-heading font-bold text- tracking-tight sm:text-3xl text-[var(--ink)]">
             Website Builders &amp; Customization
           </h1>
           <Badge variant="live">HEADLESS CMS</Badge>
@@ -80,7 +80,7 @@ export default function AdminBuildersOverviewPage() {
                     {b.badge}
                   </span>
                 </div>
-                <h3 className="font-heading font-black text-lg text-[var(--ink)] group-hover:text-[var(--primary-500)] transition-colors">
+                <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)] group-hover:text-[var(--primary-500)] transition-colors">
                   {b.title}
                 </h3>
                 <p className="text-xs text-[var(--muted)] mt-1">{b.desc}</p>

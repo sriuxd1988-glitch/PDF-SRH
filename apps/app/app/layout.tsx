@@ -21,7 +21,7 @@ export default function AppLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${interTight.variable}`}>
-      <body className="bg-[var(--bg)] text-[var(--text)] min-h-screen font-body transition-colors">
+      <body className="bg-[var(--bg)] text-[var(--text)] min-h-screen font-body antialiased transition-colors">
         <DesignTokenSync />
         <DashboardShell>{children}</DashboardShell>
       </body>

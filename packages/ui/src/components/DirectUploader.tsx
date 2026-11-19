@@ -205,17 +205,17 @@ export function DirectUploader({
               <UploadCloud className="w-8 h-8" />
             </div>
             <div>
-              <h3 className="font-heading font-black text-2xl text-[#20202A] dark:text-white">
+              <h3 className="font-heading font-semibold text-2xl text-[#20202A] dark:text-white tracking-tight">
                 {toolTitle}
               </h3>
-              <p className="text-sm text-[#686873] dark:text-[#AAAAB7] mt-1">
+              <p className="text-sm text-[#686873] dark:text-[#AAAAB7] font-normal mt-1">
                 Drag & drop document here or click to browse
               </p>
             </div>
-            <Button variant="primary" size="md" className="mt-2 !text-white font-bold">
+            <Button variant="primary" size="md" className="mt-2 !text-white font-medium">
               Select Document
             </Button>
-            <div className="flex items-center gap-3 text-xs font-semibold text-[#686873] dark:text-[#AAAAB7] mt-2">
+            <div className="flex items-center gap-3 text-xs font-normal text-[#686873] dark:text-[#AAAAB7] mt-2">
               <span>Limit: {maxFileSizeMb}MB</span>
               <span>•</span>
               <span>Direct S3 Upload</span>
@@ -229,9 +229,9 @@ export function DirectUploader({
           <div className="flex flex-col items-center gap-5 py-4">
             <Loader2 className="w-10 h-10 text-[#864FFE] animate-spin" />
             <div className="w-full max-w-sm">
-              <div className="flex justify-between text-xs font-bold text-[#20202A] dark:text-white mb-2">
+              <div className="flex justify-between text-xs font-medium text-[#20202A] dark:text-white mb-2">
                 <span>{statusMessage}</span>
-                <span>{uploadPercent}%</span>
+                <span className="font-mono">{uploadPercent}%</span>
               </div>
               <div className="w-full h-2.5 bg-[#F4F4F7] dark:bg-[#202028] rounded-full overflow-hidden">
                 <div
@@ -249,14 +249,14 @@ export function DirectUploader({
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <div>
-              <h4 className="font-heading font-black text-xl text-[#20202A] dark:text-white">
+              <h4 className="font-heading font-semibold text-xl text-[#20202A] dark:text-white tracking-tight">
                 File Processed Successfully!
               </h4>
-              <p className="text-xs text-[#686873] dark:text-[#AAAAB7] mt-1">{file?.name}</p>
+              <p className="text-xs text-[#686873] dark:text-[#AAAAB7] font-normal mt-1">{file?.name}</p>
             </div>
             {downloadUrl && (
               <a href={downloadUrl} download={`processed_${file?.name}`} onClick={(e) => e.stopPropagation()}>
-                <Button variant="primary" size="lg" className="!text-white font-bold flex items-center gap-2">
+                <Button variant="primary" size="lg" className="!text-white font-medium flex items-center gap-2">
                   <ArrowDownToLine className="w-4 h-4 text-white" />
                   <span>Download Document</span>
                 </Button>
@@ -267,7 +267,7 @@ export function DirectUploader({
                 e.stopPropagation();
                 reset();
               }}
-              className="text-xs font-bold text-[#686873] hover:underline mt-2"
+              className="text-xs font-medium text-[#686873] hover:underline mt-2"
             >
               Upload another file
             </button>
@@ -277,8 +277,8 @@ export function DirectUploader({
         {status === 'failed' && (
           <div className="flex flex-col items-center gap-4 py-4">
             <AlertCircle className="w-12 h-12 text-rose-500" />
-            <h4 className="font-heading font-black text-lg text-rose-600">Upload / Processing Error</h4>
-            <p className="text-xs text-rose-500">{statusMessage}</p>
+            <h4 className="font-heading font-semibold text-lg text-rose-600 tracking-tight">Upload / Processing Error</h4>
+            <p className="text-xs text-rose-500 font-normal">{statusMessage}</p>
             <Button variant="secondary" size="sm" onClick={(e) => { e.stopPropagation(); reset(); }}>
               Try Again
             </Button>

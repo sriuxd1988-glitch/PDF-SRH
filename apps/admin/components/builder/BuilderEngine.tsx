@@ -69,7 +69,7 @@ export function BuilderEngine({
       <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <h2 className="font-heading font-black text-2xl text-[var(--ink)]">{title}</h2>
+            <h2 className="font-heading font-bold text- tracking-tight text-[var(--ink)]">{title}</h2>
             <Badge variant="live" dot>LIVE DRAFT STAGING</Badge>
           </div>
           <p className="text-xs text-[var(--muted)] mt-1">{subtitle}</p>
@@ -223,7 +223,7 @@ export function BuilderEngine({
             </button>
 
             <div>
-              <h3 className="font-heading font-black text-2xl text-[var(--ink)]">
+              <h3 className="font-heading font-bold text- tracking-tight text-[var(--ink)]">
                 Media Asset Library
               </h3>
               <p className="text-xs text-[var(--muted)] mt-1">

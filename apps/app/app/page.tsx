@@ -102,18 +102,18 @@ export default function WorkspacePage() {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl text-[var(--ink)] tracking-tight">
               Welcome back, John!
             </h1>
             {userRole === 'PRO' ? (
               <Badge variant="pro">PRO (2GB CAPACITOR)</Badge>
             ) : (
-              <span className="text-xs font-bold px-3 py-1 rounded-full bg-[var(--soft)] text-[var(--muted)] border border-[var(--line)]">
+              <span className="text-xs font-medium px-3 py-1 rounded-full bg-[var(--soft)] text-[var(--muted)] border border-[var(--line)]">
                 Free Starter (50MB)
               </span>
             )}
           </div>
-          <p className="text-sm text-[var(--muted)] mt-1.5 max-w-2xl">
+          <p className="text-sm text-[var(--muted)] font-normal mt-1.5 max-w-2xl leading-relaxed">
             {userRole === 'PRO'
               ? 'Your account is equipped with 2GB upload capacitor, 24-hour file vault, and dedicated priority worker queue routing.'
               : 'You have 10 daily tasks with 50MB file limit and 2-hour zero-retention auto-shredding. Upgrade anytime for batch ZIP mode.'}
@@ -141,15 +141,15 @@ export default function WorkspacePage() {
         {/* Daily Quota Meter */}
         <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-3">
+            <div className="flex items-center justify-between text-xs font-medium text-[var(--muted)] uppercase tracking-wider mb-3">
               <span>Daily Tasks Meter</span>
               <Zap className="w-4 h-4 text-amber-500" />
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="font-heading font-black text-3xl sm:text-4xl text-[var(--ink)]">
+              <span className="font-heading font-bold text-3xl sm:text-4xl text-[var(--ink)] tracking-tight tabular-nums">
                 {taskCount}
               </span>
-              <span className="text-sm font-semibold text-[var(--muted)]">
+              <span className="text-sm font-normal text-[var(--muted)]">
                 / {maxDailyTasks} tasks used
               </span>
             </div>
@@ -182,17 +182,17 @@ export default function WorkspacePage() {
         {/* Max File Capacity */}
         <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-3">
+            <div className="flex items-center justify-between text-xs font-medium text-[var(--muted)] uppercase tracking-wider mb-3">
               <span>File Size Capacitor</span>
               <ShieldCheck className="w-4 h-4 text-emerald-500" />
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="font-heading font-black text-3xl sm:text-4xl text-[var(--ink)]">
+              <span className="font-heading font-bold text-3xl sm:text-4xl text-[var(--ink)] tracking-tight tabular-nums">
                 {maxFileMb} MB
               </span>
-              <span className="text-sm font-semibold text-[var(--muted)]">per document</span>
+              <span className="text-sm font-normal text-[var(--muted)]">per document</span>
             </div>
-            <p className="text-xs text-[var(--muted)] mt-2">
+            <p className="text-xs text-[var(--muted)] font-normal mt-2">
               {userRole === 'PRO'
                 ? 'High-capacity direct S3 presigned PUT with zero proxy buffering.'
                 : 'Need to process files over 50MB? Pro unlocks 2,048 MB (2GB).'}
@@ -203,13 +203,13 @@ export default function WorkspacePage() {
             {userRole === 'FREE' ? (
               <button
                 onClick={() => openUpgradeModal('Upgrade file size to 2GB')}
-                className="text-xs font-bold text-[var(--primary-500)] hover:underline inline-flex items-center gap-1"
+                className="text-xs font-semibold text-[var(--primary-500)] hover:underline inline-flex items-center gap-1"
               >
                 <span>Upgrade to 2GB Limit</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             ) : (
-              <span className="text-xs font-bold text-emerald-600 flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4" /> 2GB Multi-File Ready
               </span>
             )}
@@ -219,12 +219,12 @@ export default function WorkspacePage() {
         {/* Retention Countdown & Privacy */}
         <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between text-xs font-bold text-[var(--muted)] uppercase tracking-wider mb-3">
+            <div className="flex items-center justify-between text-xs font-medium text-[var(--muted)] uppercase tracking-wider mb-3">
               <span>Auto-Shred Retention</span>
               <Clock className="w-4 h-4 text-[var(--primary-500)]" />
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="font-heading font-black text-3xl sm:text-4xl font-mono text-[var(--ink)]">
+              <span className="font-heading font-bold text-3xl sm:text-4xl font-mono text-[var(--ink)] tracking-tight tabular-nums">
                 {userRole === 'PRO' ? '23:45:10' : '01:42:15'}
               </span>
             </div>
@@ -295,11 +295,11 @@ export default function WorkspacePage() {
           <div className="w-14 h-14 rounded-2xl bg-[var(--card)] text-[var(--primary-500)] border border-[var(--line)] flex items-center justify-center shadow-sm">
             <UploadCloud className="w-7 h-7" />
           </div>
-          <h3 className="font-heading font-black text-xl text-[var(--ink)]">
+          <h3 className="font-heading font-semibold text-xl text-[var(--ink)] tracking-tight">
             Drop document to start processing
           </h3>
-          <p className="text-xs text-[var(--muted)] max-w-sm">
-            Supports PDF, Word, Excel, and PowerPoint. Max file size: <span className="font-bold text-[var(--ink)]">{maxFileMb} MB</span>.
+          <p className="text-xs text-[var(--muted)] font-normal max-w-sm">
+            Supports PDF, Word, Excel, and PowerPoint. Max file size: <span className="font-semibold text-[var(--ink)]">{maxFileMb} MB</span>.
           </p>
           <div className="mt-2">
             <NextSaaSBtn text="Select File from Computer" variant="primary" size="md" />
@@ -311,16 +311,16 @@ export default function WorkspacePage() {
       <div className="p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="font-heading font-black text-xl text-[var(--ink)]">
+            <h2 className="font-heading font-semibold text-xl text-[var(--ink)] tracking-tight">
               Recent Processed Documents
             </h2>
-            <p className="text-xs text-[var(--muted)] mt-0.5">
+            <p className="text-xs text-[var(--muted)] font-normal mt-0.5">
               Encrypted files stored in MinIO S3 with automated lifecycle deletion.
             </p>
           </div>
           <Link
             href="/files"
-            className="text-xs font-bold text-[var(--primary-500)] hover:underline inline-flex items-center gap-1"
+            className="text-xs font-semibold text-[var(--primary-500)] hover:underline inline-flex items-center gap-1"
           >
             <span>View all in Vault</span>
             <ArrowRight className="w-3.5 h-3.5" />

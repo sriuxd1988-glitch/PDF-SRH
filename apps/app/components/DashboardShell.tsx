@@ -75,10 +75,10 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             {/* Logo */}
             <div className="h-16 px-6 border-b border-[var(--line)] flex items-center justify-between">
               <Link href="/" className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[var(--primary-500)] text-white font-black text-base flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[var(--primary-500)] text-white font-bold text-sm flex items-center justify-center">
                   S
                 </div>
-                <span className="font-heading font-black text-lg text-[var(--ink)]">SimplifyPDF</span>
+                <span className="font-heading font-bold text-base tracking-tight text-[var(--ink)]">SimplifyPDF</span>
               </Link>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -90,7 +90,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
             {/* Nav Links */}
             <nav className="p-4 flex flex-col gap-1.5 flex-1 overflow-y-auto">
-              <div className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider px-3 mb-1">
+              <div className="text-[10px] font-semibold text-[var(--muted)] uppercase tracking-wider px-3 mb-1">
                 Navigation
               </div>
               {navItems.map((item) => {
@@ -101,9 +101,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                     key={item.href}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center justify-between px-3 py-2.5 rounded-2xl text-xs font-bold transition-all ${
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-2xl text-xs font-medium transition-all ${
                       isActive
-                        ? 'bg-[var(--primary-500)] text-white shadow-sm'
+                        ? 'bg-[var(--primary-500)] text-white shadow-sm font-semibold'
                         : 'text-[var(--text)] hover:bg-[var(--soft)]'
                     }`}
                   >
@@ -112,7 +112,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                       <span>{item.label}</span>
                     </div>
                     {item.proOnly && userRole === 'FREE' && (
-                      <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[var(--yellow)] text-neutral-950">
+                      <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-[var(--yellow)] text-neutral-950">
                         PRO
                       </span>
                     )}
@@ -127,14 +127,14 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 <div className="p-4 rounded-2xl bg-gradient-to-br from-[var(--primary-50)] to-violet-100/50 dark:from-[var(--soft)] dark:to-violet-950/20 border border-[var(--line)] flex flex-col gap-3">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-[var(--primary-500)]" />
-                    <span className="text-xs font-black text-[var(--ink)]">Unlock PRO 2GB</span>
+                    <span className="text-xs font-semibold text-[var(--ink)]">Unlock PRO 2GB</span>
                   </div>
-                  <p className="text-[11px] text-[var(--muted)]">
+                  <p className="text-[11px] text-[var(--muted)] font-normal">
                     Batch ZIP conversion, 24h retention, and priority worker queue.
                   </p>
                   <button
                     onClick={() => openUpgradeModal('Upgrade from free sidebar.')}
-                    className="w-full py-2 rounded-xl bg-[var(--primary-500)] text-white font-bold text-xs hover:bg-[var(--primary-700)] transition-colors shadow-sm"
+                    className="w-full py-2 rounded-xl bg-[var(--primary-500)] text-white font-medium text-xs hover:bg-[var(--primary-700)] transition-colors shadow-sm"
                   >
                     Upgrade for ₹249/mo
                   </button>
@@ -145,8 +145,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-3">
                   <Zap className="w-4 h-4 text-emerald-500 shrink-0" />
                   <div className="min-w-0">
-                    <span className="block text-xs font-black text-emerald-600 truncate">Priority Worker Routing</span>
-                    <span className="block text-[10px] text-[var(--muted)]">Zero Queue Delay</span>
+                    <span className="block text-xs font-semibold text-emerald-600 truncate">Priority Worker Routing</span>
+                    <span className="block text-[10px] text-[var(--muted)] font-normal">Zero Queue Delay</span>
                   </div>
                 </div>
               </div>

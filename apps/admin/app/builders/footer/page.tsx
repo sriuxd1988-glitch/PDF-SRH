@@ -84,7 +84,7 @@ export default function FooterBuilderPage() {
         <div>
           <div className="flex items-center justify-between mb-3">
             <div>
-              <h3 className="font-heading font-black text-lg text-[var(--ink)]">
+              <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
                 Navigation Columns ({columns.length}/4)
               </h3>
               <p className="text-xs text-[var(--muted)]">Manage link columns rendered across the website</p>
@@ -135,7 +135,7 @@ export default function FooterBuilderPage() {
 
         {/* Copyright Line */}
         <div className="pt-4 border-t border-[var(--line)]">
-          <h3 className="font-heading font-black text-lg text-[var(--ink)] mb-1">
+          <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)] mb-1">
             Copyright &amp; Legal Line
           </h3>
           <p className="text-xs text-[var(--muted)] mb-3">
@@ -151,7 +151,7 @@ export default function FooterBuilderPage() {
 
         {/* Trust Badges Settings */}
         <div className="pt-4 border-t border-[var(--line)]">
-          <h3 className="font-heading font-black text-lg text-[var(--ink)] mb-1">
+          <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)] mb-1">
             Compliance &amp; Trust Badges
           </h3>
           <p className="text-xs text-[var(--muted)] mb-3">

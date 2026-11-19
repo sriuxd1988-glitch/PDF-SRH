@@ -69,11 +69,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           {/* Logo Bar */}
           <div className="h-16 px-6 border-b border-[var(--line)] flex items-center justify-between shrink-0">
             <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-[var(--primary-500)] text-white font-black text-base flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-[var(--primary-500)] text-white font-semibold text-base flex items-center justify-center">
                 S
               </div>
               <div className="flex flex-col">
-                <span className="font-heading font-black text-base text-[var(--ink)] leading-none">
+                <span className="font-heading font-semibold text- tracking-tight text-[var(--ink)] leading-none">
                   SimplifyPDF
                 </span>
                 <span className="text-[10px] font-bold text-[var(--primary-500)] tracking-wider uppercase mt-0.5">

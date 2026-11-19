@@ -54,10 +54,10 @@ export default function SettingsPage() {
     <div className="flex flex-col gap-8 max-w-4xl">
       {/* Banner */}
       <div className="p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
-        <h1 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+        <h1 className="font-heading font-bold text-2xl sm:text-3xl text-[var(--ink)] tracking-tight">
           Account &amp; Privacy Settings
         </h1>
-        <p className="text-sm text-[var(--muted)] mt-1.5">
+        <p className="text-sm text-[var(--muted)] font-normal mt-1.5 leading-relaxed">
           Manage your personal identity, security credentials, multi-factor authentication, and GDPR data erasure rights.
         </p>
       </div>
@@ -69,15 +69,15 @@ export default function SettingsPage() {
             <User className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-heading font-black text-lg text-[var(--ink)]">Profile Information</h2>
-            <p className="text-xs text-[var(--muted)]">Your public name and contact email for notifications and invoices.</p>
+            <h2 className="font-heading font-semibold text-lg text-[var(--ink)] tracking-tight">Profile Information</h2>
+            <p className="text-xs text-[var(--muted)] font-normal">Your public name and contact email for notifications and invoices.</p>
           </div>
         </div>
 
         <form onSubmit={handleSaveProfile} className="flex flex-col gap-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-[var(--ink)] mb-1.5">Full Name</label>
+              <label className="block text-xs font-medium text-[var(--ink)] mb-1.5">Full Name</label>
               <input
                 type="text"
                 value={name}
@@ -86,7 +86,7 @@ export default function SettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-[var(--ink)] mb-1.5">Email Address</label>
+              <label className="block text-xs font-medium text-[var(--ink)] mb-1.5">Email Address</label>
               <input
                 type="email"
                 value={email}
@@ -99,7 +99,7 @@ export default function SettingsPage() {
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-2xl bg-[var(--primary-500)] text-white font-bold text-xs hover:bg-[var(--primary-700)] transition-colors shadow-sm"
+              className="px-6 py-2.5 rounded-2xl bg-[var(--primary-500)] text-white font-medium text-xs hover:bg-[var(--primary-700)] transition-colors shadow-sm"
             >
               Save Profile Changes
             </button>
@@ -114,15 +114,15 @@ export default function SettingsPage() {
             <KeyRound className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-heading font-black text-lg text-[var(--ink)]">Change Password</h2>
-            <p className="text-xs text-[var(--muted)]">Update your master account login credentials.</p>
+            <h2 className="font-heading font-semibold text-lg text-[var(--ink)] tracking-tight">Change Password</h2>
+            <p className="text-xs text-[var(--muted)] font-normal">Update your master account login credentials.</p>
           </div>
         </div>
 
         <form onSubmit={handleUpdatePassword} className="flex flex-col gap-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-[var(--ink)] mb-1.5">Current Password</label>
+              <label className="block text-xs font-medium text-[var(--ink)] mb-1.5">Current Password</label>
               <input
                 type="password"
                 placeholder="••••••••••••"
@@ -132,7 +132,7 @@ export default function SettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-[var(--ink)] mb-1.5">New Password</label>
+              <label className="block text-xs font-medium text-[var(--ink)] mb-1.5">New Password</label>
               <input
                 type="password"
                 placeholder="••••••••••••"
@@ -146,7 +146,7 @@ export default function SettingsPage() {
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-2xl bg-[var(--secondary)] text-white font-bold text-xs hover:bg-black transition-colors"
+              className="px-6 py-2.5 rounded-2xl bg-[var(--secondary)] text-white font-medium text-xs hover:bg-black transition-colors"
             >
               Update Password
             </button>
@@ -162,8 +162,8 @@ export default function SettingsPage() {
               <Fingerprint className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="font-heading font-black text-lg text-[var(--ink)]">Two-Factor Authentication (2FA)</h2>
-              <p className="text-xs text-[var(--muted)]">Require a TOTP verification code from Google Authenticator or 1Password.</p>
+              <h2 className="font-heading font-semibold text-lg text-[var(--ink)] tracking-tight">Two-Factor Authentication (2FA)</h2>
+              <p className="text-xs text-[var(--muted)] font-normal">Require a TOTP verification code from Google Authenticator or 1Password.</p>
             </div>
           </div>
 
@@ -172,7 +172,7 @@ export default function SettingsPage() {
               setTwoFactorEnabled(!twoFactorEnabled);
               alert(twoFactorEnabled ? '2FA Disabled' : '2FA Enabled with TOTP authenticator app.');
             }}
-            className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all ${
+            className={`px-4 py-2 rounded-2xl text-xs font-medium transition-all ${
               twoFactorEnabled
                 ? 'bg-emerald-600 text-white shadow-sm'
                 : 'bg-[var(--soft)] text-[var(--muted)] border border-[var(--line)]'
@@ -190,7 +190,7 @@ export default function SettingsPage() {
             <Trash2 className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-heading font-black text-lg text-rose-600">
+            <h2 className="font-heading font-semibold text-lg text-rose-600 tracking-tight">
               GDPR Article 17 Right to Erasure
             </h2>
             <p className="text-xs text-[var(--muted)]">

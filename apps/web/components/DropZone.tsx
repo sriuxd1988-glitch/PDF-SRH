@@ -181,17 +181,17 @@ export function DropZone({
               <UploadCloud className="w-10 h-10" />
             </div>
             <div>
-              <h3 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+              <h3 className="font-heading font-semibold text-2xl sm:text-3xl text-[var(--ink)] tracking-tight">
                 {toolTitle}
               </h3>
-              <p className="text-sm sm:text-base text-[var(--muted)] mt-1.5 max-w-md mx-auto">
+              <p className="text-sm sm:text-base text-[var(--muted)] font-normal mt-1.5 max-w-md mx-auto">
                 Drag & drop your PDF file here, or click to browse from device.
               </p>
             </div>
             <div className="flex items-center gap-3 mt-2">
               <NextSaaSBtn text="Select PDF File" variant="primary" size="md" />
             </div>
-            <div className="flex items-center gap-4 text-xs font-semibold text-[var(--muted)] mt-4">
+            <div className="flex items-center gap-4 text-xs font-normal text-[var(--muted)] mt-4">
               <span>⚡ Free limit: {maxFileSizeMb}MB</span>
               <span>•</span>
               <span>🔒 256-bit AES Direct S3</span>
@@ -207,9 +207,9 @@ export function DropZone({
               <Loader2 className="w-6 h-6 text-[var(--primary-500)]" />
             </div>
             <div className="w-full max-w-md">
-              <div className="flex justify-between text-xs font-bold text-[var(--ink)] mb-2">
+              <div className="flex justify-between text-xs font-medium text-[var(--ink)] mb-2">
                 <span>{statusText}</span>
-                <span>{progress}%</span>
+                <span className="font-mono">{progress}%</span>
               </div>
               <div className="w-full h-3 bg-[var(--soft)] rounded-full overflow-hidden">
                 <div
@@ -218,7 +218,7 @@ export function DropZone({
                 />
               </div>
             </div>
-            <p className="text-xs text-[var(--muted)] flex items-center gap-1.5">
+            <p className="text-xs text-[var(--muted)] flex items-center gap-1.5 font-normal">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               Powered by permissive engines (pypdfium2 / pikepdf / qpdf)
             </p>
@@ -231,10 +231,10 @@ export function DropZone({
               <CheckCircle2 className="w-9 h-9" />
             </div>
             <div>
-              <h4 className="font-heading font-black text-2xl text-[var(--ink)]">
+              <h4 className="font-heading font-semibold text-2xl text-[var(--ink)] tracking-tight">
                 Processing Completed!
               </h4>
-              <p className="text-sm text-[var(--muted)] mt-1">
+              <p className="text-sm text-[var(--muted)] font-normal mt-1">
                 {file?.name}
               </p>
             </div>
@@ -253,7 +253,7 @@ export function DropZone({
                 e.stopPropagation();
                 reset();
               }}
-              className="text-xs font-bold text-[var(--muted)] hover:text-[var(--ink)] underline underline-offset-4 mt-2"
+              className="text-xs font-medium text-[var(--muted)] hover:text-[var(--ink)] underline underline-offset-4 mt-2"
             >
               Process another document
             </button>
@@ -265,16 +265,16 @@ export function DropZone({
             <div className="w-16 h-16 rounded-full bg-rose-100 dark:bg-rose-950/40 text-rose-600 flex items-center justify-center">
               <AlertCircle className="w-9 h-9" />
             </div>
-            <h4 className="font-heading font-black text-xl text-[var(--ink)]">
+            <h4 className="font-heading font-semibold text-xl text-[var(--ink)] tracking-tight">
               Processing Error
             </h4>
-            <p className="text-sm text-rose-600 max-w-md">{statusText}</p>
+            <p className="text-sm text-rose-600 font-normal max-w-md">{statusText}</p>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 reset();
               }}
-              className="mt-2 px-4 py-2 rounded-xl bg-[var(--soft)] text-xs font-bold text-[var(--ink)] hover:bg-[var(--line)]"
+              className="mt-2 px-4 py-2 rounded-xl bg-[var(--soft)] text-xs font-medium text-[var(--ink)] hover:bg-[var(--line)]"
             >
               Try Again
             </button>

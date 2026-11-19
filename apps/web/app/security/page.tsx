@@ -45,10 +45,10 @@ export default function SecurityPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 flex flex-col gap-16">
       <div className="text-center max-w-2xl mx-auto flex flex-col items-center gap-3">
         <Badge variant="pro">TRUST & SECURITY ARCHITECTURE</Badge>
-        <h1 className="font-heading font-black text-4xl sm:text-6xl text-[var(--ink)] tracking-tight">
+        <h1 className="font-heading font-bold text-4xl sm:text-6xl text-[var(--ink)] tracking-tight">
           Privacy-First Document Processing
         </h1>
-        <p className="text-base sm:text-lg text-[var(--muted)]">
+        <p className="text-base sm:text-lg text-[var(--muted)] font-normal">
           Built for legal teams, enterprises, and privacy-conscious professionals.
         </p>
       </div>
@@ -61,10 +61,10 @@ export default function SecurityPage() {
               <div className="w-12 h-12 rounded-2xl bg-[var(--primary-50)] text-[var(--primary-500)] flex items-center justify-center">
                 <Icon className="w-6 h-6" />
               </div>
-              <h3 className="font-heading font-black text-xl text-[var(--ink)]">
+              <h3 className="font-heading font-semibold text-xl text-[var(--ink)] tracking-tight">
                 {p.title}
               </h3>
-              <p className="text-sm text-[var(--muted)] leading-relaxed">
+              <p className="text-sm text-[var(--muted)] font-normal leading-relaxed">
                 {p.desc}
               </p>
             </GlowCard>

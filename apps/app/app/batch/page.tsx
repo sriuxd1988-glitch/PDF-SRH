@@ -24,18 +24,18 @@ export default function BatchStudioPage() {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl text-[var(--ink)] tracking-tight">
               PRO Multi-File Batch Studio
             </h1>
             {userRole === 'PRO' ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-600 font-bold text-xs">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-600 font-semibold text-xs">
                 <Crown className="w-3.5 h-3.5 fill-amber-500" /> SimplifyPDF Pro Active
               </span>
             ) : (
               <Badge variant="neutral">Pro Feature Preview</Badge>
             )}
           </div>
-          <p className="text-sm text-[var(--muted)] mt-1.5 max-w-2xl">
+          <p className="text-sm text-[var(--muted)] font-normal mt-1.5 max-w-2xl leading-relaxed">
             Drop up to 100 documents simultaneously (up to 2,048 MB total payload). All files process in parallel across dedicated permissive worker pools and package into a single consolidated ZIP archive.
           </p>
         </div>
@@ -44,8 +44,8 @@ export default function BatchStudioPage() {
           <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-3">
             <Zap className="w-5 h-5 text-emerald-500 shrink-0" />
             <div className="text-xs">
-              <span className="block font-black text-emerald-700">⚡ Priority Queue Active</span>
-              <span className="block text-[11px] text-[var(--muted)]">Renewal: Dec 20, 2026</span>
+              <span className="block font-semibold text-emerald-700">⚡ Priority Queue Active</span>
+              <span className="block text-[11px] text-[var(--muted)] font-normal">Renewal: Dec 20, 2026</span>
             </div>
           </div>
         ) : (

@@ -38,13 +38,13 @@ export function UpgradeModal({ isOpen, onClose, triggerReason }: UpgradeModalPro
 
         {/* Header */}
         <div className="mb-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--lime)] text-neutral-950 text-xs font-bold uppercase tracking-wider mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--lime)] text-neutral-950 text-xs font-semibold uppercase tracking-wider mb-3">
             <Sparkles className="w-3.5 h-3.5" /> PRO Upgrade
           </div>
-          <h2 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+          <h2 className="font-heading font-bold text-2xl sm:text-3xl text-[var(--ink)] tracking-tight">
             Supercharge Your PDF Productivity
           </h2>
-          <p className="text-sm text-[var(--muted)] mt-1">
+          <p className="text-sm text-[var(--muted)] font-normal mt-1 leading-relaxed">
             {triggerReason || 'Unlock full batch processing, priority queue routing, and 2GB limits.'}
           </p>
         </div>
@@ -57,8 +57,8 @@ export function UpgradeModal({ isOpen, onClose, triggerReason }: UpgradeModalPro
                 <Check className="w-3.5 h-3.5" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-[var(--ink)]">{feat.title}</h4>
-                <p className="text-[11px] text-[var(--muted)] mt-0.5">{feat.desc}</p>
+                <h4 className="text-xs font-semibold text-[var(--ink)]">{feat.title}</h4>
+                <p className="text-[11px] text-[var(--muted)] font-normal mt-0.5">{feat.desc}</p>
               </div>
             </div>
           ))}
@@ -68,10 +68,10 @@ export function UpgradeModal({ isOpen, onClose, triggerReason }: UpgradeModalPro
         <div className="p-5 rounded-2xl bg-[var(--secondary)] text-white flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <div className="flex items-baseline gap-2">
-              <span className="font-heading font-black text-2xl text-white">₹249</span>
-              <span className="text-xs text-neutral-400 font-semibold">/ month ($4.99 USD)</span>
+              <span className="font-heading font-bold text-2xl text-white tracking-tight">₹249</span>
+              <span className="text-xs text-neutral-400 font-normal">/ month ($4.99 USD)</span>
             </div>
-            <p className="text-[11px] text-neutral-400 mt-0.5">Cancel anytime with 1 click. Zero lock-in.</p>
+            <p className="text-[11px] text-neutral-400 font-normal mt-0.5">Cancel anytime with 1 click. Zero lock-in.</p>
           </div>
 
           <div onClick={() => alert('Redirecting to Stripe / Razorpay checkout...')}>

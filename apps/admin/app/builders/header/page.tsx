@@ -56,7 +56,7 @@ export default function HeaderBuilderPage() {
       <div className="p-6 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm flex flex-col gap-6">
         {/* Brand & Logo Settings */}
         <div>
-          <h3 className="font-heading font-black text-lg text-[var(--ink)] mb-1">
+          <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)] mb-1">
             Brand Identity
           </h3>
           <p className="text-xs text-[var(--muted)] mb-4">
@@ -82,7 +82,7 @@ export default function HeaderBuilderPage() {
         <div className="pt-4 border-t border-[var(--line)]">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <h3 className="font-heading font-black text-lg text-[var(--ink)]">
+              <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
                 Header Menu Links
               </h3>
               <p className="text-xs text-[var(--muted)]">Manage top navigation hierarchy</p>
@@ -133,7 +133,7 @@ export default function HeaderBuilderPage() {
 
         {/* Primary Header CTA Settings */}
         <div className="pt-4 border-t border-[var(--line)]">
-          <h3 className="font-heading font-black text-lg text-[var(--ink)] mb-1">
+          <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)] mb-1">
             Primary Action Button (.btn-v6)
           </h3>
           <p className="text-xs text-[var(--muted)] mb-4">

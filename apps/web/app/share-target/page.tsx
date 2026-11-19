@@ -37,7 +37,7 @@ export default function ShareTargetPage() {
       <div className="w-16 h-16 rounded-3xl bg-[var(--soft)] border border-[var(--line)] flex items-center justify-center text-[var(--primary-500)] mb-4 shadow-sm">
         <Share2 className="w-8 h-8" />
       </div>
-      <h1 className="font-heading font-black text-2xl text-[var(--ink)]">
+      <h1 className="font-heading font-semibold text-2xl text-[var(--ink)] tracking-tight">
         Web Share Target Active
       </h1>
       <p className="text-sm text-[var(--muted)] mt-2 flex items-center gap-2">

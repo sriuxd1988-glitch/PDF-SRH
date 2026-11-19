@@ -25,17 +25,17 @@ export function SplitAuth({
         {/* Top bar */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#6D1FE2] to-[#864FFE] text-white flex items-center justify-center font-extrabold text-sm shadow">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#6D1FE2] to-[#864FFE] text-white flex items-center justify-center font-bold text-sm shadow">
               SP
             </div>
-            <span className="font-heading font-extrabold text-lg tracking-tight">{siteName}</span>
+            <span className="font-heading font-bold text-lg tracking-tight">{siteName}</span>
           </div>
           <span className="text-xs text-[#686873] dark:text-[#AAAAB7]">
             {isLogin ? 'No account? ' : 'Already have an account? '}
             <button
               type="button"
               onClick={onToggleMode}
-              className="font-bold text-[#864FFE] hover:underline cursor-pointer"
+              className="font-semibold text-[#864FFE] hover:underline cursor-pointer"
             >
               {isLogin ? 'Sign up' : 'Log in'}
             </button>
@@ -45,10 +45,10 @@ export function SplitAuth({
         {/* Center Form Container */}
         <div className="space-y-6 my-auto">
           <div>
-            <h1 className="font-heading font-extrabold text-3xl tracking-tight mb-2">
+            <h1 className="font-heading font-bold text-3xl tracking-tight mb-2">
               {isLogin ? 'Welcome back' : 'Create your account'}
             </h1>
-            <p className="text-sm text-[#686873] dark:text-[#AAAAB7]">
+            <p className="text-sm text-[#686873] dark:text-[#AAAAB7] font-normal">
               {isLogin
                 ? `Sign in to access your private ${siteName} workspace.`
                 : `Start processing files with free daily quota and zero ad clutter.`}
@@ -164,13 +164,13 @@ export function SplitAuth({
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-mono font-bold tracking-widest uppercase bg-white/15 border border-white/20 mb-6">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-mono font-medium tracking-wider uppercase bg-white/15 border border-white/20 mb-6">
             {siteName.toUpperCase()} · MASTER WORKSPACE
           </span>
-          <h2 className="font-heading font-extrabold text-4xl leading-tight max-w-md mb-4 text-white">
+          <h2 className="font-heading font-bold text-4xl leading-tight max-w-md mb-4 text-white tracking-tight">
             Every document. Every PDF job. One click.
           </h2>
-          <p className="text-white/80 text-sm max-w-sm leading-relaxed">
+          <p className="text-white/80 text-sm max-w-sm font-normal leading-relaxed">
             Ultra-fast, ad-free PDF conversion, extreme compression, e-signing, and optical character recognition in a privacy-first sandbox.
           </p>
         </div>

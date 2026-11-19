@@ -69,7 +69,7 @@ export default function AdminQueuePage() {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+            <h1 className="font-heading font-bold text- tracking-tight sm:text-3xl text-[var(--ink)]">
               Redis Queue &amp; Worker Health Console
             </h1>
             <Badge variant="live" dot>REDIS 7.2 ONLINE</Badge>
@@ -87,7 +87,7 @@ export default function AdminQueuePage() {
             <span>Priority Stream Depth</span>
             <Zap className="w-4 h-4 text-emerald-500" />
           </div>
-          <div className="font-heading font-black text-3xl text-[var(--ink)]">0 Lag</div>
+          <div className="font-heading font-bold text- tracking-tight text-[var(--ink)]">0 Lag</div>
           <span className="text-[11px] font-mono text-[var(--muted)] block mt-1">stream:pdf-jobs:pro</span>
           <span className="text-xs text-emerald-600 font-bold mt-2 block">⚡ Dedicated Warm Pool</span>
         </div>
@@ -97,7 +97,7 @@ export default function AdminQueuePage() {
             <span>Standard Stream Depth</span>
             <Layers className="w-4 h-4 text-[var(--primary-500)]" />
           </div>
-          <div className="font-heading font-black text-3xl text-[var(--ink)]">2 Queued</div>
+          <div className="font-heading font-bold text- tracking-tight text-[var(--ink)]">2 Queued</div>
           <span className="text-[11px] font-mono text-[var(--muted)] block mt-1">stream:pdf-jobs (Free)</span>
           <span className="text-xs text-[var(--muted)] font-bold mt-2 block">Avg Wait: 0.4s</span>
         </div>
@@ -107,7 +107,7 @@ export default function AdminQueuePage() {
             <span>LibreOffice Semaphore</span>
             <Server className="w-4 h-4 text-amber-500" />
           </div>
-          <div className="font-heading font-black text-3xl text-[var(--ink)]">1 / 1 Lock</div>
+          <div className="font-heading font-bold text- tracking-tight text-[var(--ink)]">1 / 1 Lock</div>
           <span className="text-[11px] font-mono text-[var(--muted)] block mt-1">lock:libreoffice:semaphore</span>
           <span className="text-xs text-amber-600 font-bold mt-2 block">Max 1 VPS Guard Active</span>
         </div>
@@ -117,7 +117,7 @@ export default function AdminQueuePage() {
             <span>Dead-Letter Queue (DLQ)</span>
             <AlertOctagon className="w-4 h-4 text-rose-500" />
           </div>
-          <div className="font-heading font-black text-3xl text-rose-600">{dlqJobs.length} Failed</div>
+          <div className="font-heading font-bold text- tracking-tight text-rose-600">{dlqJobs.length} Failed</div>
           <span className="text-[11px] font-mono text-[var(--muted)] block mt-1">stream:pdf-jobs:dlq</span>
           <span className="text-xs text-rose-600 font-bold mt-2 block">Action Required</span>
         </div>
@@ -125,7 +125,7 @@ export default function AdminQueuePage() {
 
       {/* Worker Resource Consumption */}
       <div className="p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm flex flex-col gap-6">
-        <h3 className="font-heading font-black text-xl text-[var(--ink)]">
+        <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
           Container Resource Allocation
         </h3>
 
@@ -166,7 +166,7 @@ export default function AdminQueuePage() {
       <div className="p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm flex flex-col gap-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-heading font-black text-xl text-[var(--ink)]">
+            <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
               Dead-Letter Queue (DLQ) Inspector
             </h3>
             <p className="text-xs text-[var(--muted)] mt-0.5">
@@ -178,7 +178,7 @@ export default function AdminQueuePage() {
         {dlqJobs.length === 0 ? (
           <div className="text-center py-12 flex flex-col items-center gap-2">
             <CheckCircle2 className="w-10 h-10 text-emerald-500" />
-            <h4 className="font-heading font-black text-lg text-[var(--ink)]">
+            <h4 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
               DLQ is Completely Empty!
             </h4>
             <p className="text-xs text-[var(--muted)]">All processed worker tasks completed cleanly.</p>

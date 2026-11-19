@@ -20,7 +20,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <button
           ref={ref}
           className={cn(
-            'group relative inline-flex items-center justify-center overflow-hidden rounded-full font-semibold text-sm transition-all duration-300',
+            'group relative inline-flex items-center justify-center overflow-hidden rounded-full font-medium text-sm transition-all duration-300',
             'bg-[#864FFE] hover:bg-[#6D1FE2] text-white shadow-md hover:shadow-lg hover:-translate-y-0.5',
             size === 'sm' ? 'px-4 py-1.5' : size === 'lg' ? 'px-8 py-3.5 text-base' : 'px-6 py-2.5',
             className
@@ -47,7 +47,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <button
           ref={ref}
           className={cn(
-            'group relative inline-flex items-center justify-center gap-2.5 rounded-full font-semibold text-sm transition-all duration-300 overflow-hidden',
+            'group relative inline-flex items-center justify-center gap-2.5 rounded-full font-medium text-sm transition-all duration-300 overflow-hidden',
             'bg-[#1A1A1C] hover:bg-[#11141D] text-white shadow-md hover:-translate-y-0.5',
             size === 'sm' ? 'px-4 py-1.5' : size === 'lg' ? 'px-8 py-3.5 text-base' : 'px-6 py-2.5',
             className
@@ -68,7 +68,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     // 3. Nuvexa Standard Buttons
-    const baseClasses = 'inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 cursor-pointer disabled:opacity-50';
+    const baseClasses = 'inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-200 cursor-pointer disabled:opacity-50';
     const sizeClasses = {
       sm: 'px-3.5 py-1.5 text-xs',
       md: 'px-5 py-2.5 text-sm',

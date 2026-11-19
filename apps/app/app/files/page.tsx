@@ -95,12 +95,12 @@ export default function HistoryVaultPage() {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl text-[var(--ink)] tracking-tight">
               Document History Vault
             </h1>
             <Badge variant="neutral">{files.length} Files Retained</Badge>
           </div>
-          <p className="text-sm text-[var(--muted)] mt-1.5 max-w-2xl">
+          <p className="text-sm text-[var(--muted)] font-normal mt-1.5 max-w-2xl leading-relaxed">
             {userRole === 'PRO'
               ? 'Files persist in your encrypted S3 vault for 24 hours. You can download or trigger instant GDPR-compliant shredding at any time.'
               : 'Free member files are automatically shredded 2 hours after creation. Upgrade to Pro for 24-hour vault retention.'}
@@ -154,7 +154,7 @@ export default function HistoryVaultPage() {
             <div className="w-12 h-12 rounded-2xl bg-[var(--soft)] text-[var(--muted)] flex items-center justify-center">
               <Clock className="w-6 h-6" />
             </div>
-            <h3 className="font-heading font-black text-lg text-[var(--ink)]">
+            <h3 className="font-heading font-semibold text-lg text-[var(--ink)] tracking-tight">
               No files currently in vault
             </h3>
             <p className="text-xs text-[var(--muted)] max-w-sm">

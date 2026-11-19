@@ -163,10 +163,10 @@ export function BatchUploader() {
         <div className="w-16 h-16 rounded-2xl bg-[var(--primary-50)] text-[var(--primary-500)] flex items-center justify-center">
           <FolderArchive className="w-8 h-8" />
         </div>
-        <h3 className="font-heading font-black text-xl text-[var(--ink)]">
+        <h3 className="font-heading font-semibold text-xl text-[var(--ink)] tracking-tight">
           Drop up to 100 files for batch processing
         </h3>
-        <p className="text-xs text-[var(--muted)] max-w-md">
+        <p className="text-xs text-[var(--muted)] font-normal max-w-md leading-relaxed">
           Accepts PDF, DOCX, XLSX, PNG, and JPG. Multi-file parallel processing with consolidated ZIP archive export.
         </p>
         <div className="mt-2">
@@ -181,13 +181,13 @@ export function BatchUploader() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-heading font-black text-lg text-[var(--ink)]">
+                <h3 className="font-heading font-semibold text-lg text-[var(--ink)] tracking-tight">
                   Staged Batch Queue ({files.length} / 100 Files)
                 </h3>
                 <Badge variant="pro">2GB CAPACITOR</Badge>
               </div>
-              <p className="text-xs text-[var(--muted)] mt-0.5">
-                Total batch payload: <span className="font-bold text-[var(--ink)]">{totalMb} MB</span> / 2,048 MB
+              <p className="text-xs text-[var(--muted)] font-normal mt-0.5">
+                Total batch payload: <span className="font-semibold text-[var(--ink)]">{totalMb} MB</span> / 2,048 MB
               </p>
             </div>
 

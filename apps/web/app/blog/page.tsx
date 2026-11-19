@@ -43,10 +43,10 @@ export default function BlogListingPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 flex flex-col gap-12">
       <div className="text-center max-w-2xl mx-auto flex flex-col items-center gap-3">
         <Badge variant="pro">DOCUMENT ENGINEERING INSIGHTS</Badge>
-        <h1 className="font-heading font-black text-4xl sm:text-5xl text-[var(--ink)] tracking-tight">
+        <h1 className="font-heading font-bold text-4xl sm:text-5xl text-[var(--ink)] tracking-tight">
           SimplifyPDF Blog & Guides
         </h1>
-        <p className="text-base text-[var(--muted)]">
+        <p className="text-base text-[var(--muted)] font-normal">
           Practical tutorials, architecture breakdowns, and security deep-dives from our engineering team.
         </p>
       </div>
@@ -56,18 +56,18 @@ export default function BlogListingPage() {
           <Link key={post.slug} href={`/blog/${post.slug}`} className="group">
             <GlowCard className="p-6 h-full flex flex-col justify-between group-hover:border-[var(--primary-500)] transition-colors">
               <div>
-                <div className="flex items-center justify-between text-xs font-bold text-[var(--muted)] mb-3">
-                  <span className="text-[var(--primary-500)] uppercase tracking-wider">{post.category}</span>
+                <div className="flex items-center justify-between text-xs font-medium text-[var(--muted)] mb-3">
+                  <span className="text-[var(--primary-500)] uppercase tracking-wider font-semibold">{post.category}</span>
                   <div className="flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5" />
                     <span>{post.readTime}</span>
                   </div>
                 </div>
 
-                <h2 className="font-heading font-black text-xl text-[var(--ink)] group-hover:text-[var(--primary-500)] transition-colors mb-2">
+                <h2 className="font-heading font-semibold text-lg text-[var(--ink)] group-hover:text-[var(--primary-500)] transition-colors mb-2 tracking-tight">
                   {post.title}
                 </h2>
-                <p className="text-xs sm:text-sm text-[var(--muted)] leading-relaxed">
+                <p className="text-xs sm:text-sm text-[var(--muted)] font-normal leading-relaxed">
                   {post.excerpt}
                 </p>
               </div>

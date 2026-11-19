@@ -49,7 +49,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="SimplifyPDF" />
       </head>
-      <body className="bg-[var(--bg)] text-[var(--text)] min-h-screen flex flex-col font-body transition-colors">
+      <body className="bg-[var(--bg)] text-[var(--text)] min-h-screen flex flex-col font-body antialiased transition-colors">
         <PwaRegister />
         <DesignTokenSync />
         <NotificationBar />

@@ -79,7 +79,7 @@ export default function AdminOverviewPage() {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+            <h1 className="font-heading font-bold text- tracking-tight sm:text-3xl text-[var(--ink)]">
               Executive Command Center
             </h1>
             <Badge variant="live" dot>SYSTEMS OPERATIONAL</Badge>
@@ -121,7 +121,7 @@ export default function AdminOverviewPage() {
                   <span>{kpi.title}</span>
                   <Icon className="w-4 h-4 text-[var(--primary-500)]" />
                 </div>
-                <div className="font-heading font-black text-2xl text-[var(--ink)]">
+                <div className="font-heading font-bold text- tracking-tight text-[var(--ink)]">
                   {kpi.value}
                 </div>
               </div>
@@ -146,7 +146,7 @@ export default function AdminOverviewPage() {
           <div>
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h3 className="font-heading font-black text-xl text-[var(--ink)]">
+                <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
                   Daily Conversion Volumes by Tool
                 </h3>
                 <p className="text-xs text-[var(--muted)] mt-0.5">
@@ -191,7 +191,7 @@ export default function AdminOverviewPage() {
         <div className="lg:col-span-5 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-heading font-black text-xl text-[var(--ink)]">
+              <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
                 Revenue Trajectory
               </h3>
               <Badge variant="pro">24.5% GROWTH</Badge>
@@ -204,7 +204,7 @@ export default function AdminOverviewPage() {
               <div className="p-4 rounded-2xl bg-[var(--soft)] border border-[var(--line)] flex items-center justify-between">
                 <div>
                   <span className="text-[11px] font-bold text-[var(--muted)] uppercase">Razorpay (India - INR)</span>
-                  <div className="font-heading font-black text-xl text-[var(--ink)] mt-0.5">₹98,400</div>
+                  <div className="font-heading font-semibold text- tracking-tight text-[var(--ink)] mt-0.5">₹98,400</div>
                   <span className="text-[11px] text-emerald-600 font-semibold">395 Active Subscribers</span>
                 </div>
                 <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center font-bold text-xs">
@@ -215,7 +215,7 @@ export default function AdminOverviewPage() {
               <div className="p-4 rounded-2xl bg-[var(--soft)] border border-[var(--line)] flex items-center justify-between">
                 <div>
                   <span className="text-[11px] font-bold text-[var(--muted)] uppercase">Stripe (Global - USD)</span>
-                  <div className="font-heading font-black text-xl text-[var(--ink)] mt-0.5">$535.50</div>
+                  <div className="font-heading font-semibold text- tracking-tight text-[var(--ink)] mt-0.5">$535.50</div>
                   <span className="text-[11px] text-emerald-600 font-semibold">108 Active Subscribers</span>
                 </div>
                 <div className="w-10 h-10 rounded-xl bg-violet-500/10 text-[var(--primary-500)] flex items-center justify-center font-bold text-xs">

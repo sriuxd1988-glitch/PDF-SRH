@@ -27,20 +27,20 @@ export function ToolView({ slug, tool }: ToolViewProps) {
       <div className="flex items-center gap-2">
         <Link
           href="/#tools"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--muted)] hover:text-[var(--ink)] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" /> Back to all tools
         </Link>
       </div>
 
       <div className="text-center flex flex-col items-center gap-4">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[var(--primary-50)] text-[var(--primary-500)] text-xs font-bold">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[var(--primary-50)] text-[var(--primary-500)] text-xs font-medium">
           <Sparkles className="w-3.5 h-3.5" /> High-Speed Permissive Engine
         </div>
-        <h1 className="font-heading font-black text-4xl sm:text-5xl text-[var(--ink)] tracking-tight">
+        <h1 className="font-heading font-bold text-4xl sm:text-5xl text-[var(--ink)] tracking-tight">
           {tool.title}
         </h1>
-        <p className="text-base sm:text-lg text-[var(--muted)] max-w-xl">
+        <p className="text-base sm:text-lg text-[var(--muted)] font-normal max-w-xl leading-relaxed">
           {tool.desc}
         </p>
       </div>
@@ -48,7 +48,7 @@ export function ToolView({ slug, tool }: ToolViewProps) {
       {/* Tool Specific Options Panel */}
       {slug === 'compress' && (
         <div className="max-w-md mx-auto w-full p-4 rounded-2xl bg-[var(--card)] border border-[var(--line)] flex flex-col gap-3 shadow-sm">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+          <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-[var(--muted)]">
             <Sliders className="w-3.5 h-3.5 text-[var(--primary-500)]" />
             <span>Compression Level</span>
           </div>
@@ -61,9 +61,9 @@ export function ToolView({ slug, tool }: ToolViewProps) {
               <button
                 key={lvl.id}
                 onClick={() => setCompressLevel(lvl.id as any)}
-                className={`p-2.5 rounded-xl text-center text-xs font-bold transition-all border ${
+                className={`p-2.5 rounded-xl text-center text-xs font-medium transition-all border ${
                   compressLevel === lvl.id
-                    ? 'border-[var(--primary-500)] bg-[var(--primary-50)] text-[var(--primary-500)]'
+                    ? 'border-[var(--primary-500)] bg-[var(--primary-50)] text-[var(--primary-500)] font-semibold'
                     : 'border-[var(--line)] bg-[var(--soft)] text-[var(--muted)]'
                 }`}
               >

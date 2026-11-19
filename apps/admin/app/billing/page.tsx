@@ -110,7 +110,7 @@ export default function AdminBillingPage() {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+            <h1 className="font-heading font-bold text- tracking-tight sm:text-3xl text-[var(--ink)]">
               Billing Operations &amp; Gateway Management
             </h1>
             <Badge variant="live" dot>RAZORPAY + STRIPE</Badge>
@@ -127,7 +127,7 @@ export default function AdminBillingPage() {
           <span className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider">
             Total MRR (Blended)
           </span>
-          <div className="font-heading font-black text-3xl text-[var(--ink)] mt-2">
+          <div className="font-heading font-bold text- tracking-tight text-[var(--ink)] mt-2">
             ₹1,42,850
           </div>
           <span className="text-xs text-emerald-600 font-semibold mt-1 inline-block">
@@ -139,7 +139,7 @@ export default function AdminBillingPage() {
           <span className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider">
             Razorpay Subscriptions (INR)
           </span>
-          <div className="font-heading font-black text-3xl text-[var(--ink)] mt-2">
+          <div className="font-heading font-bold text- tracking-tight text-[var(--ink)] mt-2">
             395 Active
           </div>
           <span className="text-xs text-[var(--muted)] font-semibold mt-1 inline-block">
@@ -151,7 +151,7 @@ export default function AdminBillingPage() {
           <span className="text-xs font-bold text-[var(--muted)] uppercase tracking-wider">
             Stripe Subscriptions (USD)
           </span>
-          <div className="font-heading font-black text-3xl text-[var(--ink)] mt-2">
+          <div className="font-heading font-bold text- tracking-tight text-[var(--ink)] mt-2">
             108 Active
           </div>
           <span className="text-xs text-[var(--muted)] font-semibold mt-1 inline-block">
@@ -164,7 +164,7 @@ export default function AdminBillingPage() {
       <div className="p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm flex flex-col gap-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-heading font-black text-xl text-[var(--ink)]">
+            <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
               Promotional Coupons &amp; Discount Codes
             </h3>
             <p className="text-xs text-[var(--muted)] mt-0.5">
@@ -205,7 +205,7 @@ export default function AdminBillingPage() {
             <div key={i} className="p-3.5 rounded-2xl bg-[var(--soft)] border border-[var(--line)] flex items-center gap-3">
               <Tag className="w-4 h-4 text-[var(--primary-500)]" />
               <div>
-                <span className="font-mono font-black text-xs text-[var(--ink)] block">{c.code}</span>
+                <span className="font-mono font-semibold text-xs text-[var(--ink)] block">{c.code}</span>
                 <span className="text-[10px] text-[var(--muted)]">{c.discount} · {c.redemptions} redeemed</span>
               </div>
             </div>
@@ -216,7 +216,7 @@ export default function AdminBillingPage() {
       {/* Transactions & Invoices Table */}
       <div className="p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="font-heading font-black text-xl text-[var(--ink)]">
+          <h3 className="font-heading font-semibold text- tracking-tight text-[var(--ink)]">
             Recent Payment Transactions
           </h3>
           <span className="text-xs font-bold text-[var(--muted)]">

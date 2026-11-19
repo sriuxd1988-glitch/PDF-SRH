@@ -31,18 +31,18 @@ export default function BillingPage() {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl text-[var(--ink)] tracking-tight">
               Subscription &amp; Billing
             </h1>
             {userRole === 'PRO' ? (
               <Badge variant="pro">Active Pro Plan</Badge>
             ) : (
-              <span className="text-xs font-bold px-3 py-1 rounded-full bg-[var(--soft)] text-[var(--muted)] border border-[var(--line)]">
+              <span className="text-xs font-medium px-3 py-1 rounded-full bg-[var(--soft)] text-[var(--muted)] border border-[var(--line)]">
                 Free Starter
               </span>
             )}
           </div>
-          <p className="text-sm text-[var(--muted)] mt-1.5 max-w-2xl">
+          <p className="text-sm text-[var(--muted)] font-normal mt-1.5 max-w-2xl leading-relaxed">
             Manage your payment methods, change billing frequency, download GST/VAT invoices, or cancel anytime with one click.
           </p>
         </div>
@@ -76,12 +76,12 @@ export default function BillingPage() {
             </div>
 
             <div className="flex items-baseline gap-3">
-              <h2 className="font-heading font-black text-3xl text-[var(--ink)]">
+              <h2 className="font-heading font-semibold text-3xl text-[var(--ink)] tracking-tight">
                 {userRole === 'PRO' ? 'SimplifyPDF Pro Member' : 'SimplifyPDF Free Starter'}
               </h2>
             </div>
 
-            <p className="text-sm text-[var(--muted)] mt-2">
+            <p className="text-sm text-[var(--muted)] font-normal mt-2 leading-relaxed">
               {userRole === 'PRO'
                 ? 'Your subscription is billed monthly at ₹249 INR ($4.99 USD). Next renewal on December 20, 2026.'
                 : 'Free starter tier with 10 tasks/day and 50MB file size limit. Upgrade to unlock 2,048 MB limits.'}
@@ -89,22 +89,22 @@ export default function BillingPage() {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6">
               <div className="p-3 rounded-2xl bg-[var(--soft)] border border-[var(--line)]">
-                <span className="text-[10px] font-bold text-[var(--muted)] uppercase">Max File Limit</span>
-                <span className="block text-sm font-black text-[var(--ink)] mt-0.5">{userRole === 'PRO' ? '2,048 MB' : '50 MB'}</span>
+                <span className="text-[10px] font-medium text-[var(--muted)] uppercase">Max File Limit</span>
+                <span className="block text-sm font-semibold text-[var(--ink)] mt-0.5">{userRole === 'PRO' ? '2,048 MB' : '50 MB'}</span>
               </div>
               <div className="p-3 rounded-2xl bg-[var(--soft)] border border-[var(--line)]">
-                <span className="text-[10px] font-bold text-[var(--muted)] uppercase">Daily Tasks</span>
-                <span className="block text-sm font-black text-[var(--ink)] mt-0.5">{userRole === 'PRO' ? '250 Tasks' : '10 Tasks'}</span>
+                <span className="text-[10px] font-medium text-[var(--muted)] uppercase">Daily Tasks</span>
+                <span className="block text-sm font-semibold text-[var(--ink)] mt-0.5">{userRole === 'PRO' ? '250 Tasks' : '10 Tasks'}</span>
               </div>
               <div className="p-3 rounded-2xl bg-[var(--soft)] border border-[var(--line)]">
-                <span className="text-[10px] font-bold text-[var(--muted)] uppercase">Retention Vault</span>
-                <span className="block text-sm font-black text-[var(--ink)] mt-0.5">{userRole === 'PRO' ? '24 Hours' : '2 Hours'}</span>
+                <span className="text-[10px] font-medium text-[var(--muted)] uppercase">Retention Vault</span>
+                <span className="block text-sm font-semibold text-[var(--ink)] mt-0.5">{userRole === 'PRO' ? '24 Hours' : '2 Hours'}</span>
               </div>
             </div>
           </div>
 
           <div className="mt-8 pt-6 border-t border-[var(--line)] flex items-center justify-between">
-            <span className="text-xs font-bold text-[var(--muted)]">
+            <span className="text-xs font-medium text-[var(--muted)]">
               Payment Method: Visa ending in 4242
             </span>
             {userRole === 'PRO' ? (
@@ -113,14 +113,14 @@ export default function BillingPage() {
                   setUserRole('FREE');
                   alert('Subscription downgraded to Free Starter.');
                 }}
-                className="text-xs font-bold text-rose-500 hover:underline"
+                className="text-xs font-semibold text-rose-500 hover:underline"
               >
                 Cancel Subscription
               </button>
             ) : (
               <button
                 onClick={() => setUserRole('PRO')}
-                className="text-xs font-bold text-[var(--primary-500)] hover:underline"
+                className="text-xs font-semibold text-[var(--primary-500)] hover:underline"
               >
                 Simulate Instant Pro Activation
               </button>
@@ -131,17 +131,17 @@ export default function BillingPage() {
         {/* Quick Upgrade/Pricing Card */}
         <div className="p-6 sm:p-8 rounded-3xl bg-[var(--secondary)] text-white shadow-sm flex flex-col justify-between">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--lime)] text-neutral-950 text-xs font-black uppercase tracking-wider mb-4">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--lime)] text-neutral-950 text-xs font-bold uppercase tracking-wider mb-4">
               <Sparkles className="w-3.5 h-3.5" /> PRO PASS
             </div>
-            <h3 className="font-heading font-black text-2xl text-white">Power Tools for Power Users</h3>
-            <p className="text-xs text-neutral-400 mt-2">
+            <h3 className="font-heading font-bold text-2xl text-white tracking-tight">Power Tools for Power Users</h3>
+            <p className="text-xs text-neutral-400 font-normal mt-2 leading-relaxed">
               Batch convert up to 100 documents at once, e-sign with cryptographic audit trails, and priority queue dispatch.
             </p>
 
             <div className="mt-6 flex items-baseline gap-2">
-              <span className="font-heading font-black text-3xl text-white">₹249</span>
-              <span className="text-xs text-neutral-400 font-semibold">/ month ($4.99 USD)</span>
+              <span className="font-heading font-bold text-3xl text-white tracking-tight">₹249</span>
+              <span className="text-xs text-neutral-400 font-normal">/ month ($4.99 USD)</span>
             </div>
           </div>
 
@@ -155,7 +155,7 @@ export default function BillingPage() {
       <div className="p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="font-heading font-black text-xl text-[var(--ink)]">
+            <h3 className="font-heading font-semibold text-xl text-[var(--ink)] tracking-tight">
               Invoices &amp; Receipts
             </h3>
             <p className="text-xs text-[var(--muted)] mt-0.5">

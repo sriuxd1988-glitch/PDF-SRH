@@ -83,12 +83,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div className="flex items-center gap-2 mb-3">
           <Badge variant="pro">{article.category.toUpperCase()}</Badge>
           <span className="text-xs text-[var(--muted)]">•</span>
-          <span className="text-xs font-semibold text-[var(--muted)]">{article.readTime}</span>
+          <span className="text-xs font-medium text-[var(--muted)]">{article.readTime}</span>
         </div>
-        <h1 className="font-heading font-black text-3xl sm:text-5xl text-[var(--ink)] tracking-tight leading-tight">
+        <h1 className="font-heading font-bold text-3xl sm:text-5xl text-[var(--ink)] tracking-tight leading-tight">
           {article.title}
         </h1>
-        <div className="flex items-center gap-4 text-xs font-bold text-[var(--muted)] mt-4 pt-4 border-t border-[var(--line)]">
+        <div className="flex items-center gap-4 text-xs font-medium text-[var(--muted)] mt-4 pt-4 border-t border-[var(--line)]">
           <span>By {article.author}</span>
           <span>•</span>
           <span>{article.date}</span>
@@ -97,7 +97,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       <div className="prose dark:prose-invert max-w-none flex flex-col gap-6 text-base text-[var(--text)] leading-relaxed">
         {article.content.map((p, i) => (
-          <p key={i} className="text-lg text-[var(--text)] leading-relaxed">
+          <p key={i} className="text-base sm:text-lg text-[var(--text)] font-normal leading-relaxed">
             {p}
           </p>
         ))}
@@ -106,10 +106,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       {/* Relevant Tool CTA */}
       <div className="mt-8 p-8 rounded-3xl bg-[var(--primary-50)] dark:bg-[var(--card)] border border-[var(--primary-500)]/30 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
         <div>
-          <h3 className="font-heading font-black text-xl text-[var(--ink)]">
+          <h3 className="font-heading font-semibold text-xl text-[var(--ink)] tracking-tight">
             Ready to process your documents?
           </h3>
-          <p className="text-xs text-[var(--muted)] mt-1">
+          <p className="text-xs text-[var(--muted)] font-normal mt-1">
             Try SimplifyPDF tools for free. Zero telemetry, high speed, automated shredding.
           </p>
         </div>

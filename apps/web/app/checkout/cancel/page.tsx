@@ -22,10 +22,10 @@ export default function CheckoutCancelPage() {
         <ShieldAlert className="w-8 h-8 text-amber-500" />
       </div>
 
-      <h1 className="font-heading font-black text-3xl sm:text-4xl text-[var(--ink)] tracking-tight">
+      <h1 className="font-heading font-bold text-3xl sm:text-4xl text-[var(--ink)] tracking-tight">
         Checkout was not completed
       </h1>
-      <p className="text-base text-[var(--muted)] mt-2.5 max-w-lg">
+      <p className="text-base text-[var(--muted)] font-normal mt-2.5 max-w-lg leading-relaxed">
         No worries! No funds were deducted from your card or UPI account. You can retry anytime or continue using SimplifyPDF with our Free Starter plan.
       </p>
 
@@ -42,7 +42,7 @@ export default function CheckoutCancelPage() {
 
         <Link
           href="/tools/compress"
-          className="py-3 px-6 rounded-2xl bg-[var(--soft)] hover:bg-[var(--line)] text-[var(--ink)] font-bold text-sm transition-colors"
+          className="py-3 px-6 rounded-2xl bg-[var(--soft)] hover:bg-[var(--line)] text-[var(--ink)] font-medium text-sm transition-colors"
         >
           Continue with Free Tools
         </Link>
@@ -50,7 +50,7 @@ export default function CheckoutCancelPage() {
 
       {/* Helpful Troubleshooting Card */}
       <div className="w-full mt-12 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm text-left">
-        <h2 className="font-heading font-black text-xl text-[var(--ink)] mb-4 flex items-center gap-2">
+        <h2 className="font-heading font-semibold text-xl text-[var(--ink)] mb-4 flex items-center gap-2 tracking-tight">
           <HelpCircle className="w-5 h-5 text-[var(--primary-500)]" />
           Common Checkout Questions &amp; Troubleshooting
         </h2>

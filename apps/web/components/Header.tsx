@@ -42,14 +42,14 @@ export function Header({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-[var(--primary-500)] flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-[var(--primary-500)] flex items-center justify-center text-white font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
             S
           </div>
           <div className="flex flex-col">
-            <span className="font-heading font-black text-xl tracking-tight text-[var(--ink)]">
+            <span className="font-heading font-bold text-lg tracking-tight text-[var(--ink)]">
               {logoText}
             </span>
-            <span className="text-[10px] uppercase font-bold tracking-widest text-[var(--muted)] flex items-center gap-1">
+            <span className="text-[10px] uppercase font-medium tracking-wider text-[var(--muted)] flex items-center gap-1">
               <ShieldCheck className="w-3 h-3 text-emerald-500" /> Permissive OS
             </span>
           </div>
@@ -61,7 +61,7 @@ export function Header({
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm font-semibold text-[var(--muted)] hover:text-[var(--ink)] transition-colors flex items-center gap-1.5"
+              className="text-sm font-medium text-[var(--muted)] hover:text-[var(--ink)] transition-colors flex items-center gap-1.5"
             >
               {item.label}
               {item.badge && (
@@ -83,7 +83,7 @@ export function Header({
             {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
           </button>
 
-          <Link href="/login" className="hidden sm:inline-block text-sm font-bold text-[var(--ink)] hover:text-[var(--primary-500)] transition-colors px-3 py-2">
+          <Link href="/login" className="hidden sm:inline-block text-sm font-medium text-[var(--ink)] hover:text-[var(--primary-500)] transition-colors px-3 py-2">
             Sign In
           </Link>
 

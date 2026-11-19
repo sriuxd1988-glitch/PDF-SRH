@@ -165,7 +165,7 @@ export default function AdminUsersPage() {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="font-heading font-black text-2xl sm:text-3xl text-[var(--ink)]">
+            <h1 className="font-heading font-bold text- tracking-tight sm:text-3xl text-[var(--ink)]">
               User Directory &amp; Access Controls
             </h1>
             <Badge variant="live">{users.length} Registered Accounts</Badge>
@@ -291,11 +291,11 @@ export default function AdminUsersPage() {
             </button>
 
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-[var(--primary-500)] text-white font-black text-xl flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-[var(--primary-500)] text-white font-semibold text-xl flex items-center justify-center">
                 {selectedUser.name.charAt(0)}
               </div>
               <div>
-                <h3 className="font-heading font-black text-2xl text-[var(--ink)]">
+                <h3 className="font-heading font-bold text- tracking-tight text-[var(--ink)]">
                   {selectedUser.name}
                 </h3>
                 <span className="text-xs font-mono text-[var(--muted)]">{selectedUser.id} · {selectedUser.email}</span>
@@ -305,11 +305,11 @@ export default function AdminUsersPage() {
             <div className="grid grid-cols-2 gap-3 mb-6 text-xs">
               <div className="p-3 rounded-2xl bg-[var(--soft)] border border-[var(--line)]">
                 <span className="text-[10px] font-bold uppercase text-[var(--muted)]">Subscription Tier</span>
-                <span className="block font-black text-[var(--ink)] mt-0.5">{selectedUser.plan}</span>
+                <span className="block font-semibold text-[var(--ink)] mt-0.5">{selectedUser.plan}</span>
               </div>
               <div className="p-3 rounded-2xl bg-[var(--soft)] border border-[var(--line)]">
                 <span className="text-[10px] font-bold uppercase text-[var(--muted)]">Account Status</span>
-                <span className="block font-black text-[var(--ink)] mt-0.5">{selectedUser.status}</span>
+                <span className="block font-semibold text-[var(--ink)] mt-0.5">{selectedUser.status}</span>
               </div>
               <div className="p-3 rounded-2xl bg-[var(--soft)] border border-[var(--line)]">
                 <span className="text-[10px] font-bold uppercase text-[var(--muted)]">Last Active IP</span>
