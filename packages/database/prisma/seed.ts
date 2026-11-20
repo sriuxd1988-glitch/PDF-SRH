@@ -171,23 +171,50 @@ async function main() {
   // 6. Seed Tools Configuration
   console.log('Seeding Tool Configs...');
   const defaultTools = [
-    { slug: 'compress', toolName: 'Compress PDF', category: 'OPTIMIZE', sortOrder: 1 },
-    { slug: 'merge', toolName: 'Merge PDF', category: 'OPTIMIZE', sortOrder: 2 },
-    { slug: 'split', toolName: 'Split PDF', category: 'OPTIMIZE', sortOrder: 3 },
-    { slug: 'word-to-pdf', toolName: 'Word to PDF', category: 'CONVERT', sortOrder: 4 },
-    { slug: 'pdf-to-word', toolName: 'PDF to Word', category: 'CONVERT', sortOrder: 5 },
-    { slug: 'pdf-to-images', toolName: 'PDF to JPG', category: 'CONVERT', sortOrder: 6 },
-    { slug: 'images-to-pdf', toolName: 'JPG to PDF', category: 'CONVERT', sortOrder: 7 },
-    { slug: 'ocr', toolName: 'OCR PDF', category: 'CONVERT', sortOrder: 8 },
-    { slug: 'protect', toolName: 'Protect PDF', category: 'SECURITY', sortOrder: 9 },
-    { slug: 'unlock', toolName: 'Unlock PDF', category: 'SECURITY', sortOrder: 10 },
-    { slug: 'redact', toolName: 'Redact PDF', category: 'SECURITY', sortOrder: 11 },
-    { slug: 'esign', toolName: 'eSign PDF', category: 'SECURITY', sortOrder: 12 },
-    { slug: 'organize', toolName: 'Organize PDF', category: 'EDIT', sortOrder: 13 },
-    { slug: 'rotate', toolName: 'Rotate PDF', category: 'EDIT', sortOrder: 14 },
-    { slug: 'flatten', toolName: 'Flatten PDF', category: 'EDIT', sortOrder: 15 },
-    { slug: 'crop', toolName: 'Crop PDF', category: 'EDIT', sortOrder: 16 },
-    { slug: 'watermark', toolName: 'Watermark PDF', category: 'EDIT', sortOrder: 17 },
+    // Column 1: Convert to PDF
+    { slug: 'word-to-pdf', toolName: 'Word to PDF', category: 'CONVERT_TO_PDF', sortOrder: 1 },
+    { slug: 'excel-to-pdf', toolName: 'Excel to PDF', category: 'CONVERT_TO_PDF', sortOrder: 2 },
+    { slug: 'powerpoint-to-pdf', toolName: 'PowerPoint to PDF', category: 'CONVERT_TO_PDF', sortOrder: 3 },
+    { slug: 'jpg-to-pdf', toolName: 'JPG to PDF', category: 'CONVERT_TO_PDF', sortOrder: 4 },
+    { slug: 'png-to-pdf', toolName: 'PNG to PDF', category: 'CONVERT_TO_PDF', sortOrder: 5 },
+    { slug: 'heic-to-pdf', toolName: 'HEIC to PDF', category: 'CONVERT_TO_PDF', sortOrder: 6 },
+    { slug: 'autocad-to-pdf', toolName: 'AutoCAD to PDF', category: 'CONVERT_TO_PDF', sortOrder: 7 },
+    { slug: 'openoffice-to-pdf', toolName: 'OpenOffice to PDF', category: 'CONVERT_TO_PDF', sortOrder: 8 },
+    { slug: 'ebooks-to-pdf', toolName: 'eBooks to PDF', category: 'CONVERT_TO_PDF', sortOrder: 9 },
+    { slug: 'iwork-to-pdf', toolName: 'iWork to PDF', category: 'CONVERT_TO_PDF', sortOrder: 10 },
+    { slug: 'publisher-to-pdf', toolName: 'Publisher to PDF', category: 'CONVERT_TO_PDF', sortOrder: 11 },
+    { slug: 'dicom-to-pdf', toolName: 'DICOM to PDF', category: 'CONVERT_TO_PDF', sortOrder: 12 },
+    { slug: 'eps-to-pdf', toolName: 'EPS to PDF', category: 'CONVERT_TO_PDF', sortOrder: 13 },
+
+    // Column 2: Convert from PDF
+    { slug: 'pdf-to-word', toolName: 'PDF to Word', category: 'CONVERT_FROM_PDF', sortOrder: 14 },
+    { slug: 'pdf-to-excel', toolName: 'PDF to Excel', category: 'CONVERT_FROM_PDF', sortOrder: 15 },
+    { slug: 'pdf-to-powerpoint', toolName: 'PDF to PowerPoint', category: 'CONVERT_FROM_PDF', sortOrder: 16 },
+    { slug: 'pdf-to-jpg', toolName: 'PDF to JPG', category: 'CONVERT_FROM_PDF', sortOrder: 17 },
+    { slug: 'pdf-to-png', toolName: 'PDF to PNG', category: 'CONVERT_FROM_PDF', sortOrder: 18 },
+    { slug: 'extract-pdf-images', toolName: 'Extract PDF Images', category: 'CONVERT_FROM_PDF', sortOrder: 19 },
+    { slug: 'pdf-to-pdfa', toolName: 'PDF to PDF/A', category: 'CONVERT_FROM_PDF', sortOrder: 20 },
+
+    // Column 3: Merge and Split
+    { slug: 'merge', toolName: 'Merge PDF', category: 'MERGE_SPLIT', sortOrder: 21 },
+    { slug: 'split', toolName: 'Split PDF', category: 'MERGE_SPLIT', sortOrder: 22 },
+
+    // Column 4: PDF Security
+    { slug: 'protect', toolName: 'Protect PDF', category: 'SECURITY', sortOrder: 23 },
+    { slug: 'unlock', toolName: 'Unlock PDF', category: 'SECURITY', sortOrder: 24 },
+    { slug: 'redact', toolName: 'Redact PDF', category: 'SECURITY', sortOrder: 25 },
+    { slug: 'esign', toolName: 'eSign PDF', category: 'SECURITY', sortOrder: 26 },
+
+    // Column 5: PDF Tools
+    { slug: 'pdf-converter', toolName: 'PDF Converter', category: 'TOOLS', sortOrder: 27 },
+    { slug: 'compress', toolName: 'Compress PDF', category: 'TOOLS', sortOrder: 28 },
+    { slug: 'delete-pages', toolName: 'Delete PDF Pages', category: 'TOOLS', sortOrder: 29 },
+    { slug: 'rotate', toolName: 'Rotate PDF', category: 'TOOLS', sortOrder: 30 },
+    { slug: 'flatten', toolName: 'Flatten PDF', category: 'TOOLS', sortOrder: 31 },
+    { slug: 'repair', toolName: 'Repair PDF', category: 'TOOLS', sortOrder: 32 },
+    { slug: 'print-ready', toolName: 'Print-Ready PDF', category: 'TOOLS', sortOrder: 33 },
+    { slug: 'ocr', toolName: 'OCR PDF', category: 'TOOLS', sortOrder: 34 },
+    { slug: 'organize', toolName: 'Organize PDF', category: 'TOOLS', sortOrder: 35 },
   ];
 
   for (const tool of defaultTools) {

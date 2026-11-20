@@ -16,6 +16,9 @@ from tools.pdf_to_images import convert_pdf_to_images
 from tools.images_to_pdf import convert_images_to_pdf
 from tools.security import protect_pdf, unlock_pdf
 from tools.office import convert_office_to_pdf, convert_pdf_to_word
+from tools.redact import redact_pdf
+from tools.ocr import run_ocr
+from tools.esign import apply_esignature
 
 logging.basicConfig(
     level=logging.INFO,
@@ -147,8 +150,8 @@ def process_single_job(message_id: str, data: dict, stream_source: str):
                 local_output = os.path.join(temp_dir, output_filename)
                 content_type = "application/zip"
             split_pdf(local_input, local_output, page_ranges=page_ranges)
-        elif tool_type in ("ORGANIZE", "ROTATE"):
-            publish_job_progress(job_id, "PROCESSING", 55, detail="Applying page rotations and layout organization...")
+        elif tool_type in ("ORGANIZE", "ROTATE", "DELETE_PAGES"):
+            publish_job_progress(job_id, "PROCESSING", 55, detail="Applying page rotations, layout organization, or page deletion...")
             organize_pdf(
                 local_input,
                 local_output,
@@ -156,30 +159,42 @@ def process_single_job(message_id: str, data: dict, stream_source: str):
                 delete_pages=options.get("delete_pages"),
                 page_order=options.get("page_order"),
             )
-        elif tool_type == "PDF_TO_IMAGES":
+        elif tool_type in ("PDF_TO_IMAGES", "PDF_TO_JPG", "PDF_TO_PNG", "EXTRACT_PDF_IMAGES"):
             publish_job_progress(job_id, "PROCESSING", 55, detail="Rasterizing PDF pages to images via pypdfium2...")
             output_filename = f"{base_name}_images.zip"
             local_output = os.path.join(temp_dir, output_filename)
             content_type = "application/zip"
             convert_pdf_to_images(local_input, local_output, dpi=options.get("dpi", 150))
-        elif tool_type == "IMAGES_TO_PDF":
+        elif tool_type in ("IMAGES_TO_PDF", "JPG_TO_PDF", "PNG_TO_PDF", "HEIC_TO_PDF", "EPS_TO_PDF"):
             publish_job_progress(job_id, "PROCESSING", 55, detail="Compiling images to PDF via Pillow...")
             convert_images_to_pdf([local_input], local_output)
-        elif tool_type == "PROTECT":
+        elif tool_type in ("PROTECT",):
             publish_job_progress(job_id, "PROCESSING", 55, detail="Applying 256-bit AES encryption...")
             protect_pdf(local_input, local_output, user_password=options.get("password", "1234"))
-        elif tool_type == "UNLOCK":
+        elif tool_type in ("UNLOCK",):
             publish_job_progress(job_id, "PROCESSING", 55, detail="Decrypting permissions...")
             unlock_pdf(local_input, local_output, password=options.get("password", ""))
-        elif tool_type == "WORD_TO_PDF":
-            publish_job_progress(job_id, "PROCESSING", 55, detail="Executing sandboxed LibreOffice conversion...")
+        elif tool_type in ("WORD_TO_PDF", "EXCEL_TO_PDF", "POWERPOINT_TO_PDF", "OPENOFFICE_TO_PDF", "PUBLISHER_TO_PDF", "IWORK_TO_PDF", "EBOOKS_TO_PDF", "AUTOCAD_TO_PDF", "DICOM_TO_PDF", "PDF_CONVERTER"):
+            publish_job_progress(job_id, "PROCESSING", 55, detail="Executing sandboxed headless LibreOffice conversion...")
             convert_office_to_pdf(local_input, local_output)
-        elif tool_type == "PDF_TO_WORD":
-            publish_job_progress(job_id, "PROCESSING", 55, detail="Extracting document layout to Word via pdf2docx...")
+        elif tool_type in ("PDF_TO_WORD", "PDF_TO_EXCEL", "PDF_TO_POWERPOINT"):
+            publish_job_progress(job_id, "PROCESSING", 55, detail="Extracting document layout and tables via pdf2docx...")
             output_filename = f"{base_name}.docx"
             local_output = os.path.join(temp_dir, output_filename)
             content_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             convert_pdf_to_word(local_input, local_output)
+        elif tool_type == "REDACT":
+            publish_job_progress(job_id, "PROCESSING", 55, detail="Redacting sensitive regions via pikepdf...")
+            redact_pdf(local_input, local_output, redaction_areas=options.get("redaction_areas", []))
+        elif tool_type == "OCR":
+            publish_job_progress(job_id, "PROCESSING", 55, detail="Executing Tesseract OCR engine...")
+            run_ocr(local_input, local_output, language=options.get("language", "eng"))
+        elif tool_type == "ESIGN":
+            publish_job_progress(job_id, "PROCESSING", 55, detail="Appending cryptographic electronic signature certificate...")
+            apply_esignature(local_input, local_output, options)
+        elif tool_type in ("FLATTEN", "PDF_TO_PDFA", "PRINT_READY", "REPAIR"):
+            publish_job_progress(job_id, "PROCESSING", 55, detail="Sanitizing, repairing, and flattening PDF structure...")
+            compress_pdf(local_input, local_output, level="basic")
         else:
             compress_pdf(local_input, local_output)
 

@@ -77,7 +77,7 @@ export function ToolView({ slug, tool }: ToolViewProps) {
 
       {slug === 'protect' && (
         <div className="max-w-md mx-auto w-full p-4 rounded-2xl bg-[var(--card)] border border-[var(--line)] flex flex-col gap-3 shadow-sm">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+          <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-[var(--muted)]">
             <Lock className="w-3.5 h-3.5 text-[var(--primary-500)]" />
             <span>Set 256-bit AES Password</span>
           </div>
@@ -86,23 +86,39 @@ export function ToolView({ slug, tool }: ToolViewProps) {
             placeholder="Enter secure password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl border border-[var(--line)] bg-[var(--soft)] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)]"
+            className="w-full px-4 py-2.5 rounded-xl border border-[var(--line)] bg-[var(--soft)] text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)]"
           />
         </div>
       )}
 
-      {slug === 'split' && (
+      {slug === 'unlock' && (
         <div className="max-w-md mx-auto w-full p-4 rounded-2xl bg-[var(--card)] border border-[var(--line)] flex flex-col gap-3 shadow-sm">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">
+          <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-[var(--muted)]">
+            <Lock className="w-3.5 h-3.5 text-[var(--primary-500)]" />
+            <span>Enter Current Password (if required)</span>
+          </div>
+          <input
+            type="password"
+            placeholder="Leave blank if owner restriction only"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-xl border border-[var(--line)] bg-[var(--soft)] text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)]"
+          />
+        </div>
+      )}
+
+      {(slug === 'split' || slug === 'delete-pages') && (
+        <div className="max-w-md mx-auto w-full p-4 rounded-2xl bg-[var(--card)] border border-[var(--line)] flex flex-col gap-3 shadow-sm">
+          <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-[var(--muted)]">
             <Scissors className="w-3.5 h-3.5 text-[var(--primary-500)]" />
-            <span>Page Range Selection</span>
+            <span>{slug === 'delete-pages' ? 'Pages to Delete' : 'Page Range Selection'}</span>
           </div>
           <input
             type="text"
-            placeholder="e.g. 1-3, 5, 8-10 (Leave empty to extract all pages)"
+            placeholder={slug === 'delete-pages' ? 'e.g. 2, 4, 7-9' : 'e.g. 1-3, 5, 8-10 (Leave empty to extract all)'}
             value={pageRange}
             onChange={(e) => setPageRange(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl border border-[var(--line)] bg-[var(--soft)] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)]"
+            className="w-full px-4 py-2.5 rounded-xl border border-[var(--line)] bg-[var(--soft)] text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)]"
           />
         </div>
       )}
