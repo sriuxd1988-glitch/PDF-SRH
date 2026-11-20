@@ -390,7 +390,7 @@ export function Header() {
 
           <Link
             href="/pricing"
-            className="px-5 py-2.5 rounded-full bg-[var(--primary-500)] hover:bg-[var(--primary-600)] text-white text-sm font-bold shadow-md hover:shadow-lg transition-all"
+            className="px-5 py-2.5 rounded-full bg-[var(--primary-500)] hover:bg-[var(--primary-700)] text-white hover:text-white text-sm font-bold shadow-md hover:shadow-lg transition-all cursor-pointer"
           >
             Sign up
           </Link>

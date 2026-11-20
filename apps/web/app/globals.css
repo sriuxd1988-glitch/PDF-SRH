@@ -17,3 +17,21 @@
     text-rendering: optimizeLegibility;
   }
 }
+
+@layer components {
+  /* Prevent any primary buttons or links from turning white or losing text visibility on hover */
+  button[class*='bg-[var(--primary-500)]']:hover,
+  a[class*='bg-[var(--primary-500)]']:hover,
+  button[class*='bg-[#864FFE]']:hover,
+  a[class*='bg-[#864FFE]']:hover {
+    background-color: var(--primary-700, #6D1FE2) !important;
+    color: #ffffff !important;
+  }
+
+  button[class*='bg-[var(--primary-500)]']:hover *,
+  a[class*='bg-[var(--primary-500)]']:hover *,
+  button[class*='bg-[#864FFE]']:hover *,
+  a[class*='bg-[#864FFE]']:hover * {
+    color: #ffffff !important;
+  }
+}

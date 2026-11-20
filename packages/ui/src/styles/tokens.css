@@ -4,9 +4,16 @@
 
 :root {
   /* Nuvexa Light Theme Tokens */
-  --primary-500: #864FFE; /* Nuvexa Violet */
-  --primary-700: #6D1FE2;
   --primary-50: #F4F0FF;
+  --primary-100: #E9DFFD;
+  --primary-200: #D4BFFB;
+  --primary-300: #BFA0F9;
+  --primary-400: #A378F7;
+  --primary-500: #864FFE; /* Nuvexa Violet */
+  --primary-600: #743BE8; /* Hover Violet */
+  --primary-700: #6D1FE2; /* Deep Violet */
+  --primary-800: #5512B8;
+  --primary-900: #3D0B85;
   --secondary: #1A1A1C; /* Dark Near-black */
   --ink: #11141D;
   --bg: #FAF9F7; /* Nuvexa Paper */
@@ -63,6 +70,15 @@ body {
   --input: #202028;
   --code: #0F0F14;
   --primary-50: #221A38;
+  --primary-100: #2D214D;
+  --primary-200: #3E2C6A;
+  --primary-300: #5A3F9A;
+  --primary-400: #704EC5;
+  --primary-500: #864FFE;
+  --primary-600: #743BE8;
+  --primary-700: #6D1FE2;
+  --primary-800: #5512B8;
+  --primary-900: #3D0B85;
   --shadow: none;
 }
 
@@ -71,14 +87,28 @@ body {
    ========================================================================== */
 
 .btn-primary,
-.btn-v6-primary {
-  background-color: var(--primary-500) !important;
+.btn-v6-primary,
+[class*='bg-[var(--primary-500)]'],
+.bg-primary-500,
+[class*='bg-[#864FFE]'] {
+  background-color: var(--primary-500);
   color: #ffffff !important;
 }
 
 .btn-primary:hover,
-.btn-v6-primary:hover {
+.btn-v6-primary:hover,
+[class*='bg-[var(--primary-500)]']:hover,
+.bg-primary-500:hover,
+[class*='bg-[#864FFE]']:hover {
   background-color: var(--primary-700) !important;
+  color: #ffffff !important;
+}
+
+.btn-primary:hover *,
+.btn-v6-primary:hover *,
+[class*='bg-[var(--primary-500)]']:hover *,
+.bg-primary-500:hover *,
+[class*='bg-[#864FFE]']:hover * {
   color: #ffffff !important;
 }
 

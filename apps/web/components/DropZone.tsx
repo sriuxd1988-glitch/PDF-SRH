@@ -291,7 +291,7 @@ export function DropZone({
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold text-white bg-[var(--primary-500)] hover:bg-[var(--primary-600)] transition-all shadow-md shadow-[var(--primary-500)]/25 hover:shadow-lg hover:shadow-[var(--primary-500)]/35 active:scale-[0.98]"
+                className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-semibold text-white hover:text-white bg-[var(--primary-500)] hover:bg-[var(--primary-700)] transition-all shadow-md shadow-[var(--primary-500)]/25 hover:shadow-lg hover:shadow-[var(--primary-500)]/35 active:scale-[0.98] cursor-pointer"
               >
                 {isMultiFile ? 'Select PDF Files' : 'Select PDF File'}
               </button>
@@ -521,10 +521,10 @@ export function DropZone({
               <button
                 type="button"
                 onClick={handleNextStep}
-                className="w-full inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-base font-semibold text-white bg-[var(--primary-500)] hover:bg-[var(--primary-600)] transition-all shadow-lg shadow-[var(--primary-500)]/25 hover:shadow-xl hover:shadow-[var(--primary-500)]/35 active:scale-[0.98]"
+                className="w-full inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-base font-semibold text-white hover:text-white bg-[var(--primary-500)] hover:bg-[var(--primary-700)] transition-all shadow-lg shadow-[var(--primary-500)]/25 hover:shadow-xl hover:shadow-[var(--primary-500)]/35 active:scale-[0.98] cursor-pointer"
               >
                 <span>Next: {toolTitle}</span>
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-5 h-5 text-white" />
               </button>
 
               <button
@@ -591,7 +591,7 @@ export function DropZone({
               <a
                 href={downloadUrl}
                 download={`processed_${files[0]?.name || 'document.pdf'}`}
-                className="mt-2 inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-base font-semibold text-white bg-[var(--primary-500)] hover:bg-[var(--primary-600)] transition-all shadow-lg shadow-[var(--primary-500)]/25 hover:shadow-xl hover:shadow-[var(--primary-500)]/35 active:scale-[0.98]"
+                className="mt-2 inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-base font-semibold text-white hover:text-white bg-[var(--primary-500)] hover:bg-[var(--primary-700)] transition-all shadow-lg shadow-[var(--primary-500)]/25 hover:shadow-xl hover:shadow-[var(--primary-500)]/35 active:scale-[0.98] cursor-pointer"
               >
                 <ArrowDownToLine className="w-5 h-5 text-white" />
                 <span>Download File</span>
