@@ -2,6 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ToolView } from './ToolView';
+import { getToolContent } from '../../../lib/tool-content';
 
 const ALL_TOOLS: Record<string, { title: string; toolType: string; desc: string; maxMb: number; tips: string[] }> = {
   // --- Category: Merge & Split ---
@@ -432,15 +433,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const tool = ALL_TOOLS[resolved.slug];
   if (!tool) return { title: 'Tool Not Found — SimplifyPDF' };
 
+  const content = getToolContent(resolved.slug, tool);
+
   return {
-    title: `${tool.title} — Free Online Tool | SimplifyPDF`,
-    description: tool.desc,
+    title: `${content.title} — 100% Free Online Tool | SimplifyPDF`,
+    description: `${content.actionTitle}. ${content.tagline} Bank-grade 256-bit encryption, instant cloud processing, no watermarks, and 2-hour auto-shred.`,
+    keywords: content.keywords,
     openGraph: {
-      title: `${tool.title} — High-Speed Permissive PDF Processing`,
-      description: tool.desc,
+      title: `${content.title} — Fast & Secure Online PDF Tool`,
+      description: `${content.actionTitle}. ${content.tagline}`,
       url: `https://simplifypdf.com/tools/${resolved.slug}`,
       siteName: 'SimplifyPDF',
       type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${content.title} — Free Online Tool | SimplifyPDF`,
+      description: content.tagline,
     },
   };
 }
@@ -450,37 +459,71 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   const tool = ALL_TOOLS[resolved.slug];
   if (!tool) notFound();
 
-  // JSON-LD Structured Data Schema for Search Engines
+  const content = getToolContent(resolved.slug, tool);
+
+  // Full Rich JSON-LD Structured Data Schema for Google Search Snippets
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'SoftwareApplication',
-        name: `SimplifyPDF ${tool.title}`,
+        name: `SimplifyPDF ${content.title}`,
         operatingSystem: 'All',
         applicationCategory: 'UtilitiesApplication',
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: content.ratingScore,
+          reviewCount: content.ratingVotes.replace(/,/g, ''),
+        },
         offers: {
           '@type': 'Offer',
           price: '0',
           priceCurrency: 'USD',
         },
-        description: tool.desc,
+        description: content.tagline,
       },
       {
         '@type': 'HowTo',
-        name: `How to ${tool.title} Online`,
-        step: [
+        name: content.actionTitle,
+        description: `Step by step guide to ${content.shortVerb.toLowerCase()} ${content.noun} online for free.`,
+        step: content.howToSteps.map((s) => ({
+          '@type': 'HowToStep',
+          position: s.step,
+          name: s.title,
+          text: s.desc,
+        })),
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: content.faqs.map((f) => ({
+          '@type': 'Question',
+          name: f.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: f.answer,
+          },
+        })),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
           {
-            '@type': 'HowToStep',
-            text: 'Drop or select your document in the SimplifyPDF uploader.',
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://simplifypdf.com',
           },
           {
-            '@type': 'HowToStep',
-            text: 'Choose your options and execute high-speed permissive processing.',
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Tools',
+            item: 'https://simplifypdf.com/#tools',
           },
           {
-            '@type': 'HowToStep',
-            text: 'Download your processed document instantly with signed URL.',
+            '@type': 'ListItem',
+            position: 3,
+            name: content.title,
+            item: `https://simplifypdf.com/tools/${resolved.slug}`,
           },
         ],
       },
