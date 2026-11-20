@@ -46,6 +46,7 @@ export function DropZone({
   const [statusText, setStatusText] = useState('');
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [savedBytes, setSavedBytes] = useState<number | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Tool Specific Options (only shown in staged step)
   const [compressLevel, setCompressLevel] = useState<'basic' | 'recommended' | 'extreme'>('recommended');
@@ -73,9 +74,13 @@ export function DropZone({
     // Check size limit
     const totalSize = newFiles.reduce((acc, f) => acc + f.size, 0);
     if (totalSize > maxFileSizeMb * 1024 * 1024) {
-      alert(`Files exceed the ${maxFileSizeMb}MB limit for free tier. Upgrade to PRO for up to 2GB files.`);
+      setErrorMessage(
+        `Selected files (${formatSize(totalSize)}) exceed the ${maxFileSizeMb}MB free tier limit. Upgrade to PRO for up to 2GB files.`
+      );
       return;
     }
+
+    setErrorMessage(null);
 
     setFiles((prev) => (isMultiFile && status === 'staged' ? [...prev, ...newFiles] : newFiles));
     setStatus('uploading');
@@ -230,6 +235,7 @@ export function DropZone({
     setStatusText('');
     setDownloadUrl(null);
     setSavedBytes(null);
+    setErrorMessage(null);
   };
 
   return (
@@ -286,6 +292,22 @@ export function DropZone({
                 Drag & drop your {isMultiFile ? 'files' : 'file'} here, or click to browse from device.
               </p>
             </div>
+
+            {errorMessage && (
+              <div className="w-full max-w-md p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200 text-xs flex items-center justify-between gap-3 text-left animate-in fade-in">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-amber-600" />
+                  <span>{errorMessage}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setErrorMessage(null)}
+                  className="text-amber-600 hover:text-amber-900 dark:hover:text-amber-100 font-bold p-1 cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
 
             <div className="mt-2">
               <button

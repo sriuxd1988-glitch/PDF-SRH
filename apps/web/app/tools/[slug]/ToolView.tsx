@@ -40,6 +40,23 @@ export function ToolView({ slug, tool }: ToolViewProps) {
   // Interactive Rating Widget state
   const [userRating, setUserRating] = useState<number | null>(null);
   const [hasRated, setHasRated] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: tool.title,
+          text: tool.desc,
+          url: window.location.href,
+        })
+        .catch(() => {});
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2200);
+    }
+  };
 
   const handleRate = (stars: number) => {
     setUserRating(stars);
@@ -205,21 +222,20 @@ export function ToolView({ slug, tool }: ToolViewProps) {
             <span className="text-xs text-[var(--muted)]">Share this tool:</span>
             <button
               type="button"
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({
-                    title: tool.title,
-                    text: tool.desc,
-                    url: window.location.href,
-                  });
-                } else {
-                  navigator.clipboard.writeText(window.location.href);
-                  alert('Tool link copied to clipboard!');
-                }
-              }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[var(--line)] bg-[var(--soft)] hover:bg-[var(--line)] text-xs font-semibold text-[var(--ink)] transition-colors"
+              onClick={handleShare}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[var(--line)] bg-[var(--soft)] hover:bg-[var(--line)] text-xs font-semibold text-[var(--ink)] transition-colors cursor-pointer"
             >
-              <Share2 className="w-3.5 h-3.5" /> Share
+              {isCopied ? (
+                <>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="text-emerald-600 font-bold">Link Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Share</span>
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -301,6 +317,31 @@ export function ToolView({ slug, tool }: ToolViewProps) {
               </div>
             );
           })}
+        </div>
+      </section>
+
+      {/* ---------------- SECTION 4.5: BOTTOM CONVERSION CTA ---------------- */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 w-full">
+        <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[var(--primary-500)] via-[#743be8] to-[#6D1FE2] text-white text-center flex flex-col items-center gap-4 shadow-xl shadow-purple-500/20">
+          <span className="text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full bg-white/20 text-white backdrop-blur-sm">
+            100% Free · No Registration Needed
+          </span>
+          <h3 className="font-heading font-extrabold text-2xl sm:text-3xl tracking-tight text-white">
+            Ready to {content.shortVerb} your {content.noun}?
+          </h3>
+          <p className="text-sm sm:text-base text-purple-100 max-w-lg font-normal leading-relaxed">
+            Fast, private, and secure with 256-bit AES encryption. Automatic 2-hour file shredding safeguards your confidential files.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="mt-2 inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-white text-[var(--primary-700)] hover:bg-neutral-50 font-bold text-sm sm:text-base shadow-lg transition-all hover:scale-105 active:scale-[0.98] cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4 text-[var(--primary-700)]" />
+            <span>Select File to {content.shortVerb} Now</span>
+          </button>
         </div>
       </section>
 

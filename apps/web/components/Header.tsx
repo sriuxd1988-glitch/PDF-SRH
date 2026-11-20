@@ -31,11 +31,14 @@ import {
   FileCheck,
   FileCode,
   Sparkles,
+  Menu,
+  X,
 } from 'lucide-react';
 
 export function Header() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [openMenu, setOpenMenu] = useState<'convert' | 'all' | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -186,11 +189,14 @@ export function Header() {
               <button
                 type="button"
                 onClick={() => setOpenMenu(openMenu === 'all' ? null : 'all')}
-                className={`flex items-center gap-1 py-2 hover:text-[var(--primary-500)] transition-colors ${
+                className={`flex items-center gap-1.5 py-2 hover:text-[var(--primary-500)] transition-colors ${
                   openMenu === 'all' ? 'text-[var(--primary-500)]' : ''
                 }`}
               >
                 <span>All PDF Tools</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[var(--primary-50)] text-[var(--primary-500)] dark:bg-purple-950/60 dark:text-purple-300">
+                  58
+                </span>
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform ${openMenu === 'all' ? 'rotate-180' : ''}`} />
               </button>
 
@@ -372,30 +378,165 @@ export function Header() {
         </div>
 
         {/* Right Side Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="p-2.5 rounded-full border border-[#e2e8f0] dark:border-[#242430] text-[#64748b] hover:text-[#181b20] dark:hover:text-white transition-colors"
+            className="p-2.5 rounded-full border border-[#e2e8f0] dark:border-[#242430] text-[#64748b] hover:text-[#181b20] dark:hover:text-white transition-colors cursor-pointer"
           >
             {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
           </button>
 
           <Link
             href="/login"
-            className="text-sm font-bold text-[#181b20] dark:text-white hover:text-[var(--primary-500)] transition-colors px-2 py-1"
+            className="hidden sm:inline-block text-sm font-bold text-[#181b20] dark:text-white hover:text-[var(--primary-500)] transition-colors px-2 py-1"
           >
             Log in
           </Link>
 
           <Link
             href="/pricing"
-            className="px-5 py-2.5 rounded-full bg-[var(--primary-500)] hover:bg-[var(--primary-700)] text-white hover:text-white text-sm font-bold shadow-md hover:shadow-lg transition-all cursor-pointer"
+            className="hidden sm:inline-block px-5 py-2.5 rounded-full bg-[var(--primary-500)] hover:bg-[var(--primary-700)] text-white hover:text-white text-sm font-bold shadow-md hover:shadow-lg transition-all cursor-pointer"
           >
             Sign up
           </Link>
+
+          {/* Mobile Hamburger Menu Button */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle navigation menu"
+            className="lg:hidden p-2.5 rounded-full border border-[#e2e8f0] dark:border-[#242430] text-[#64748b] hover:text-[#181b20] dark:hover:text-white transition-colors cursor-pointer"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Navigation Drawer */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden border-t border-[#e2e8f0] dark:border-[#242430] bg-white dark:bg-[#14141c] px-4 py-6 flex flex-col gap-5 animate-in slide-in-from-top-2 duration-200 shadow-2xl max-h-[85vh] overflow-y-auto">
+          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#64748b] dark:text-[#94a3b8]">
+            <span>Popular PDF Tools</span>
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--primary-50)] text-[var(--primary-500)] font-extrabold">
+              58 Tools Total
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 text-xs font-bold uppercase tracking-wider text-[#181b20] dark:text-neutral-200">
+            <Link
+              href="/tools/merge"
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-3 rounded-xl bg-[var(--soft)] hover:bg-[var(--line)] flex items-center gap-2 transition-colors"
+            >
+              <span className="w-6 h-6 rounded bg-[#EA580C] text-white flex items-center justify-center shrink-0">
+                <Combine className="w-3.5 h-3.5" />
+              </span>
+              <span className="truncate">Merge PDF</span>
+            </Link>
+
+            <Link
+              href="/tools/split"
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-3 rounded-xl bg-[var(--soft)] hover:bg-[var(--line)] flex items-center gap-2 transition-colors"
+            >
+              <span className="w-6 h-6 rounded bg-[#EA580C] text-white flex items-center justify-center shrink-0">
+                <Scissors className="w-3.5 h-3.5" />
+              </span>
+              <span className="truncate">Split PDF</span>
+            </Link>
+
+            <Link
+              href="/tools/compress"
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-3 rounded-xl bg-[var(--soft)] hover:bg-[var(--line)] flex items-center gap-2 transition-colors"
+            >
+              <span className="w-6 h-6 rounded bg-[#10B981] text-white flex items-center justify-center shrink-0">
+                <Minimize2 className="w-3.5 h-3.5" />
+              </span>
+              <span className="truncate">Compress PDF</span>
+            </Link>
+
+            <Link
+              href="/tools/pdf-to-word"
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-3 rounded-xl bg-[var(--soft)] hover:bg-[var(--line)] flex items-center gap-2 transition-colors"
+            >
+              <span className="w-6 h-6 rounded bg-[#185ABD] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                W
+              </span>
+              <span className="truncate">PDF to Word</span>
+            </Link>
+
+            <Link
+              href="/tools/word-to-pdf"
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-3 rounded-xl bg-[var(--soft)] hover:bg-[var(--line)] flex items-center gap-2 transition-colors"
+            >
+              <span className="w-6 h-6 rounded bg-[#185ABD] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                W
+              </span>
+              <span className="truncate">Word to PDF</span>
+            </Link>
+
+            <Link
+              href="/tools/protect"
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-3 rounded-xl bg-[var(--soft)] hover:bg-[var(--line)] flex items-center gap-2 transition-colors"
+            >
+              <span className="w-6 h-6 rounded bg-[#0D9488] text-white flex items-center justify-center shrink-0">
+                <Lock className="w-3.5 h-3.5" />
+              </span>
+              <span className="truncate">Protect PDF</span>
+            </Link>
+          </div>
+
+          <div className="pt-3 border-t border-[#e2e8f0] dark:border-[#242430] flex flex-col gap-2">
+            <Link
+              href="/#tools"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-xs font-bold uppercase tracking-wider text-[var(--primary-500)] py-2 flex items-center justify-between"
+            >
+              <span>Explore All 58 PDF Tools</span>
+              <span>→</span>
+            </Link>
+
+            <Link
+              href="/pricing"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-xs font-bold uppercase tracking-wider text-[#181b20] dark:text-white py-2 flex items-center justify-between"
+            >
+              <span>Pricing Plans</span>
+              <span className="text-[10px] font-normal text-[var(--muted)]">Pro $4.99/mo</span>
+            </Link>
+
+            <Link
+              href="/blog"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-xs font-bold uppercase tracking-wider text-[#181b20] dark:text-white py-2"
+            >
+              Blog & PDF Guides
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-3 pt-2">
+            <Link
+              href="/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex-1 py-3 text-center rounded-full border border-[#e2e8f0] dark:border-[#242430] text-xs font-bold text-[#181b20] dark:text-white hover:bg-[var(--soft)] transition-colors"
+            >
+              Log in
+            </Link>
+            <Link
+              href="/pricing"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex-1 py-3 text-center rounded-full bg-[var(--primary-500)] hover:bg-[var(--primary-700)] text-white text-xs font-bold shadow-sm transition-colors"
+            >
+              Sign up Free
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

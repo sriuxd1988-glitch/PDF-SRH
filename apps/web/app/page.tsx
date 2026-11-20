@@ -540,6 +540,89 @@ const ILOVE_TOOLS: ILoveTool[] = [
     badgeLetter: 'E',
     icon: PenTool,
   },
+  // 50. PNG to PDF
+  {
+    slug: 'png-to-pdf',
+    name: 'PNG to PDF',
+    desc: 'Convert PNG graphics and screenshots into clean PDF documents with transparency preserved.',
+    cat: 'CONVERT',
+    tileBg: '#7C3AED',
+    badgeLetter: 'PNG',
+    icon: ImageIcon,
+  },
+  // 51. HEIC to PDF
+  {
+    slug: 'heic-to-pdf',
+    name: 'HEIC to PDF',
+    desc: 'Convert Apple iPhone HEIC and HEIF photos into universal PDF documents.',
+    cat: 'CONVERT',
+    tileBg: '#4F46E5',
+    icon: Camera,
+  },
+  // 52. OpenOffice to PDF
+  {
+    slug: 'openoffice-to-pdf',
+    name: 'OpenOffice to PDF',
+    desc: 'Convert OpenDocument formats (.odt, .ods, .odp) into standardized PDF files.',
+    cat: 'CONVERT',
+    tileBg: '#0284C7',
+    icon: FileText,
+  },
+  // 53. eBooks to PDF
+  {
+    slug: 'ebooks-to-pdf',
+    name: 'eBooks to PDF',
+    desc: 'Convert EPUB, MOBI, and digital eBook files into readable, printable PDF documents.',
+    cat: 'CONVERT',
+    tileBg: '#D97706',
+    icon: BookOpen,
+  },
+  // 54. iWork to PDF
+  {
+    slug: 'iwork-to-pdf',
+    name: 'iWork to PDF',
+    desc: 'Convert Apple Pages, Numbers, and Keynote documents into PDF format.',
+    cat: 'CONVERT',
+    tileBg: '#1E293B',
+    icon: Laptop,
+  },
+  // 55. PDF to PNG
+  {
+    slug: 'pdf-to-png',
+    name: 'PDF to PNG',
+    desc: 'Extract pages to crisp, high-resolution transparent PNG images.',
+    cat: 'CONVERT',
+    tileBg: '#7C3AED',
+    badgeLetter: 'PNG',
+    icon: ImageIcon,
+  },
+  // 56. Extract PDF Images
+  {
+    slug: 'extract-pdf-images',
+    name: 'Extract PDF Images',
+    desc: 'Pull all embedded photos and bitmap graphics out of your PDF at original quality.',
+    cat: 'CONVERT',
+    tileBg: '#9333EA',
+    icon: ImageIcon,
+  },
+  // 57. Images to PDF
+  {
+    slug: 'images-to-pdf',
+    name: 'Images to PDF',
+    desc: 'Combine JPG, PNG, WebP, and BMP images into a single unified PDF file.',
+    cat: 'CONVERT',
+    tileBg: '#EA580C',
+    icon: ImageIcon,
+  },
+  // 58. PDF to Images
+  {
+    slug: 'pdf-to-images',
+    name: 'PDF to Images',
+    desc: 'Batch export all PDF pages to individual JPG or PNG image files.',
+    cat: 'CONVERT',
+    tileBg: '#F59E0B',
+    icon: ImageIcon,
+  },
 ];
 
 const FILTER_PILLS: { key: FilterCategory; label: string }[] = [
@@ -583,6 +666,14 @@ export default function HomePage() {
   const [activeFilter, setActiveFilter] = useState<FilterCategory>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { ALL: ILOVE_TOOLS.length };
+    ILOVE_TOOLS.forEach((tool) => {
+      counts[tool.cat] = (counts[tool.cat] || 0) + 1;
+    });
+    return counts;
+  }, []);
+
   const filteredTools = useMemo(() => {
     return ILOVE_TOOLS.filter((tool) => {
       const matchesCategory = activeFilter === 'ALL' || tool.cat === activeFilter;
@@ -614,13 +705,22 @@ export default function HomePage() {
               key={pill.key}
               type="button"
               onClick={() => setActiveFilter(pill.key)}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all ${
                 activeFilter === pill.key
                   ? 'bg-[#181b20] dark:bg-white text-white dark:text-[#181b20] shadow-sm'
                   : 'bg-white dark:bg-[#1a1a24] text-[#4a5568] dark:text-[#94a3b8] border border-[#e2e8f0] dark:border-[#2a2a38] hover:border-[#cbd5e1] hover:text-[#181b20] dark:hover:text-white'
               }`}
             >
-              {pill.label}
+              <span>{pill.label}</span>
+              <span
+                className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
+                  activeFilter === pill.key
+                    ? 'bg-white/20 dark:bg-black/20 text-white dark:text-[#181b20]'
+                    : 'bg-[#f1f3f7] dark:bg-[#232330] text-[#64748b] dark:text-[#94a3b8]'
+                }`}
+              >
+                {categoryCounts[pill.key] || 0}
+              </span>
             </button>
           ))}
         </div>
@@ -630,7 +730,7 @@ export default function HomePage() {
           <Search className="w-5 h-5 absolute left-5 top-1/2 -translate-y-1/2 text-[#94a3b8] group-focus-within:text-[var(--primary-500)] transition-colors pointer-events-none" />
           <input
             type="text"
-            placeholder="Search 50+ PDF tools (e.g. compress, merge, excel, sign, delete pages)..."
+            placeholder="Search 58+ PDF tools (e.g. compress, merge, excel, sign, delete pages)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-14 pr-12 py-3.5 sm:py-4 text-sm sm:text-base rounded-full bg-white dark:bg-[#1a1a24] border border-[#d8dce6] dark:border-[#2a2a38] text-[#181b20] dark:text-white placeholder-[#94a3b8] focus:outline-none focus:border-[var(--primary-500)] focus:ring-4 focus:ring-[var(--primary-500)]/10 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-md transition-all font-normal"
@@ -657,7 +757,9 @@ export default function HomePage() {
               className="group relative p-6 sm:p-7 rounded-2xl bg-white dark:bg-[#161622] border border-[#f1f1f5] dark:border-[#222230] shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-2 hover:border-[#181b20] dark:hover:border-white transition-all duration-150 flex flex-col justify-start min-h-[210px]"
             >
               <div className="flex items-center justify-between mb-4">
-                <CardBadge tool={tool} />
+                <div className="transition-transform duration-200 group-hover:scale-110">
+                  <CardBadge tool={tool} />
+                </div>
                 {tool.isNew && (
                   <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                     New!
@@ -677,16 +779,39 @@ export default function HomePage() {
         </div>
 
         {filteredTools.length === 0 && (
-          <div className="text-center py-16 bg-white dark:bg-[#161622] rounded-2xl border border-[#e2e8f0] dark:border-[#222230]">
-            <p className="text-sm text-[#64748b]">No tools found matching &ldquo;{searchQuery}&rdquo;</p>
+          <div className="text-center py-16 px-4 bg-white dark:bg-[#161622] rounded-3xl border border-[#e2e8f0] dark:border-[#222230] max-w-lg mx-auto flex flex-col items-center gap-4 shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--soft)] flex items-center justify-center text-[var(--muted)]">
+              <Search className="w-8 h-8 opacity-40" />
+            </div>
+            <div>
+              <h4 className="font-heading font-bold text-lg text-[#181b20] dark:text-white">
+                No tools found matching &ldquo;{searchQuery}&rdquo;
+              </h4>
+              <p className="text-xs sm:text-sm text-[#64748b] dark:text-[#94a3b8] mt-1">
+                Try searching for another keyword or select one of our popular tools below.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-1">
+              {['Merge', 'Compress', 'Word to PDF', 'Split', 'Protect', 'Sign'].map((chip) => (
+                <button
+                  key={chip}
+                  type="button"
+                  onClick={() => setSearchQuery(chip)}
+                  className="px-3 py-1 rounded-full bg-[var(--soft)] hover:bg-[var(--line)] text-xs font-semibold text-[var(--ink)] transition-colors cursor-pointer"
+                >
+                  {chip}
+                </button>
+              ))}
+            </div>
             <button
+              type="button"
               onClick={() => {
                 setSearchQuery('');
                 setActiveFilter('ALL');
               }}
-              className="mt-3 text-xs font-bold text-[var(--primary-500)] hover:underline"
+              className="mt-2 px-5 py-2 rounded-full bg-[var(--primary-500)] hover:bg-[var(--primary-700)] text-white font-semibold text-xs transition-colors shadow-sm cursor-pointer"
             >
-              Clear filters
+              Reset Search & Filters
             </button>
           </div>
         )}
