@@ -50,9 +50,7 @@ interface ToolItem {
   cat: 'CONVERT_TO' | 'CONVERT_FROM' | 'MERGE_SPLIT' | 'SECURITY' | 'TOOLS';
   catLabel: string;
   badge?: string | null;
-  accentClass: string;
-  iconBgClass: string;
-  iconTextClass: string;
+  solidBg: string;
   badgeLetter?: string;
   icon: React.ComponentType<{ className?: string }>;
 }
@@ -65,9 +63,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert DOC and DOCX Word documents into standard high-fidelity PDF files.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'blue',
-    iconBgClass: 'bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900',
-    iconTextClass: 'text-blue-600 dark:text-blue-400',
+    solidBg: '#185ABD',
     badgeLetter: 'W',
     icon: FileText,
     badge: 'Popular',
@@ -78,9 +74,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert XLS and XLSX spreadsheets to standardized, printable PDF pages.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'emerald',
-    iconBgClass: 'bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900',
-    iconTextClass: 'text-emerald-600 dark:text-emerald-400',
+    solidBg: '#107C41',
     badgeLetter: 'X',
     icon: FileSpreadsheet,
     badge: null,
@@ -91,9 +85,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert PPT and PPTX presentation slides into clean vector PDF documents.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'amber',
-    iconBgClass: 'bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900',
-    iconTextClass: 'text-amber-600 dark:text-amber-400',
+    solidBg: '#D83B01',
     badgeLetter: 'P',
     icon: Presentation,
     badge: null,
@@ -104,9 +96,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Compile one or multiple JPG photos into a single unified PDF document.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'purple',
-    iconBgClass: 'bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900',
-    iconTextClass: 'text-purple-600 dark:text-purple-400',
+    solidBg: '#9C27B0',
     icon: ImageIcon,
     badge: null,
   },
@@ -116,9 +106,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert PNG graphics and screenshots with transparent alpha channel preservation.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'purple',
-    iconBgClass: 'bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900',
-    iconTextClass: 'text-purple-600 dark:text-purple-400',
+    solidBg: '#9C27B0',
     icon: ImageIcon,
     badge: null,
   },
@@ -128,9 +116,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert Apple iPhone HEIC and HEIF photos into universal PDF documents.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'purple',
-    iconBgClass: 'bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900',
-    iconTextClass: 'text-purple-600 dark:text-purple-400',
+    solidBg: '#9C27B0',
     icon: Camera,
     badge: 'iOS',
   },
@@ -140,9 +126,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert architectural DWG and DXF engineering drawings into vector PDF blueprints.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'rose',
-    iconBgClass: 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900',
-    iconTextClass: 'text-rose-600 dark:text-rose-400',
+    solidBg: '#E5252A',
     badgeLetter: 'A',
     icon: Compass,
     badge: 'CAD',
@@ -153,9 +137,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert OpenDocument formats (.odt, .ods, .odp) into standardized PDF files.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'sky',
-    iconBgClass: 'bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-900',
-    iconTextClass: 'text-sky-600 dark:text-sky-400',
+    solidBg: '#009BE0',
     icon: FileText,
     badge: null,
   },
@@ -165,9 +147,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert EPUB, MOBI, and Kindle eBook files into readable, printable PDF documents.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'amber',
-    iconBgClass: 'bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900',
-    iconTextClass: 'text-amber-600 dark:text-amber-400',
+    solidBg: '#F59E0B',
     icon: BookOpen,
     badge: null,
   },
@@ -177,9 +157,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert Apple Pages, Numbers, and Keynote documents into standard PDF files.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'slate',
-    iconBgClass: 'bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700',
-    iconTextClass: 'text-slate-700 dark:text-slate-300',
+    solidBg: '#2D3748',
     icon: Laptop,
     badge: 'Mac',
   },
@@ -189,9 +167,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert Microsoft Publisher (.pub) marketing layouts and brochures into PDF files.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'teal',
-    iconBgClass: 'bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-900',
-    iconTextClass: 'text-teal-600 dark:text-teal-400',
+    solidBg: '#007A78',
     badgeLetter: 'P',
     icon: LayoutTemplate,
     badge: null,
@@ -202,9 +178,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert medical DICOM (.dcm) radiological imaging scans (X-ray, MRI) into clinical reports.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'cyan',
-    iconBgClass: 'bg-cyan-50 dark:bg-cyan-950/40 border border-cyan-200 dark:border-cyan-900',
-    iconTextClass: 'text-cyan-600 dark:text-cyan-400',
+    solidBg: '#00838F',
     badgeLetter: 'D',
     icon: Activity,
     badge: 'Medical',
@@ -215,9 +189,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert vector Encapsulated PostScript (.eps) illustrations and logos to PDF format.',
     cat: 'CONVERT_TO',
     catLabel: 'Convert to PDF',
-    accentClass: 'indigo',
-    iconBgClass: 'bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900',
-    iconTextClass: 'text-indigo-600 dark:text-indigo-400',
+    solidBg: '#4527A0',
     badgeLetter: 'E',
     icon: PenTool,
     badge: null,
@@ -230,9 +202,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert PDF files into fully editable Microsoft Word (.docx) documents.',
     cat: 'CONVERT_FROM',
     catLabel: 'Convert from PDF',
-    accentClass: 'blue',
-    iconBgClass: 'bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900',
-    iconTextClass: 'text-blue-600 dark:text-blue-400',
+    solidBg: '#185ABD',
     badgeLetter: 'W',
     icon: FileCode,
     badge: 'Popular',
@@ -243,9 +213,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Extract financial tables, ledgers, and data from PDF into editable Excel (.xlsx) spreadsheets.',
     cat: 'CONVERT_FROM',
     catLabel: 'Convert from PDF',
-    accentClass: 'emerald',
-    iconBgClass: 'bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900',
-    iconTextClass: 'text-emerald-600 dark:text-emerald-400',
+    solidBg: '#107C41',
     badgeLetter: 'X',
     icon: FileSpreadsheet,
     badge: null,
@@ -256,9 +224,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert presentation PDF slides into fully editable PowerPoint (.pptx) slide decks.',
     cat: 'CONVERT_FROM',
     catLabel: 'Convert from PDF',
-    accentClass: 'amber',
-    iconBgClass: 'bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900',
-    iconTextClass: 'text-amber-600 dark:text-amber-400',
+    solidBg: '#D83B01',
     badgeLetter: 'P',
     icon: Presentation,
     badge: null,
@@ -269,9 +235,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Extract and rasterize PDF pages into high-resolution JPG image files.',
     cat: 'CONVERT_FROM',
     catLabel: 'Convert from PDF',
-    accentClass: 'purple',
-    iconBgClass: 'bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900',
-    iconTextClass: 'text-purple-600 dark:text-purple-400',
+    solidBg: '#9C27B0',
     icon: ImageIcon,
     badge: null,
   },
@@ -281,9 +245,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Export PDF pages as crisp, transparent PNG images with maximum sharpness.',
     cat: 'CONVERT_FROM',
     catLabel: 'Convert from PDF',
-    accentClass: 'purple',
-    iconBgClass: 'bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900',
-    iconTextClass: 'text-purple-600 dark:text-purple-400',
+    solidBg: '#9C27B0',
     icon: ImageIcon,
     badge: null,
   },
@@ -293,9 +255,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Unpack and extract all raw image assets embedded inside a PDF document.',
     cat: 'CONVERT_FROM',
     catLabel: 'Convert from PDF',
-    accentClass: 'purple',
-    iconBgClass: 'bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900',
-    iconTextClass: 'text-purple-600 dark:text-purple-400',
+    solidBg: '#9C27B0',
     icon: Layers,
     badge: null,
   },
@@ -305,9 +265,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Convert PDF documents to ISO-19005 compliant PDF/A for legal long-term archiving.',
     cat: 'CONVERT_FROM',
     catLabel: 'Convert from PDF',
-    accentClass: 'blue',
-    iconBgClass: 'bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900',
-    iconTextClass: 'text-blue-600 dark:text-blue-400',
+    solidBg: '#185ABD',
     badgeLetter: 'A',
     icon: FileCheck,
     badge: 'ISO',
@@ -320,9 +278,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Combine multiple PDFs into one unified document in any custom order.',
     cat: 'MERGE_SPLIT',
     catLabel: 'Merge and Split',
-    accentClass: 'orange',
-    iconBgClass: 'bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-900',
-    iconTextClass: 'text-orange-600 dark:text-orange-400',
+    solidBg: '#EA580C',
     icon: Combine,
     badge: 'Popular',
   },
@@ -332,9 +288,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Separate one or multiple pages into clean independent PDF files.',
     cat: 'MERGE_SPLIT',
     catLabel: 'Merge and Split',
-    accentClass: 'orange',
-    iconBgClass: 'bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-900',
-    iconTextClass: 'text-orange-600 dark:text-orange-400',
+    solidBg: '#EA580C',
     icon: Scissors,
     badge: null,
   },
@@ -346,9 +300,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Lock documents with unbreakable 256-bit AES encryption passwords.',
     cat: 'SECURITY',
     catLabel: 'PDF Security',
-    accentClass: 'teal',
-    iconBgClass: 'bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-900',
-    iconTextClass: 'text-teal-600 dark:text-teal-400',
+    solidBg: '#0D9488',
     icon: Lock,
     badge: 'AES-256',
   },
@@ -358,9 +310,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Remove passwords and permissions from encrypted PDF documents.',
     cat: 'SECURITY',
     catLabel: 'PDF Security',
-    accentClass: 'teal',
-    iconBgClass: 'bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-900',
-    iconTextClass: 'text-teal-600 dark:text-teal-400',
+    solidBg: '#0D9488',
     icon: Unlock,
     badge: null,
   },
@@ -370,9 +320,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Permanently remove sensitive text, numbers, and private regions from documents.',
     cat: 'SECURITY',
     catLabel: 'PDF Security',
-    accentClass: 'teal',
-    iconBgClass: 'bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-900',
-    iconTextClass: 'text-teal-600 dark:text-teal-400',
+    solidBg: '#0D9488',
     icon: EyeOff,
     badge: 'Legal',
   },
@@ -382,9 +330,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Draw or type legally binding electronic signatures with audit certificate stamps.',
     cat: 'SECURITY',
     catLabel: 'PDF Security',
-    accentClass: 'teal',
-    iconBgClass: 'bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-900',
-    iconTextClass: 'text-teal-600 dark:text-teal-400',
+    solidBg: '#0D9488',
     icon: FilePenLine,
     badge: 'PRO',
   },
@@ -396,9 +342,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Universal smart converter: drop any document, spreadsheet, image, or presentation.',
     cat: 'TOOLS',
     catLabel: 'PDF Tools',
-    accentClass: 'red',
-    iconBgClass: 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900',
-    iconTextClass: 'text-rose-600 dark:text-rose-400',
+    solidBg: '#DC2626',
     icon: FileCog,
     badge: 'Universal',
   },
@@ -408,9 +352,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Reduce file size by up to 85% while preserving crisp quality and vector text.',
     cat: 'TOOLS',
     catLabel: 'PDF Tools',
-    accentClass: 'red',
-    iconBgClass: 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900',
-    iconTextClass: 'text-rose-600 dark:text-rose-400',
+    solidBg: '#DC2626',
     icon: Minimize2,
     badge: 'Popular',
   },
@@ -420,9 +362,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Remove unwanted, blank, or sensitive pages permanently from any PDF document.',
     cat: 'TOOLS',
     catLabel: 'PDF Tools',
-    accentClass: 'red',
-    iconBgClass: 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900',
-    iconTextClass: 'text-rose-600 dark:text-rose-400',
+    solidBg: '#DC2626',
     icon: Trash2,
     badge: null,
   },
@@ -432,9 +372,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Rotate individual pages or the entire PDF document permanently.',
     cat: 'TOOLS',
     catLabel: 'PDF Tools',
-    accentClass: 'red',
-    iconBgClass: 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900',
-    iconTextClass: 'text-rose-600 dark:text-rose-400',
+    solidBg: '#DC2626',
     icon: RotateCw,
     badge: null,
   },
@@ -444,9 +382,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Bake interactive fillable form fields and digital annotations into static page content.',
     cat: 'TOOLS',
     catLabel: 'PDF Tools',
-    accentClass: 'red',
-    iconBgClass: 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900',
-    iconTextClass: 'text-rose-600 dark:text-rose-400',
+    solidBg: '#DC2626',
     icon: Layers,
     badge: null,
   },
@@ -456,9 +392,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Recover and repair damaged, corrupted, or unreadable PDF files.',
     cat: 'TOOLS',
     catLabel: 'PDF Tools',
-    accentClass: 'red',
-    iconBgClass: 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900',
-    iconTextClass: 'text-rose-600 dark:text-rose-400',
+    solidBg: '#DC2626',
     icon: Wrench,
     badge: 'Rescue',
   },
@@ -468,9 +402,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Prepress prep: flatten transparency, convert to CMYK, and configure trim marks.',
     cat: 'TOOLS',
     catLabel: 'PDF Tools',
-    accentClass: 'red',
-    iconBgClass: 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900',
-    iconTextClass: 'text-rose-600 dark:text-rose-400',
+    solidBg: '#DC2626',
     icon: Printer,
     badge: 'Print',
   },
@@ -480,9 +412,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Extract selectable, searchable text from scanned paper PDF documents.',
     cat: 'TOOLS',
     catLabel: 'PDF Tools',
-    accentClass: 'red',
-    iconBgClass: 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900',
-    iconTextClass: 'text-rose-600 dark:text-rose-400',
+    solidBg: '#DC2626',
     icon: ScanText,
     badge: 'PRO',
   },
@@ -492,9 +422,7 @@ const ALL_TOOLS: ToolItem[] = [
     desc: 'Rearrange, rotate, and delete pages inside your PDF documents with visual reordering.',
     cat: 'TOOLS',
     catLabel: 'PDF Tools',
-    accentClass: 'red',
-    iconBgClass: 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900',
-    iconTextClass: 'text-rose-600 dark:text-rose-400',
+    solidBg: '#DC2626',
     icon: FolderTree,
     badge: null,
   },
@@ -516,6 +444,66 @@ const DIRECTORY_COLUMNS: { cat: CategoryKey; title: string }[] = [
   { cat: 'SECURITY', title: 'PDF SECURITY' },
   { cat: 'TOOLS', title: 'PDF TOOLS' },
 ];
+
+function ToolBadgeIcon({ tool, size = 'sm' }: { tool: ToolItem; size?: 'sm' | 'lg' }) {
+  const Icon = tool.icon;
+
+  if (tool.badgeLetter) {
+    if (size === 'lg') {
+      return (
+        <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
+          <div className="w-9 h-11 rounded-[6px] border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 flex flex-col justify-center items-end pr-1.5 gap-1 shadow-sm">
+            <div className="w-4 h-0.5 bg-neutral-300 dark:bg-neutral-600 rounded-full" />
+            <div className="w-5 h-0.5 bg-neutral-300 dark:bg-neutral-600 rounded-full" />
+            <div className="w-3.5 h-0.5 bg-neutral-300 dark:bg-neutral-600 rounded-full" />
+          </div>
+          <div
+            className="absolute bottom-0 left-0 w-6 h-6 rounded-[4px] flex items-center justify-center text-white font-bold text-xs shadow-md leading-none"
+            style={{ backgroundColor: tool.solidBg }}
+          >
+            {tool.badgeLetter}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="relative w-7 h-7 flex items-center justify-center shrink-0">
+        <div className="w-5 h-6 rounded-[3px] border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 flex flex-col justify-center items-end pr-1 gap-0.5 shadow-xs">
+          <div className="w-2 h-0.5 bg-neutral-300 dark:bg-neutral-600 rounded-full" />
+          <div className="w-2.5 h-0.5 bg-neutral-300 dark:bg-neutral-600 rounded-full" />
+          <div className="w-1.5 h-0.5 bg-neutral-300 dark:bg-neutral-600 rounded-full" />
+        </div>
+        <div
+          className="absolute -bottom-0.5 -left-0.5 w-4 h-4 rounded-[3px] flex items-center justify-center text-white font-bold text-[9px] shadow-sm leading-none"
+          style={{ backgroundColor: tool.solidBg }}
+        >
+          {tool.badgeLetter}
+        </div>
+      </div>
+    );
+  }
+
+  if (size === 'lg') {
+    return (
+      <div
+        className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 text-white shadow-sm"
+        style={{ backgroundColor: tool.solidBg }}
+      >
+        <Icon className="w-6 h-6 text-white" />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-white shadow-xs"
+      style={{ backgroundColor: tool.solidBg }}
+    >
+      <Icon className="w-3.5 h-3.5 text-white" />
+    </div>
+  );
+}
 
 export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState<CategoryKey>('ALL');
@@ -667,29 +655,18 @@ export default function HomePage() {
               const toolsInCol = ALL_TOOLS.filter((t) => t.cat === col.cat);
               return (
                 <div key={col.cat} className="flex flex-col gap-4">
-                  <h3 className="font-heading font-semibold text-xs uppercase tracking-wider text-[var(--ink)] pb-3 border-b border-[var(--line)]">
+                  <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-[var(--ink)] pb-2 border-b border-[var(--line)]">
                     {col.title}
                   </h3>
-                  <div className="flex flex-col gap-2.5">
+                  <div className="flex flex-col gap-2">
                     {toolsInCol.map((tool) => {
-                      const Icon = tool.icon;
                       return (
                         <Link
                           key={tool.slug}
                           href={`/tools/${tool.slug}`}
-                          className="group flex items-center gap-3 p-2 rounded-xl hover:bg-[var(--soft)] transition-all"
+                          className="group flex items-center gap-3 p-1.5 rounded-xl hover:bg-[var(--soft)] transition-all"
                         >
-                          <div
-                            className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${tool.iconBgClass} ${tool.iconTextClass} group-hover:scale-105 transition-transform relative`}
-                          >
-                            {tool.badgeLetter ? (
-                              <div className="flex items-center justify-center">
-                                <span className="font-mono font-bold text-xs">{tool.badgeLetter}</span>
-                              </div>
-                            ) : (
-                              <Icon className="w-4 h-4" />
-                            )}
-                          </div>
+                          <ToolBadgeIcon tool={tool} size="sm" />
                           <span className="text-sm font-medium text-[var(--ink)] group-hover:text-[var(--primary-500)] transition-colors tracking-tight">
                             {tool.name}
                           </span>
@@ -705,19 +682,12 @@ export default function HomePage() {
           /* GRID VIEW (Rich Cards with Descriptions & Metadata) */
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredTools.map((tool) => {
-              const Icon = tool.icon;
               return (
                 <Link key={tool.slug} href={`/tools/${tool.slug}`} className="group">
                   <GlowCard className="p-6 h-full flex flex-col justify-between group-hover:border-[var(--primary-500)] transition-colors">
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform ${tool.iconBgClass} ${tool.iconTextClass}`}>
-                          {tool.badgeLetter ? (
-                            <span className="font-mono font-bold text-lg">{tool.badgeLetter}</span>
-                          ) : (
-                            <Icon className="w-6 h-6" />
-                          )}
-                        </div>
+                        <ToolBadgeIcon tool={tool} size="lg" />
                         {tool.badge && (
                           <Badge variant={tool.badge === 'PRO' ? 'pro' : 'outline'}>
                             {tool.badge}
