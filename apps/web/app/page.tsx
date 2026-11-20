@@ -626,15 +626,24 @@ export default function HomePage() {
         </div>
 
         {/* Search Filter */}
-        <div className="mt-4 w-full max-w-md relative">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
+        <div className="mt-6 w-full max-w-2xl relative group">
+          <Search className="w-5 h-5 absolute left-5 top-1/2 -translate-y-1/2 text-[#94a3b8] group-focus-within:text-[var(--primary-500)] transition-colors pointer-events-none" />
           <input
             type="text"
-            placeholder="Search all PDF tools..."
+            placeholder="Search 50+ PDF tools (e.g. compress, merge, excel, sign, delete pages)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-xs rounded-full bg-white dark:bg-[#1a1a24] border border-[#e2e8f0] dark:border-[#2a2a38] text-[#181b20] dark:text-white placeholder-[#94a3b8] focus:outline-none focus:border-[var(--primary-500)] shadow-xs"
+            className="w-full pl-13 pr-12 py-3.5 sm:py-4 text-sm sm:text-base rounded-full bg-white dark:bg-[#1a1a24] border border-[#d8dce6] dark:border-[#2a2a38] text-[#181b20] dark:text-white placeholder-[#94a3b8] focus:outline-none focus:border-[var(--primary-500)] focus:ring-4 focus:ring-[var(--primary-500)]/10 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-md transition-all font-normal"
           />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[#94a3b8] hover:text-[#181b20] dark:hover:text-white px-2 py-1 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            >
+              Clear
+            </button>
+          )}
         </div>
       </section>
 
