@@ -37,32 +37,191 @@ import {
   ArrowRight,
   CheckCircle,
   Sparkles,
+  Crop,
+  Stamp,
+  Highlighter,
+  Eye,
+  Hash,
+  CheckSquare,
+  Share2,
+  Send,
+  FolderArchive,
+  Type,
 } from 'lucide-react';
 import { DropZone } from '../components/DropZone';
 import { ButtonV6, NextSaaSBtn, GlowCard, Badge } from '@simplifypdf/ui';
 
-type CategoryKey = 'ALL' | 'CONVERT_TO' | 'CONVERT_FROM' | 'MERGE_SPLIT' | 'SECURITY' | 'TOOLS';
+type CategoryFilter = 'ALL' | 'COMPRESS_CONVERT' | 'OFFICE' | 'ORGANIZE' | 'EDIT' | 'SIGN_PROTECT';
 
 interface ToolItem {
   slug: string;
   name: string;
   desc: string;
-  cat: 'CONVERT_TO' | 'CONVERT_FROM' | 'MERGE_SPLIT' | 'SECURITY' | 'TOOLS';
-  catLabel: string;
+  group: string;
+  filterCat: CategoryFilter;
   badge?: string | null;
   solidBg: string;
   badgeLetter?: string;
   icon: React.ComponentType<{ className?: string }>;
 }
 
+interface DirectoryGroup {
+  title: string;
+  tools: ToolItem[];
+}
+
+interface DirectoryColumn {
+  colIndex: number;
+  groups: DirectoryGroup[];
+}
+
 const ALL_TOOLS: ToolItem[] = [
-  // --- COLUMN 1: CONVERT TO PDF (13 tools) ---
+  // ==========================================
+  // COLUMN 1: Compress, Convert, PDF to Image, Image to PDF
+  // ==========================================
+  // Compress
+  {
+    slug: 'compress',
+    name: 'Compress PDF',
+    desc: 'Reduce file size by up to 85% while preserving crisp quality and vector text.',
+    group: 'Compress',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#E53935',
+    icon: Minimize2,
+    badge: 'Popular',
+  },
+  // Convert
+  {
+    slug: 'pdf-converter',
+    name: 'PDF Converter',
+    desc: 'Universal smart converter: drop any document, spreadsheet, image, or presentation.',
+    group: 'Convert',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#E53935',
+    icon: FileCog,
+    badge: 'Universal',
+  },
+  {
+    slug: 'ocr',
+    name: 'PDF OCR',
+    desc: 'Extract selectable, searchable text from scanned paper PDF documents.',
+    group: 'Convert',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#E53935',
+    badgeLetter: 'OCR',
+    icon: ScanText,
+    badge: 'PRO',
+  },
+  {
+    slug: 'pdf-to-pdfa',
+    name: 'PDF to PDF/A',
+    desc: 'Convert PDF documents to ISO-19005 compliant PDF/A for legal long-term archiving.',
+    group: 'Convert',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#E53935',
+    badgeLetter: 'PDF/A',
+    icon: FileCheck,
+    badge: 'ISO',
+  },
+  // PDF to Image
+  {
+    slug: 'pdf-to-jpg',
+    name: 'PDF to JPG',
+    desc: 'Extract and rasterize PDF pages into high-resolution JPG image files.',
+    group: 'PDF to Image',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#F59E0B',
+    icon: ImageIcon,
+    badge: null,
+  },
+  {
+    slug: 'pdf-to-png',
+    name: 'PDF to PNG',
+    desc: 'Export PDF pages as crisp, transparent PNG images with maximum sharpness.',
+    group: 'PDF to Image',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#F59E0B',
+    badgeLetter: 'PNG',
+    icon: ImageIcon,
+    badge: null,
+  },
+  // Image to PDF
+  {
+    slug: 'jpg-to-pdf',
+    name: 'JPG to PDF',
+    desc: 'Compile one or multiple JPG photos into a single unified PDF document.',
+    group: 'Image to PDF',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#F59E0B',
+    icon: ImageIcon,
+    badge: null,
+  },
+  {
+    slug: 'png-to-pdf',
+    name: 'PNG to PDF',
+    desc: 'Convert PNG graphics and screenshots with transparent alpha channel preservation.',
+    group: 'Image to PDF',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#F59E0B',
+    badgeLetter: 'PNG',
+    icon: ImageIcon,
+    badge: null,
+  },
+  {
+    slug: 'heic-to-pdf',
+    name: 'HEIC to PDF',
+    desc: 'Convert Apple iPhone HEIC and HEIF photos into universal PDF documents.',
+    group: 'Image to PDF',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#F59E0B',
+    icon: Camera,
+    badge: 'iOS',
+  },
+
+  // ==========================================
+  // COLUMN 2: PDF to Office, Office to PDF, OpenOffice to PDF
+  // ==========================================
+  // PDF to Office
+  {
+    slug: 'pdf-to-word',
+    name: 'PDF to Word',
+    desc: 'Convert PDF files into fully editable Microsoft Word (.docx) documents.',
+    group: 'PDF to Office',
+    filterCat: 'OFFICE',
+    solidBg: '#185ABD',
+    badgeLetter: 'W',
+    icon: FileCode,
+    badge: 'Popular',
+  },
+  {
+    slug: 'pdf-to-excel',
+    name: 'PDF to Excel',
+    desc: 'Extract financial tables and data from PDF into editable Excel (.xlsx) spreadsheets.',
+    group: 'PDF to Office',
+    filterCat: 'OFFICE',
+    solidBg: '#107C41',
+    badgeLetter: 'X',
+    icon: FileSpreadsheet,
+    badge: null,
+  },
+  {
+    slug: 'pdf-to-powerpoint',
+    name: 'PDF to PPT',
+    desc: 'Convert presentation PDF slides into fully editable PowerPoint (.pptx) slide decks.',
+    group: 'PDF to Office',
+    filterCat: 'OFFICE',
+    solidBg: '#D83B01',
+    badgeLetter: 'P',
+    icon: Presentation,
+    badge: null,
+  },
+  // Office to PDF
   {
     slug: 'word-to-pdf',
     name: 'Word to PDF',
     desc: 'Convert DOC and DOCX Word documents into standard high-fidelity PDF files.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
+    group: 'Office to PDF',
+    filterCat: 'OFFICE',
     solidBg: '#185ABD',
     badgeLetter: 'W',
     icon: FileText,
@@ -72,8 +231,8 @@ const ALL_TOOLS: ToolItem[] = [
     slug: 'excel-to-pdf',
     name: 'Excel to PDF',
     desc: 'Convert XLS and XLSX spreadsheets to standardized, printable PDF pages.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
+    group: 'Office to PDF',
+    filterCat: 'OFFICE',
     solidBg: '#107C41',
     badgeLetter: 'X',
     icon: FileSpreadsheet,
@@ -81,92 +240,148 @@ const ALL_TOOLS: ToolItem[] = [
   },
   {
     slug: 'powerpoint-to-pdf',
-    name: 'PowerPoint to PDF',
+    name: 'PPT to PDF',
     desc: 'Convert PPT and PPTX presentation slides into clean vector PDF documents.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
+    group: 'Office to PDF',
+    filterCat: 'OFFICE',
     solidBg: '#D83B01',
     badgeLetter: 'P',
     icon: Presentation,
     badge: null,
   },
+  // OpenOffice to PDF
   {
-    slug: 'jpg-to-pdf',
-    name: 'JPG to PDF',
-    desc: 'Compile one or multiple JPG photos into a single unified PDF document.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
-    solidBg: '#9C27B0',
-    icon: ImageIcon,
+    slug: 'odt-to-pdf',
+    name: 'ODT to PDF',
+    desc: 'Convert OpenDocument Text (.odt) documents into standardized PDF files.',
+    group: 'OpenOffice to PDF',
+    filterCat: 'OFFICE',
+    solidBg: '#0288D1',
+    badgeLetter: 'ODT',
+    icon: FileText,
     badge: null,
   },
   {
-    slug: 'png-to-pdf',
-    name: 'PNG to PDF',
-    desc: 'Convert PNG graphics and screenshots with transparent alpha channel preservation.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
-    solidBg: '#9C27B0',
-    icon: ImageIcon,
+    slug: 'ods-to-pdf',
+    name: 'ODS to PDF',
+    desc: 'Convert OpenDocument Spreadsheet (.ods) files to standardized, printable PDF pages.',
+    group: 'OpenOffice to PDF',
+    filterCat: 'OFFICE',
+    solidBg: '#107C41',
+    badgeLetter: 'ODS',
+    icon: FileSpreadsheet,
     badge: null,
   },
   {
-    slug: 'heic-to-pdf',
-    name: 'HEIC to PDF',
-    desc: 'Convert Apple iPhone HEIC and HEIF photos into universal PDF documents.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
-    solidBg: '#9C27B0',
-    icon: Camera,
-    badge: 'iOS',
+    slug: 'odp-to-pdf',
+    name: 'ODP to PDF',
+    desc: 'Convert OpenDocument Presentation (.odp) slide decks into clean PDF documents.',
+    group: 'OpenOffice to PDF',
+    filterCat: 'OFFICE',
+    solidBg: '#D83B01',
+    badgeLetter: 'ODP',
+    icon: Presentation,
+    badge: null,
+  },
+
+  // ==========================================
+  // COLUMN 3: Convert to PDF, iWork to PDF
+  // ==========================================
+  // Convert to PDF
+  {
+    slug: 'txt-to-pdf',
+    name: 'TXT to PDF',
+    desc: 'Convert plain text files into cleanly formatted, printable PDF documents.',
+    group: 'Convert to PDF',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#1E88E5',
+    badgeLetter: 'TXT',
+    icon: FileText,
+    badge: null,
+  },
+  {
+    slug: 'rtf-to-pdf',
+    name: 'RTF to PDF',
+    desc: 'Convert Rich Text Format (.rtf) documents to PDF with styled text preservation.',
+    group: 'Convert to PDF',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#1E88E5',
+    badgeLetter: 'RTF',
+    icon: FileText,
+    badge: null,
+  },
+  {
+    slug: 'hwp-to-pdf',
+    name: 'HWP to PDF',
+    desc: 'Convert Hancom Hangul Word Processor (.hwp, .hwpx) documents into standard PDF.',
+    group: 'Convert to PDF',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#1E88E5',
+    badgeLetter: 'HWP',
+    icon: FileText,
+    badge: 'Hangul',
+  },
+  {
+    slug: 'html-to-pdf',
+    name: 'HTML to PDF',
+    desc: 'Convert HTML web pages and code files into high-fidelity vector PDF documents.',
+    group: 'Convert to PDF',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#1E88E5',
+    badgeLetter: 'HTML',
+    icon: FileCode,
+    badge: null,
+  },
+  {
+    slug: 'epub-to-pdf',
+    name: 'EPUB to PDF',
+    desc: 'Convert EPUB eBook files into printable and shareable PDF documents.',
+    group: 'Convert to PDF',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#1E88E5',
+    badgeLetter: 'EPUB',
+    icon: BookOpen,
+    badge: null,
+  },
+  {
+    slug: 'zip-to-pdf',
+    name: 'ZIP to PDF',
+    desc: 'Unpack files inside a ZIP archive and compile them into a unified PDF document.',
+    group: 'Convert to PDF',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#1E88E5',
+    badgeLetter: 'ZIP',
+    icon: FolderArchive,
+    badge: null,
+  },
+  {
+    slug: 'csv-to-pdf',
+    name: 'CSV to PDF',
+    desc: 'Convert raw CSV spreadsheets into clean, paginated tabular PDF reports.',
+    group: 'Convert to PDF',
+    filterCat: 'COMPRESS_CONVERT',
+    solidBg: '#107C41',
+    badgeLetter: 'CSV',
+    icon: FileSpreadsheet,
+    badge: null,
   },
   {
     slug: 'autocad-to-pdf',
     name: 'AutoCAD to PDF',
     desc: 'Convert architectural DWG and DXF engineering drawings into vector PDF blueprints.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
+    group: 'Convert to PDF',
+    filterCat: 'COMPRESS_CONVERT',
     solidBg: '#E5252A',
     badgeLetter: 'A',
     icon: Compass,
     badge: 'CAD',
   },
   {
-    slug: 'openoffice-to-pdf',
-    name: 'OpenOffice to PDF',
-    desc: 'Convert OpenDocument formats (.odt, .ods, .odp) into standardized PDF files.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
-    solidBg: '#009BE0',
-    icon: FileText,
-    badge: null,
-  },
-  {
-    slug: 'ebooks-to-pdf',
-    name: 'eBooks to PDF',
-    desc: 'Convert EPUB, MOBI, and Kindle eBook files into readable, printable PDF documents.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
-    solidBg: '#F59E0B',
-    icon: BookOpen,
-    badge: null,
-  },
-  {
-    slug: 'iwork-to-pdf',
-    name: 'iWork to PDF',
-    desc: 'Convert Apple Pages, Numbers, and Keynote documents into standard PDF files.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
-    solidBg: '#2D3748',
-    icon: Laptop,
-    badge: 'Mac',
-  },
-  {
     slug: 'publisher-to-pdf',
     name: 'Publisher to PDF',
     desc: 'Convert Microsoft Publisher (.pub) marketing layouts and brochures into PDF files.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
+    group: 'Convert to PDF',
+    filterCat: 'COMPRESS_CONVERT',
     solidBg: '#007A78',
     badgeLetter: 'P',
     icon: LayoutTemplate,
@@ -175,9 +390,9 @@ const ALL_TOOLS: ToolItem[] = [
   {
     slug: 'dicom-to-pdf',
     name: 'DICOM to PDF',
-    desc: 'Convert medical DICOM (.dcm) radiological imaging scans (X-ray, MRI) into clinical reports.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
+    desc: 'Convert medical DICOM (.dcm) radiological scans (X-ray, MRI) into clinical reports.',
+    group: 'Convert to PDF',
+    filterCat: 'COMPRESS_CONVERT',
     solidBg: '#00838F',
     badgeLetter: 'D',
     icon: Activity,
@@ -187,98 +402,35 @@ const ALL_TOOLS: ToolItem[] = [
     slug: 'eps-to-pdf',
     name: 'EPS to PDF',
     desc: 'Convert vector Encapsulated PostScript (.eps) illustrations and logos to PDF format.',
-    cat: 'CONVERT_TO',
-    catLabel: 'Convert to PDF',
+    group: 'Convert to PDF',
+    filterCat: 'COMPRESS_CONVERT',
     solidBg: '#4527A0',
     badgeLetter: 'E',
     icon: PenTool,
     badge: null,
   },
-
-  // --- COLUMN 2: CONVERT FROM PDF (7 tools) ---
+  // iWork to PDF
   {
-    slug: 'pdf-to-word',
-    name: 'PDF to Word',
-    desc: 'Convert PDF files into fully editable Microsoft Word (.docx) documents.',
-    cat: 'CONVERT_FROM',
-    catLabel: 'Convert from PDF',
-    solidBg: '#185ABD',
-    badgeLetter: 'W',
-    icon: FileCode,
-    badge: 'Popular',
-  },
-  {
-    slug: 'pdf-to-excel',
-    name: 'PDF to Excel',
-    desc: 'Extract financial tables, ledgers, and data from PDF into editable Excel (.xlsx) spreadsheets.',
-    cat: 'CONVERT_FROM',
-    catLabel: 'Convert from PDF',
-    solidBg: '#107C41',
-    badgeLetter: 'X',
-    icon: FileSpreadsheet,
-    badge: null,
-  },
-  {
-    slug: 'pdf-to-powerpoint',
-    name: 'PDF to PowerPoint',
-    desc: 'Convert presentation PDF slides into fully editable PowerPoint (.pptx) slide decks.',
-    cat: 'CONVERT_FROM',
-    catLabel: 'Convert from PDF',
-    solidBg: '#D83B01',
-    badgeLetter: 'P',
-    icon: Presentation,
-    badge: null,
-  },
-  {
-    slug: 'pdf-to-jpg',
-    name: 'PDF to JPG',
-    desc: 'Extract and rasterize PDF pages into high-resolution JPG image files.',
-    cat: 'CONVERT_FROM',
-    catLabel: 'Convert from PDF',
-    solidBg: '#9C27B0',
-    icon: ImageIcon,
-    badge: null,
-  },
-  {
-    slug: 'pdf-to-png',
-    name: 'PDF to PNG',
-    desc: 'Export PDF pages as crisp, transparent PNG images with maximum sharpness.',
-    cat: 'CONVERT_FROM',
-    catLabel: 'Convert from PDF',
-    solidBg: '#9C27B0',
-    icon: ImageIcon,
-    badge: null,
-  },
-  {
-    slug: 'extract-pdf-images',
-    name: 'Extract PDF Images',
-    desc: 'Unpack and extract all raw image assets embedded inside a PDF document.',
-    cat: 'CONVERT_FROM',
-    catLabel: 'Convert from PDF',
-    solidBg: '#9C27B0',
-    icon: Layers,
-    badge: null,
-  },
-  {
-    slug: 'pdf-to-pdfa',
-    name: 'PDF to PDF/A',
-    desc: 'Convert PDF documents to ISO-19005 compliant PDF/A for legal long-term archiving.',
-    cat: 'CONVERT_FROM',
-    catLabel: 'Convert from PDF',
-    solidBg: '#185ABD',
-    badgeLetter: 'A',
-    icon: FileCheck,
-    badge: 'ISO',
+    slug: 'pages-to-pdf',
+    name: 'Pages to PDF',
+    desc: 'Convert Apple Pages (.pages) documents into universal PDF files.',
+    group: 'iWork to PDF',
+    filterCat: 'OFFICE',
+    solidBg: '#1E88E5',
+    icon: PenTool,
+    badge: 'Apple',
   },
 
-  // --- COLUMN 3: MERGE AND SPLIT (2 tools) ---
+  // ==========================================
+  // COLUMN 4: Organize
+  // ==========================================
   {
     slug: 'merge',
     name: 'Merge PDF',
     desc: 'Combine multiple PDFs into one unified document in any custom order.',
-    cat: 'MERGE_SPLIT',
-    catLabel: 'Merge and Split',
-    solidBg: '#EA580C',
+    group: 'Organize',
+    filterCat: 'ORGANIZE',
+    solidBg: '#7C3AED',
     icon: Combine,
     badge: 'Popular',
   },
@@ -286,103 +438,200 @@ const ALL_TOOLS: ToolItem[] = [
     slug: 'split',
     name: 'Split PDF',
     desc: 'Separate one or multiple pages into clean independent PDF files.',
-    cat: 'MERGE_SPLIT',
-    catLabel: 'Merge and Split',
-    solidBg: '#EA580C',
+    group: 'Organize',
+    filterCat: 'ORGANIZE',
+    solidBg: '#7C3AED',
     icon: Scissors,
-    badge: null,
-  },
-
-  // --- COLUMN 4: PDF SECURITY (4 tools) ---
-  {
-    slug: 'protect',
-    name: 'Protect PDF',
-    desc: 'Lock documents with unbreakable 256-bit AES encryption passwords.',
-    cat: 'SECURITY',
-    catLabel: 'PDF Security',
-    solidBg: '#0D9488',
-    icon: Lock,
-    badge: 'AES-256',
-  },
-  {
-    slug: 'unlock',
-    name: 'Unlock PDF',
-    desc: 'Remove passwords and permissions from encrypted PDF documents.',
-    cat: 'SECURITY',
-    catLabel: 'PDF Security',
-    solidBg: '#0D9488',
-    icon: Unlock,
-    badge: null,
-  },
-  {
-    slug: 'redact',
-    name: 'Redact PDF',
-    desc: 'Permanently remove sensitive text, numbers, and private regions from documents.',
-    cat: 'SECURITY',
-    catLabel: 'PDF Security',
-    solidBg: '#0D9488',
-    icon: EyeOff,
-    badge: 'Legal',
-  },
-  {
-    slug: 'esign',
-    name: 'eSign PDF',
-    desc: 'Draw or type legally binding electronic signatures with audit certificate stamps.',
-    cat: 'SECURITY',
-    catLabel: 'PDF Security',
-    solidBg: '#0D9488',
-    icon: FilePenLine,
-    badge: 'PRO',
-  },
-
-  // --- COLUMN 5: PDF TOOLS (9 tools) ---
-  {
-    slug: 'pdf-converter',
-    name: 'PDF Converter',
-    desc: 'Universal smart converter: drop any document, spreadsheet, image, or presentation.',
-    cat: 'TOOLS',
-    catLabel: 'PDF Tools',
-    solidBg: '#DC2626',
-    icon: FileCog,
-    badge: 'Universal',
-  },
-  {
-    slug: 'compress',
-    name: 'Compress PDF',
-    desc: 'Reduce file size by up to 85% while preserving crisp quality and vector text.',
-    cat: 'TOOLS',
-    catLabel: 'PDF Tools',
-    solidBg: '#DC2626',
-    icon: Minimize2,
-    badge: 'Popular',
-  },
-  {
-    slug: 'delete-pages',
-    name: 'Delete PDF Pages',
-    desc: 'Remove unwanted, blank, or sensitive pages permanently from any PDF document.',
-    cat: 'TOOLS',
-    catLabel: 'PDF Tools',
-    solidBg: '#DC2626',
-    icon: Trash2,
     badge: null,
   },
   {
     slug: 'rotate',
     name: 'Rotate PDF',
     desc: 'Rotate individual pages or the entire PDF document permanently.',
-    cat: 'TOOLS',
-    catLabel: 'PDF Tools',
-    solidBg: '#DC2626',
+    group: 'Organize',
+    filterCat: 'ORGANIZE',
+    solidBg: '#7C3AED',
     icon: RotateCw,
     badge: null,
+  },
+  {
+    slug: 'delete-pages',
+    name: 'Delete PDF Pages',
+    desc: 'Remove unwanted, blank, or sensitive pages permanently from any PDF document.',
+    group: 'Organize',
+    filterCat: 'ORGANIZE',
+    solidBg: '#7C3AED',
+    icon: Trash2,
+    badge: null,
+  },
+  {
+    slug: 'extract-pages',
+    name: 'Extract PDF Pages',
+    desc: 'Extract specific pages or page ranges from a PDF into an independent document.',
+    group: 'Organize',
+    filterCat: 'ORGANIZE',
+    solidBg: '#7C3AED',
+    icon: Layers,
+    badge: null,
+  },
+  {
+    slug: 'organize',
+    name: 'Organize PDF',
+    desc: 'Rearrange, rotate, and delete pages inside your PDF documents with visual reordering.',
+    group: 'Organize',
+    filterCat: 'ORGANIZE',
+    solidBg: '#7C3AED',
+    icon: FolderTree,
+    badge: null,
+  },
+
+  // ==========================================
+  // COLUMN 5: Edit
+  // ==========================================
+  {
+    slug: 'edit-pdf',
+    name: 'Edit PDF',
+    desc: 'Add text, shapes, notes, and highlights directly into your PDF document.',
+    group: 'Edit',
+    filterCat: 'EDIT',
+    solidBg: '#0D9488',
+    badgeLetter: 'T',
+    icon: Type,
+    badge: 'New',
+  },
+  {
+    slug: 'annotator',
+    name: 'PDF Annotator',
+    desc: 'Highlight, underline, strikethrough, and add sticky comments to PDF documents.',
+    group: 'Edit',
+    filterCat: 'EDIT',
+    solidBg: '#0D9488',
+    icon: Highlighter,
+    badge: null,
+  },
+  {
+    slug: 'reader',
+    name: 'PDF Reader',
+    desc: 'Ultra-fast, distraction-free in-browser PDF viewer and document reader.',
+    group: 'Edit',
+    filterCat: 'EDIT',
+    solidBg: '#0D9488',
+    icon: Eye,
+    badge: null,
+  },
+  {
+    slug: 'number-pages',
+    name: 'Number Pages',
+    desc: 'Add custom page numbers, bates numbering, and header/footer stamps to your PDF.',
+    group: 'Edit',
+    filterCat: 'EDIT',
+    solidBg: '#0D9488',
+    icon: Hash,
+    badge: null,
+  },
+  {
+    slug: 'crop',
+    name: 'Crop PDF',
+    desc: 'Trim page margins, remove white space, or crop specific regions of PDF documents.',
+    group: 'Edit',
+    filterCat: 'EDIT',
+    solidBg: '#0D9488',
+    icon: Crop,
+    badge: null,
+  },
+  {
+    slug: 'redact',
+    name: 'Redact PDF',
+    desc: 'Permanently remove sensitive text, numbers, and private regions from documents.',
+    group: 'Edit',
+    filterCat: 'EDIT',
+    solidBg: '#0D9488',
+    icon: EyeOff,
+    badge: 'Legal',
+  },
+  {
+    slug: 'watermark',
+    name: 'Watermark PDF',
+    desc: 'Stamp custom text or logo image watermarks across every page of your PDF.',
+    group: 'Edit',
+    filterCat: 'EDIT',
+    solidBg: '#0D9488',
+    icon: Stamp,
+    badge: null,
+  },
+  {
+    slug: 'form-filler',
+    name: 'PDF Form Filler',
+    desc: 'Fill out interactive Acrobat AcroForms and XFA PDF form fields online.',
+    group: 'Edit',
+    filterCat: 'EDIT',
+    solidBg: '#0D9488',
+    icon: CheckSquare,
+    badge: null,
+  },
+  {
+    slug: 'share',
+    name: 'Share PDF',
+    desc: 'Generate secure, expiring view and download links for instant document sharing.',
+    group: 'Edit',
+    filterCat: 'EDIT',
+    solidBg: '#0D9488',
+    icon: Share2,
+    badge: null,
+  },
+
+  // ==========================================
+  // COLUMN 6: Fill & Sign, Protect
+  // ==========================================
+  // Fill & Sign
+  {
+    slug: 'esign',
+    name: 'Sign PDF',
+    desc: 'Draw or type legally binding electronic signatures with audit certificate stamps.',
+    group: 'Fill & Sign',
+    filterCat: 'SIGN_PROTECT',
+    solidBg: '#E91E63',
+    icon: FilePenLine,
+    badge: 'PRO',
+  },
+  {
+    slug: 'request-signatures',
+    name: 'Request Signatures',
+    desc: 'Send signature requests to multiple recipients with automated reminders and audit tracking.',
+    group: 'Fill & Sign',
+    filterCat: 'SIGN_PROTECT',
+    solidBg: '#EAB308',
+    icon: Send,
+    badge: 'Workflow',
+  },
+  // Protect
+  {
+    slug: 'unlock',
+    name: 'Unlock PDF',
+    desc: 'Remove passwords and permissions from encrypted PDF documents.',
+    group: 'Protect',
+    filterCat: 'SIGN_PROTECT',
+    solidBg: '#F43F5E',
+    icon: Unlock,
+    badge: null,
+  },
+  {
+    slug: 'protect',
+    name: 'Protect PDF',
+    desc: 'Lock documents with unbreakable 256-bit AES encryption passwords.',
+    group: 'Protect',
+    filterCat: 'SIGN_PROTECT',
+    solidBg: '#F43F5E',
+    icon: Lock,
+    badge: 'AES-256',
   },
   {
     slug: 'flatten',
     name: 'Flatten PDF',
     desc: 'Bake interactive fillable form fields and digital annotations into static page content.',
-    cat: 'TOOLS',
-    catLabel: 'PDF Tools',
-    solidBg: '#DC2626',
+    group: 'Protect',
+    filterCat: 'SIGN_PROTECT',
+    solidBg: '#F43F5E',
     icon: Layers,
     badge: null,
   },
@@ -390,9 +639,9 @@ const ALL_TOOLS: ToolItem[] = [
     slug: 'repair',
     name: 'Repair PDF',
     desc: 'Recover and repair damaged, corrupted, or unreadable PDF files.',
-    cat: 'TOOLS',
-    catLabel: 'PDF Tools',
-    solidBg: '#DC2626',
+    group: 'Protect',
+    filterCat: 'SIGN_PROTECT',
+    solidBg: '#F43F5E',
     icon: Wrench,
     badge: 'Rescue',
   },
@@ -400,55 +649,75 @@ const ALL_TOOLS: ToolItem[] = [
     slug: 'print-ready',
     name: 'Print-Ready PDF',
     desc: 'Prepress prep: flatten transparency, convert to CMYK, and configure trim marks.',
-    cat: 'TOOLS',
-    catLabel: 'PDF Tools',
-    solidBg: '#DC2626',
+    group: 'Protect',
+    filterCat: 'SIGN_PROTECT',
+    solidBg: '#F43F5E',
     icon: Printer,
     badge: 'Print',
   },
+];
+
+// 6-Column Directory Structure matching screenshot layout
+const DIRECTORY_COLUMNS: DirectoryColumn[] = [
   {
-    slug: 'ocr',
-    name: 'OCR PDF',
-    desc: 'Extract selectable, searchable text from scanned paper PDF documents.',
-    cat: 'TOOLS',
-    catLabel: 'PDF Tools',
-    solidBg: '#DC2626',
-    icon: ScanText,
-    badge: 'PRO',
+    colIndex: 1,
+    groups: [
+      { title: 'Compress', tools: ALL_TOOLS.filter((t) => t.group === 'Compress') },
+      { title: 'Convert', tools: ALL_TOOLS.filter((t) => t.group === 'Convert') },
+      { title: 'PDF to Image', tools: ALL_TOOLS.filter((t) => t.group === 'PDF to Image') },
+      { title: 'Image to PDF', tools: ALL_TOOLS.filter((t) => t.group === 'Image to PDF') },
+    ],
   },
   {
-    slug: 'organize',
-    name: 'Organize PDF',
-    desc: 'Rearrange, rotate, and delete pages inside your PDF documents with visual reordering.',
-    cat: 'TOOLS',
-    catLabel: 'PDF Tools',
-    solidBg: '#DC2626',
-    icon: FolderTree,
-    badge: null,
+    colIndex: 2,
+    groups: [
+      { title: 'PDF to Office', tools: ALL_TOOLS.filter((t) => t.group === 'PDF to Office') },
+      { title: 'Office to PDF', tools: ALL_TOOLS.filter((t) => t.group === 'Office to PDF') },
+      { title: 'OpenOffice to PDF', tools: ALL_TOOLS.filter((t) => t.group === 'OpenOffice to PDF') },
+    ],
+  },
+  {
+    colIndex: 3,
+    groups: [
+      { title: 'Convert to PDF', tools: ALL_TOOLS.filter((t) => t.group === 'Convert to PDF') },
+      { title: 'iWork to PDF', tools: ALL_TOOLS.filter((t) => t.group === 'iWork to PDF') },
+    ],
+  },
+  {
+    colIndex: 4,
+    groups: [
+      { title: 'Organize', tools: ALL_TOOLS.filter((t) => t.group === 'Organize') },
+    ],
+  },
+  {
+    colIndex: 5,
+    groups: [
+      { title: 'Edit', tools: ALL_TOOLS.filter((t) => t.group === 'Edit') },
+    ],
+  },
+  {
+    colIndex: 6,
+    groups: [
+      { title: 'Fill & Sign', tools: ALL_TOOLS.filter((t) => t.group === 'Fill & Sign') },
+      { title: 'Protect', tools: ALL_TOOLS.filter((t) => t.group === 'Protect') },
+    ],
   },
 ];
 
-const CATEGORIES: { key: CategoryKey; label: string; count: number }[] = [
+const CATEGORIES: { key: CategoryFilter; label: string; count: number }[] = [
   { key: 'ALL', label: 'All Tools', count: ALL_TOOLS.length },
-  { key: 'CONVERT_TO', label: 'Convert to PDF', count: ALL_TOOLS.filter((t) => t.cat === 'CONVERT_TO').length },
-  { key: 'CONVERT_FROM', label: 'Convert from PDF', count: ALL_TOOLS.filter((t) => t.cat === 'CONVERT_FROM').length },
-  { key: 'MERGE_SPLIT', label: 'Merge & Split', count: ALL_TOOLS.filter((t) => t.cat === 'MERGE_SPLIT').length },
-  { key: 'SECURITY', label: 'PDF Security', count: ALL_TOOLS.filter((t) => t.cat === 'SECURITY').length },
-  { key: 'TOOLS', label: 'PDF Tools', count: ALL_TOOLS.filter((t) => t.cat === 'TOOLS').length },
-];
-
-const DIRECTORY_COLUMNS: { cat: CategoryKey; title: string }[] = [
-  { cat: 'CONVERT_TO', title: 'CONVERT TO PDF' },
-  { cat: 'CONVERT_FROM', title: 'CONVERT FROM PDF' },
-  { cat: 'MERGE_SPLIT', title: 'MERGE AND SPLIT' },
-  { cat: 'SECURITY', title: 'PDF SECURITY' },
-  { cat: 'TOOLS', title: 'PDF TOOLS' },
+  { key: 'COMPRESS_CONVERT', label: 'Compress & Convert', count: ALL_TOOLS.filter((t) => t.filterCat === 'COMPRESS_CONVERT').length },
+  { key: 'OFFICE', label: 'Office & Docs', count: ALL_TOOLS.filter((t) => t.filterCat === 'OFFICE').length },
+  { key: 'ORGANIZE', label: 'Organize', count: ALL_TOOLS.filter((t) => t.filterCat === 'ORGANIZE').length },
+  { key: 'EDIT', label: 'Edit & Annotate', count: ALL_TOOLS.filter((t) => t.filterCat === 'EDIT').length },
+  { key: 'SIGN_PROTECT', label: 'Sign & Protect', count: ALL_TOOLS.filter((t) => t.filterCat === 'SIGN_PROTECT').length },
 ];
 
 function ToolBadgeIcon({ tool, size = 'sm' }: { tool: ToolItem; size?: 'sm' | 'lg' }) {
   const Icon = tool.icon;
 
   if (tool.badgeLetter) {
+    const isMultiChar = tool.badgeLetter.length > 2;
     if (size === 'lg') {
       return (
         <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
@@ -458,7 +727,7 @@ function ToolBadgeIcon({ tool, size = 'sm' }: { tool: ToolItem; size?: 'sm' | 'l
             <div className="w-3.5 h-0.5 bg-neutral-300 dark:bg-neutral-600 rounded-full" />
           </div>
           <div
-            className="absolute bottom-0 left-0 w-6 h-6 rounded-[4px] flex items-center justify-center text-white font-bold text-xs shadow-md leading-none"
+            className={`absolute bottom-0 left-0 ${isMultiChar ? 'px-1.5 py-0.5 text-[9px]' : 'w-6 h-6 text-xs'} rounded-[4px] flex items-center justify-center text-white font-bold shadow-md leading-none`}
             style={{ backgroundColor: tool.solidBg }}
           >
             {tool.badgeLetter}
@@ -468,18 +737,11 @@ function ToolBadgeIcon({ tool, size = 'sm' }: { tool: ToolItem; size?: 'sm' | 'l
     }
 
     return (
-      <div className="relative w-7 h-7 flex items-center justify-center shrink-0">
-        <div className="w-5 h-6 rounded-[3px] border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 flex flex-col justify-center items-end pr-1 gap-0.5 shadow-xs">
-          <div className="w-2 h-0.5 bg-neutral-300 dark:bg-neutral-600 rounded-full" />
-          <div className="w-2.5 h-0.5 bg-neutral-300 dark:bg-neutral-600 rounded-full" />
-          <div className="w-1.5 h-0.5 bg-neutral-300 dark:bg-neutral-600 rounded-full" />
-        </div>
-        <div
-          className="absolute -bottom-0.5 -left-0.5 w-4 h-4 rounded-[3px] flex items-center justify-center text-white font-bold text-[9px] shadow-sm leading-none"
-          style={{ backgroundColor: tool.solidBg }}
-        >
-          {tool.badgeLetter}
-        </div>
+      <div
+        className={`${isMultiChar ? 'px-1.5 py-0.5 min-w-[28px] h-6' : 'w-6 h-6'} rounded-[5px] flex items-center justify-center text-white font-bold text-[10px] shadow-xs shrink-0 tracking-tight leading-none`}
+        style={{ backgroundColor: tool.solidBg }}
+      >
+        {tool.badgeLetter}
       </div>
     );
   }
@@ -497,7 +759,7 @@ function ToolBadgeIcon({ tool, size = 'sm' }: { tool: ToolItem; size?: 'sm' | 'l
 
   return (
     <div
-      className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-white shadow-xs"
+      className="w-6 h-6 rounded-[5px] flex items-center justify-center shrink-0 text-white shadow-xs"
       style={{ backgroundColor: tool.solidBg }}
     >
       <Icon className="w-3.5 h-3.5 text-white" />
@@ -506,17 +768,18 @@ function ToolBadgeIcon({ tool, size = 'sm' }: { tool: ToolItem; size?: 'sm' | 'l
 }
 
 export default function HomePage() {
-  const [activeCategory, setActiveCategory] = useState<CategoryKey>('ALL');
+  const [activeCategory, setActiveCategory] = useState<CategoryFilter>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'DIRECTORY' | 'GRID'>('DIRECTORY');
 
   const filteredTools = useMemo(() => {
     return ALL_TOOLS.filter((tool) => {
-      const matchesCategory = activeCategory === 'ALL' || tool.cat === activeCategory;
+      const matchesCategory = activeCategory === 'ALL' || tool.filterCat === activeCategory;
       const matchesSearch =
         !searchQuery ||
         tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         tool.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        tool.group.toLowerCase().includes(searchQuery.toLowerCase()) ||
         tool.slug.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
@@ -528,7 +791,7 @@ export default function HomePage() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center gap-6">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--line)] bg-[var(--card)] shadow-sm">
           <Badge variant="pro">SIMPLIFYPDF 2.0</Badge>
-          <span className="text-xs font-medium text-[var(--muted)]">35 High-Speed Tools • 100% Permissive Engines</span>
+          <span className="text-xs font-medium text-[var(--muted)]">50+ High-Speed Tools • 100% Permissive Engines</span>
         </div>
 
         <h1 className="font-heading font-bold text-4xl sm:text-6xl lg:text-7xl tracking-[-0.03em] text-[var(--ink)] max-w-4xl leading-[1.12]">
@@ -574,7 +837,7 @@ export default function HomePage() {
                 All PDF Tools
               </h2>
               <p className="text-sm sm:text-base text-[var(--muted)] font-normal mt-1 max-w-xl">
-                Choose from 35 specialized tools organized for lightning-fast conversion, compression, merging, and legal security.
+                Choose from 50+ specialized tools organized for lightning-fast conversion, compression, editing, and legal security.
               </p>
             </div>
 
@@ -584,7 +847,7 @@ export default function HomePage() {
                 <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
                 <input
                   type="text"
-                  placeholder="Search 35 tools..."
+                  placeholder="Search 50+ tools..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full sm:w-64 pl-9 pr-4 py-2 text-xs rounded-xl bg-[var(--card)] border border-[var(--line)] text-[var(--ink)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--primary-500)] transition-colors"
@@ -601,7 +864,7 @@ export default function HomePage() {
                       ? 'bg-[var(--card)] text-[var(--ink)] shadow-sm'
                       : 'text-[var(--muted)] hover:text-[var(--ink)]'
                   }`}
-                  title="5-Column Directory View"
+                  title="Directory View"
                 >
                   <Columns className="w-3.5 h-3.5" />
                   <span>Directory</span>
@@ -648,35 +911,34 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* 5-COLUMN DIRECTORY VIEW (Matching user's screenshot layout) */}
+        {/* 6-COLUMN DIRECTORY VIEW (Matching user's screenshot layout) */}
         {viewMode === 'DIRECTORY' && !searchQuery && activeCategory === 'ALL' ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
-            {DIRECTORY_COLUMNS.map((col) => {
-              const toolsInCol = ALL_TOOLS.filter((t) => t.cat === col.cat);
-              return (
-                <div key={col.cat} className="flex flex-col gap-4">
-                  <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-[var(--ink)] pb-2 border-b border-[var(--line)]">
-                    {col.title}
-                  </h3>
-                  <div className="flex flex-col gap-2">
-                    {toolsInCol.map((tool) => {
-                      return (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 p-6 sm:p-8 rounded-3xl bg-[var(--card)] border border-[var(--line)] shadow-sm">
+            {DIRECTORY_COLUMNS.map((col) => (
+              <div key={col.colIndex} className="flex flex-col gap-6">
+                {col.groups.map((group) => (
+                  <div key={group.title} className="flex flex-col gap-2">
+                    <h3 className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-1">
+                      {group.title}
+                    </h3>
+                    <div className="flex flex-col gap-1.5">
+                      {group.tools.map((tool) => (
                         <Link
                           key={tool.slug}
                           href={`/tools/${tool.slug}`}
-                          className="group flex items-center gap-3 p-1.5 rounded-xl hover:bg-[var(--soft)] transition-all"
+                          className="group flex items-center gap-2.5 p-1 rounded-lg hover:bg-[var(--soft)] transition-all"
                         >
                           <ToolBadgeIcon tool={tool} size="sm" />
-                          <span className="text-sm font-medium text-[var(--ink)] group-hover:text-[var(--primary-500)] transition-colors tracking-tight">
+                          <span className="text-xs font-medium text-[var(--ink)] group-hover:text-[var(--primary-500)] transition-colors tracking-tight whitespace-nowrap overflow-hidden text-ellipsis">
                             {tool.name}
                           </span>
                         </Link>
-                      );
-                    })}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                ))}
+              </div>
+            ))}
           </div>
         ) : (
           /* GRID VIEW (Rich Cards with Descriptions & Metadata) */
@@ -695,7 +957,7 @@ export default function HomePage() {
                         )}
                       </div>
                       <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--muted)] mb-1">
-                        {tool.catLabel}
+                        {tool.group}
                       </div>
                       <h3 className="font-heading font-semibold text-lg text-[var(--ink)] group-hover:text-[var(--primary-500)] transition-colors tracking-tight">
                         {tool.name}

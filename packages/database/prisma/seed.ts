@@ -215,6 +215,29 @@ async function main() {
     { slug: 'print-ready', toolName: 'Print-Ready PDF', category: 'TOOLS', sortOrder: 33 },
     { slug: 'ocr', toolName: 'OCR PDF', category: 'TOOLS', sortOrder: 34 },
     { slug: 'organize', toolName: 'Organize PDF', category: 'TOOLS', sortOrder: 35 },
+
+    // Additional tools from extended suite
+    { slug: 'txt-to-pdf', toolName: 'TXT to PDF', category: 'CONVERT_TO_PDF', sortOrder: 36 },
+    { slug: 'rtf-to-pdf', toolName: 'RTF to PDF', category: 'CONVERT_TO_PDF', sortOrder: 37 },
+    { slug: 'hwp-to-pdf', toolName: 'HWP to PDF', category: 'CONVERT_TO_PDF', sortOrder: 38 },
+    { slug: 'html-to-pdf', toolName: 'HTML to PDF', category: 'CONVERT_TO_PDF', sortOrder: 39 },
+    { slug: 'epub-to-pdf', toolName: 'EPUB to PDF', category: 'CONVERT_TO_PDF', sortOrder: 40 },
+    { slug: 'zip-to-pdf', toolName: 'ZIP to PDF', category: 'CONVERT_TO_PDF', sortOrder: 41 },
+    { slug: 'csv-to-pdf', toolName: 'CSV to PDF', category: 'CONVERT_TO_PDF', sortOrder: 42 },
+    { slug: 'odt-to-pdf', toolName: 'ODT to PDF', category: 'CONVERT_TO_PDF', sortOrder: 43 },
+    { slug: 'ods-to-pdf', toolName: 'ODS to PDF', category: 'CONVERT_TO_PDF', sortOrder: 44 },
+    { slug: 'odp-to-pdf', toolName: 'ODP to PDF', category: 'CONVERT_TO_PDF', sortOrder: 45 },
+    { slug: 'pages-to-pdf', toolName: 'Pages to PDF', category: 'CONVERT_TO_PDF', sortOrder: 46 },
+    { slug: 'extract-pages', toolName: 'Extract PDF Pages', category: 'MERGE_SPLIT', sortOrder: 47 },
+    { slug: 'edit-pdf', toolName: 'Edit PDF', category: 'EDIT', sortOrder: 48 },
+    { slug: 'annotator', toolName: 'PDF Annotator', category: 'EDIT', sortOrder: 49 },
+    { slug: 'reader', toolName: 'PDF Reader', category: 'EDIT', sortOrder: 50 },
+    { slug: 'number-pages', toolName: 'Number Pages', category: 'EDIT', sortOrder: 51 },
+    { slug: 'crop', toolName: 'Crop PDF', category: 'EDIT', sortOrder: 52 },
+    { slug: 'watermark', toolName: 'Watermark PDF', category: 'EDIT', sortOrder: 53 },
+    { slug: 'form-filler', toolName: 'PDF Form Filler', category: 'EDIT', sortOrder: 54 },
+    { slug: 'share', toolName: 'Share PDF', category: 'EDIT', sortOrder: 55 },
+    { slug: 'request-signatures', toolName: 'Request Signatures', category: 'SECURITY', sortOrder: 56 },
   ];
 
   for (const tool of defaultTools) {

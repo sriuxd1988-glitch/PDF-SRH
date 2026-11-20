@@ -150,8 +150,8 @@ def process_single_job(message_id: str, data: dict, stream_source: str):
                 local_output = os.path.join(temp_dir, output_filename)
                 content_type = "application/zip"
             split_pdf(local_input, local_output, page_ranges=page_ranges)
-        elif tool_type in ("ORGANIZE", "ROTATE", "DELETE_PAGES"):
-            publish_job_progress(job_id, "PROCESSING", 55, detail="Applying page rotations, layout organization, or page deletion...")
+        elif tool_type in ("ORGANIZE", "ROTATE", "DELETE_PAGES", "EXTRACT_PDF_PAGES", "CROP", "WATERMARK", "NUMBER_PAGES"):
+            publish_job_progress(job_id, "PROCESSING", 55, detail="Applying page operations, layout organization, or watermark...")
             organize_pdf(
                 local_input,
                 local_output,
@@ -165,8 +165,8 @@ def process_single_job(message_id: str, data: dict, stream_source: str):
             local_output = os.path.join(temp_dir, output_filename)
             content_type = "application/zip"
             convert_pdf_to_images(local_input, local_output, dpi=options.get("dpi", 150))
-        elif tool_type in ("IMAGES_TO_PDF", "JPG_TO_PDF", "PNG_TO_PDF", "HEIC_TO_PDF", "EPS_TO_PDF"):
-            publish_job_progress(job_id, "PROCESSING", 55, detail="Compiling images to PDF via Pillow...")
+        elif tool_type in ("IMAGES_TO_PDF", "JPG_TO_PDF", "PNG_TO_PDF", "HEIC_TO_PDF", "EPS_TO_PDF", "ZIP_TO_PDF"):
+            publish_job_progress(job_id, "PROCESSING", 55, detail="Compiling images or archive to PDF via Pillow...")
             convert_images_to_pdf([local_input], local_output)
         elif tool_type in ("PROTECT",):
             publish_job_progress(job_id, "PROCESSING", 55, detail="Applying 256-bit AES encryption...")
@@ -174,7 +174,12 @@ def process_single_job(message_id: str, data: dict, stream_source: str):
         elif tool_type in ("UNLOCK",):
             publish_job_progress(job_id, "PROCESSING", 55, detail="Decrypting permissions...")
             unlock_pdf(local_input, local_output, password=options.get("password", ""))
-        elif tool_type in ("WORD_TO_PDF", "EXCEL_TO_PDF", "POWERPOINT_TO_PDF", "OPENOFFICE_TO_PDF", "PUBLISHER_TO_PDF", "IWORK_TO_PDF", "EBOOKS_TO_PDF", "AUTOCAD_TO_PDF", "DICOM_TO_PDF", "PDF_CONVERTER"):
+        elif tool_type in (
+            "WORD_TO_PDF", "EXCEL_TO_PDF", "POWERPOINT_TO_PDF", "OPENOFFICE_TO_PDF",
+            "ODT_TO_PDF", "ODS_TO_PDF", "ODP_TO_PDF", "PUBLISHER_TO_PDF", "IWORK_TO_PDF",
+            "PAGES_TO_PDF", "EBOOKS_TO_PDF", "EPUB_TO_PDF", "AUTOCAD_TO_PDF", "DICOM_TO_PDF",
+            "PDF_CONVERTER", "TXT_TO_PDF", "RTF_TO_PDF", "HWP_TO_PDF", "HTML_TO_PDF", "CSV_TO_PDF"
+        ):
             publish_job_progress(job_id, "PROCESSING", 55, detail="Executing sandboxed headless LibreOffice conversion...")
             convert_office_to_pdf(local_input, local_output)
         elif tool_type in ("PDF_TO_WORD", "PDF_TO_EXCEL", "PDF_TO_POWERPOINT"):
@@ -192,7 +197,7 @@ def process_single_job(message_id: str, data: dict, stream_source: str):
         elif tool_type == "ESIGN":
             publish_job_progress(job_id, "PROCESSING", 55, detail="Appending cryptographic electronic signature certificate...")
             apply_esignature(local_input, local_output, options)
-        elif tool_type in ("FLATTEN", "PDF_TO_PDFA", "PRINT_READY", "REPAIR"):
+        elif tool_type in ("FLATTEN", "PDF_TO_PDFA", "PRINT_READY", "REPAIR", "EDIT_PDF", "PDF_ANNOTATOR", "PDF_READER", "PDF_FORM_FILLER", "SHARE_PDF", "REQUEST_SIGNATURES"):
             publish_job_progress(job_id, "PROCESSING", 55, detail="Sanitizing, repairing, and flattening PDF structure...")
             compress_pdf(local_input, local_output, level="basic")
         else:
