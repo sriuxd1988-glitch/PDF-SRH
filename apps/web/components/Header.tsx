@@ -1,30 +1,42 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Sun, Moon, ArrowRight, ShieldCheck } from 'lucide-react';
-import { ButtonV6, NextSaaSBtn, Badge } from '@simplifypdf/ui';
+import {
+  Sun,
+  Moon,
+  ChevronDown,
+  FileText,
+  FileSpreadsheet,
+  Presentation,
+  Image as ImageIcon,
+  Combine,
+  Scissors,
+  Lock,
+  Unlock,
+  EyeOff,
+  FilePenLine,
+  Minimize2,
+  Trash2,
+  RotateCw,
+  Layers,
+  Wrench,
+  ScanText,
+  FolderTree,
+  Stamp,
+  Crop,
+  Hash,
+  Share2,
+  CheckSquare,
+  FileCheck,
+  FileCode,
+  Sparkles,
+} from 'lucide-react';
 
-interface HeaderProps {
-  logoText?: string;
-  navItems?: Array<{ label: string; href: string; badge?: string }>;
-  ctaText?: string;
-  ctaLink?: string;
-}
-
-export function Header({
-  logoText = 'SimplifyPDF',
-  navItems = [
-    { label: 'All Tools', href: '/#tools', badge: '40+' },
-    { label: 'Compress', href: '/tools/compress' },
-    { label: 'Merge', href: '/tools/merge' },
-    { label: 'Convert', href: '/tools/word-to-pdf' },
-    { label: 'Pricing', href: '/pricing' },
-  ],
-  ctaText = 'Get Started',
-  ctaLink = '/tools/compress',
-}: HeaderProps) {
+export function Header() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [openMenu, setOpenMenu] = useState<'convert' | 'all' | null>(null);
+  const menuTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -37,64 +49,350 @@ export function Header({
     document.documentElement.setAttribute('data-theme', nextTheme);
   };
 
+  const handleMouseEnter = (menu: 'convert' | 'all') => {
+    if (menuTimeoutRef.current) clearTimeout(menuTimeoutRef.current);
+    setOpenMenu(menu);
+  };
+
+  const handleMouseLeave = () => {
+    menuTimeoutRef.current = setTimeout(() => {
+      setOpenMenu(null);
+    }, 150);
+  };
+
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-[var(--bg)]/90 border-b border-[var(--line)] transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-[var(--primary-500)] flex items-center justify-center text-white font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
-            S
-          </div>
-          <div className="flex flex-col">
-            <span className="font-heading font-bold text-lg tracking-tight text-[var(--ink)]">
-              {logoText}
-            </span>
-            <span className="text-[10px] uppercase font-medium tracking-wider text-[var(--muted)] flex items-center gap-1">
-              <ShieldCheck className="w-3 h-3 text-emerald-500" /> Permissive OS
-            </span>
-          </div>
-        </Link>
+    <header className="sticky top-0 z-50 w-full bg-white dark:bg-[#14141c] border-b border-[#e2e8f0] dark:border-[#242430] shadow-xs transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
+        {/* Left: Brand Logo */}
+        <div className="flex items-center gap-8">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-[var(--primary-500)] flex items-center justify-center text-white font-bold text-lg shadow-sm group-hover:scale-105 transition-transform">
+              S
+            </div>
+            <div className="flex items-baseline">
+              <span className="font-heading font-extrabold text-2xl tracking-tight text-[#181b20] dark:text-white">
+                Simplify<span className="text-[var(--primary-500)]">PDF</span>
+              </span>
+            </div>
+          </Link>
 
-        {/* Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
+          {/* Center Navigation Links (iLovePDF Style) */}
+          <nav className="hidden lg:flex items-center gap-6 text-[13px] font-bold uppercase tracking-wider text-[#181b20] dark:text-neutral-200">
             <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-[var(--muted)] hover:text-[var(--ink)] transition-colors flex items-center gap-1.5"
+              href="/tools/merge"
+              className="py-2 hover:text-[var(--primary-500)] transition-colors whitespace-nowrap"
             >
-              {item.label}
-              {item.badge && (
-                <Badge variant="pro" className="text-[10px] px-1.5 py-0.5">
-                  {item.badge}
-                </Badge>
-              )}
+              Merge PDF
             </Link>
-          ))}
-        </nav>
 
-        {/* Actions */}
+            <Link
+              href="/tools/split"
+              className="py-2 hover:text-[var(--primary-500)] transition-colors whitespace-nowrap"
+            >
+              Split PDF
+            </Link>
+
+            <Link
+              href="/tools/compress"
+              className="py-2 hover:text-[var(--primary-500)] transition-colors whitespace-nowrap"
+            >
+              Compress PDF
+            </Link>
+
+            {/* Convert PDF Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => handleMouseEnter('convert')}
+              onMouseLeave={handleMouseLeave}
+            >
+              <button
+                type="button"
+                onClick={() => setOpenMenu(openMenu === 'convert' ? null : 'convert')}
+                className={`flex items-center gap-1 py-2 hover:text-[var(--primary-500)] transition-colors ${
+                  openMenu === 'convert' ? 'text-[var(--primary-500)]' : ''
+                }`}
+              >
+                <span>Convert PDF</span>
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${openMenu === 'convert' ? 'rotate-180' : ''}`} />
+              </button>
+
+              {openMenu === 'convert' && (
+                <div className="absolute top-full left-0 w-[480px] bg-white dark:bg-[#181824] rounded-2xl shadow-2xl border border-[#e2e8f0] dark:border-[#2a2a38] p-6 grid grid-cols-2 gap-6 animate-in fade-in zoom-in-95 duration-150">
+                  <div>
+                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#64748b] dark:text-[#94a3b8] mb-3">
+                      Convert to PDF
+                    </h4>
+                    <div className="flex flex-col gap-2">
+                      <Link href="/tools/jpg-to-pdf" className="flex items-center gap-2.5 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)] p-1 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                        <span className="w-5 h-5 rounded bg-[#F59E0B] text-white flex items-center justify-center text-[10px]"><ImageIcon className="w-3 h-3" /></span>
+                        JPG to PDF
+                      </Link>
+                      <Link href="/tools/word-to-pdf" className="flex items-center gap-2.5 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)] p-1 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                        <span className="w-5 h-5 rounded bg-[#185ABD] text-white flex items-center justify-center text-[10px] font-bold">W</span>
+                        Word to PDF
+                      </Link>
+                      <Link href="/tools/powerpoint-to-pdf" className="flex items-center gap-2.5 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)] p-1 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                        <span className="w-5 h-5 rounded bg-[#D83B01] text-white flex items-center justify-center text-[10px] font-bold">P</span>
+                        PowerPoint to PDF
+                      </Link>
+                      <Link href="/tools/excel-to-pdf" className="flex items-center gap-2.5 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)] p-1 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                        <span className="w-5 h-5 rounded bg-[#107C41] text-white flex items-center justify-center text-[10px] font-bold">X</span>
+                        Excel to PDF
+                      </Link>
+                      <Link href="/tools/html-to-pdf" className="flex items-center gap-2.5 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)] p-1 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                        <span className="w-5 h-5 rounded bg-[#0288D1] text-white flex items-center justify-center text-[10px]"><FileCode className="w-3 h-3" /></span>
+                        HTML to PDF
+                      </Link>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#64748b] dark:text-[#94a3b8] mb-3">
+                      Convert from PDF
+                    </h4>
+                    <div className="flex flex-col gap-2">
+                      <Link href="/tools/pdf-to-jpg" className="flex items-center gap-2.5 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)] p-1 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                        <span className="w-5 h-5 rounded bg-[#F59E0B] text-white flex items-center justify-center text-[10px]"><ImageIcon className="w-3 h-3" /></span>
+                        PDF to JPG
+                      </Link>
+                      <Link href="/tools/pdf-to-word" className="flex items-center gap-2.5 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)] p-1 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                        <span className="w-5 h-5 rounded bg-[#185ABD] text-white flex items-center justify-center text-[10px] font-bold">W</span>
+                        PDF to Word
+                      </Link>
+                      <Link href="/tools/pdf-to-powerpoint" className="flex items-center gap-2.5 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)] p-1 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                        <span className="w-5 h-5 rounded bg-[#D83B01] text-white flex items-center justify-center text-[10px] font-bold">P</span>
+                        PDF to PowerPoint
+                      </Link>
+                      <Link href="/tools/pdf-to-excel" className="flex items-center gap-2.5 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)] p-1 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                        <span className="w-5 h-5 rounded bg-[#107C41] text-white flex items-center justify-center text-[10px] font-bold">X</span>
+                        PDF to Excel
+                      </Link>
+                      <Link href="/tools/pdf-to-pdfa" className="flex items-center gap-2.5 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)] p-1 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/60">
+                        <span className="w-5 h-5 rounded bg-[#E53935] text-white flex items-center justify-center text-[9px] font-bold">/A</span>
+                        PDF to PDF/A
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* All PDF Tools Mega-Menu (iLovePDF Style) */}
+            <div
+              className="relative"
+              onMouseEnter={() => handleMouseEnter('all')}
+              onMouseLeave={handleMouseLeave}
+            >
+              <button
+                type="button"
+                onClick={() => setOpenMenu(openMenu === 'all' ? null : 'all')}
+                className={`flex items-center gap-1 py-2 hover:text-[var(--primary-500)] transition-colors ${
+                  openMenu === 'all' ? 'text-[var(--primary-500)]' : ''
+                }`}
+              >
+                <span>All PDF Tools</span>
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${openMenu === 'all' ? 'rotate-180' : ''}`} />
+              </button>
+
+              {openMenu === 'all' && (
+                <div className="fixed left-4 right-4 top-18 max-w-7xl mx-auto bg-white dark:bg-[#181824] rounded-2xl shadow-2xl border border-[#e2e8f0] dark:border-[#2a2a38] p-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 animate-in fade-in zoom-in-95 duration-150 z-50">
+                  {/* Column 1: Organize PDF */}
+                  <div>
+                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#64748b] dark:text-[#94a3b8] mb-3">
+                      Organize PDF
+                    </h4>
+                    <div className="flex flex-col gap-2">
+                      <Link href="/tools/merge" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#EA580C] text-white flex items-center justify-center"><Combine className="w-3 h-3" /></span>
+                        Merge PDF
+                      </Link>
+                      <Link href="/tools/split" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#EA580C] text-white flex items-center justify-center"><Scissors className="w-3 h-3" /></span>
+                        Split PDF
+                      </Link>
+                      <Link href="/tools/delete-pages" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#7C3AED] text-white flex items-center justify-center"><Trash2 className="w-3 h-3" /></span>
+                        Remove pages
+                      </Link>
+                      <Link href="/tools/extract-pages" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#7C3AED] text-white flex items-center justify-center"><Layers className="w-3 h-3" /></span>
+                        Extract pages
+                      </Link>
+                      <Link href="/tools/organize" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#7C3AED] text-white flex items-center justify-center"><FolderTree className="w-3 h-3" /></span>
+                        Organize PDF
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Column 2: Optimize PDF */}
+                  <div>
+                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#64748b] dark:text-[#94a3b8] mb-3">
+                      Optimize PDF
+                    </h4>
+                    <div className="flex flex-col gap-2">
+                      <Link href="/tools/compress" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#10B981] text-white flex items-center justify-center"><Minimize2 className="w-3 h-3" /></span>
+                        Compress PDF
+                      </Link>
+                      <Link href="/tools/repair" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#E53935] text-white flex items-center justify-center"><Wrench className="w-3 h-3" /></span>
+                        Repair PDF
+                      </Link>
+                      <Link href="/tools/ocr" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#E53935] text-white flex items-center justify-center"><ScanText className="w-3 h-3" /></span>
+                        OCR PDF
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Column 3: Convert to PDF */}
+                  <div>
+                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#64748b] dark:text-[#94a3b8] mb-3">
+                      Convert to PDF
+                    </h4>
+                    <div className="flex flex-col gap-2">
+                      <Link href="/tools/jpg-to-pdf" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#F59E0B] text-white flex items-center justify-center"><ImageIcon className="w-3 h-3" /></span>
+                        JPG to PDF
+                      </Link>
+                      <Link href="/tools/word-to-pdf" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#185ABD] text-white flex items-center justify-center text-[10px] font-bold">W</span>
+                        WORD to PDF
+                      </Link>
+                      <Link href="/tools/powerpoint-to-pdf" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#D83B01] text-white flex items-center justify-center text-[10px] font-bold">P</span>
+                        POWERPOINT to PDF
+                      </Link>
+                      <Link href="/tools/excel-to-pdf" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#107C41] text-white flex items-center justify-center text-[10px] font-bold">X</span>
+                        EXCEL to PDF
+                      </Link>
+                      <Link href="/tools/html-to-pdf" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#0288D1] text-white flex items-center justify-center"><FileCode className="w-3 h-3" /></span>
+                        HTML to PDF
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Column 4: Convert from PDF */}
+                  <div>
+                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#64748b] dark:text-[#94a3b8] mb-3">
+                      Convert from PDF
+                    </h4>
+                    <div className="flex flex-col gap-2">
+                      <Link href="/tools/pdf-to-jpg" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#F59E0B] text-white flex items-center justify-center"><ImageIcon className="w-3 h-3" /></span>
+                        PDF to JPG
+                      </Link>
+                      <Link href="/tools/pdf-to-word" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#185ABD] text-white flex items-center justify-center text-[10px] font-bold">W</span>
+                        PDF to WORD
+                      </Link>
+                      <Link href="/tools/pdf-to-powerpoint" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#D83B01] text-white flex items-center justify-center text-[10px] font-bold">P</span>
+                        PDF to POWERPOINT
+                      </Link>
+                      <Link href="/tools/pdf-to-excel" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#107C41] text-white flex items-center justify-center text-[10px] font-bold">X</span>
+                        PDF to EXCEL
+                      </Link>
+                      <Link href="/tools/pdf-to-pdfa" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#E53935] text-white flex items-center justify-center text-[9px] font-bold">/A</span>
+                        PDF to PDF/A
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Column 5: Edit PDF */}
+                  <div>
+                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#64748b] dark:text-[#94a3b8] mb-3">
+                      Edit PDF
+                    </h4>
+                    <div className="flex flex-col gap-2">
+                      <Link href="/tools/rotate" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#7C3AED] text-white flex items-center justify-center"><RotateCw className="w-3 h-3" /></span>
+                        Rotate PDF
+                      </Link>
+                      <Link href="/tools/number-pages" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#0D9488] text-white flex items-center justify-center"><Hash className="w-3 h-3" /></span>
+                        Add page numbers
+                      </Link>
+                      <Link href="/tools/watermark" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#0D9488] text-white flex items-center justify-center"><Stamp className="w-3 h-3" /></span>
+                        Add watermark
+                      </Link>
+                      <Link href="/tools/crop" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#0D9488] text-white flex items-center justify-center"><Crop className="w-3 h-3" /></span>
+                        Crop PDF
+                      </Link>
+                      <Link href="/tools/edit-pdf" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#0D9488] text-white flex items-center justify-center"><FileText className="w-3 h-3" /></span>
+                        Edit PDF
+                      </Link>
+                      <Link href="/tools/form-filler" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#0D9488] text-white flex items-center justify-center"><CheckSquare className="w-3 h-3" /></span>
+                        PDF Forms
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Column 6: PDF Security */}
+                  <div>
+                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#64748b] dark:text-[#94a3b8] mb-3">
+                      PDF Security
+                    </h4>
+                    <div className="flex flex-col gap-2">
+                      <Link href="/tools/unlock" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#0D9488] text-white flex items-center justify-center"><Unlock className="w-3 h-3" /></span>
+                        Unlock PDF
+                      </Link>
+                      <Link href="/tools/protect" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#0D9488] text-white flex items-center justify-center"><Lock className="w-3 h-3" /></span>
+                        Protect PDF
+                      </Link>
+                      <Link href="/tools/esign" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#E91E63] text-white flex items-center justify-center"><FilePenLine className="w-3 h-3" /></span>
+                        Sign PDF
+                      </Link>
+                      <Link href="/tools/redact" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#0D9488] text-white flex items-center justify-center"><EyeOff className="w-3 h-3" /></span>
+                        Redact PDF
+                      </Link>
+                      <Link href="/tools/flatten" className="flex items-center gap-2 text-xs font-semibold text-[#181b20] dark:text-neutral-200 hover:text-[var(--primary-500)]">
+                        <span className="w-5 h-5 rounded bg-[#F43F5E] text-white flex items-center justify-center"><Layers className="w-3 h-3" /></span>
+                        Flatten PDF
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </nav>
+        </div>
+
+        {/* Right Side Actions */}
         <div className="flex items-center gap-4">
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="p-2.5 rounded-full border border-[var(--line)] bg-[var(--card)] text-[var(--muted)] hover:text-[var(--ink)] transition-colors shadow-sm"
+            className="p-2.5 rounded-full border border-[#e2e8f0] dark:border-[#242430] text-[#64748b] hover:text-[#181b20] dark:hover:text-white transition-colors"
           >
             {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
           </button>
 
-          <Link href="/login" className="hidden sm:inline-block text-sm font-medium text-[var(--ink)] hover:text-[var(--primary-500)] transition-colors px-3 py-2">
-            Sign In
+          <Link
+            href="/login"
+            className="text-sm font-bold text-[#181b20] dark:text-white hover:text-[var(--primary-500)] transition-colors px-2 py-1"
+          >
+            Log in
           </Link>
 
-          {/* NextSaaS .btn-v6 vertical rolling text flip button with pure white text */}
-          <Link href={ctaLink}>
-            <ButtonV6
-              text={ctaText}
-              hoverText="Go Faster →"
-              variant="primary"
-              size="md"
-            />
+          <Link
+            href="/pricing"
+            className="px-5 py-2.5 rounded-full bg-[var(--primary-500)] hover:bg-[var(--primary-600)] text-white text-sm font-bold shadow-md hover:shadow-lg transition-all"
+          >
+            Sign up
           </Link>
         </div>
       </div>
