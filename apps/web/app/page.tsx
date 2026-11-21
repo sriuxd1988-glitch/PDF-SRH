@@ -690,8 +690,9 @@ export default function HomePage() {
     <div className="flex flex-col min-h-screen bg-[#fafafc] dark:bg-[#0c0c12] antialiased">
       {/* 1. HERO SECTION (iLovePDF Style) */}
       <section className="pt-16 sm:pt-20 pb-10 px-4 sm:px-6 max-w-5xl mx-auto text-center flex flex-col items-center">
-        <h1 className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#181b20] dark:text-white tracking-[-0.02em] leading-[1.18]">
-          Every tool you need to work with PDFs in one place
+        <h1 className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#181b20] dark:text-white tracking-[-0.02em] leading-[1.25] max-w-4xl">
+          Every tool you need to work with PDFs <br className="hidden sm:inline" />
+          in one place
         </h1>
 
         <p className="text-base sm:text-lg text-[#4a5568] dark:text-[#94a3b8] font-normal max-w-3xl leading-relaxed mt-4">
